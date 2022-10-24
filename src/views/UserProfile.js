@@ -1,4 +1,7 @@
-import React from "react";
+
+import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
 // react-bootstrap components
 import {
@@ -14,6 +17,33 @@ import {
 } from "react-bootstrap";
 
 function User() {
+  const history = useHistory()
+
+  const [user, setUser] = useState({})
+
+  
+
+  useEffect(() => {
+    axios.get(`http://localhost:8001/user/self-detail`, {
+      headers: {
+        access_token: localStorage.getItem('access_token')
+      }
+    })
+      .then((response) => {
+        console.log(response);
+
+        setUser({
+          username: response.data.username,
+          password: response.data.password,
+          division: response.data.Division.name,
+          role: response.data.Role.name,
+          email: response.data.email
+        
+        })
+      })
+      .catch(error => console.log(error));
+  }, [])
+
   return (
     <>
       <Container fluid>
@@ -44,7 +74,7 @@ function User() {
                       <Form.Group>
                         <label>Division (disabled)</label>
                         <Form.Control
-                          defaultValue="Sumber Daya Manusia"
+                          defaultValue={user.division}
                           disabled
                           placeholder="Division"
                           type="text"
@@ -55,7 +85,7 @@ function User() {
                       <Form.Group>
                         <label>Role (disabled)</label>
                         <Form.Control
-                          defaultValue="Kepala Divisi"
+                          defaultValue={user.role}
                           disabled
                           placeholder="Role"
                           type="text"
@@ -69,9 +99,11 @@ function User() {
                       <Form.Group>
                         <label>Username</label>
                         <Form.Control
-                          defaultValue="Delphito"
+    
+                          defaultValue={user.username}
                           placeholder="Company"
                           type="text"
+                          
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -79,7 +111,7 @@ function User() {
                       <Form.Group>
                         <label>Email</label>
                         <Form.Control
-                          defaultValue="delphito@staffany.com"
+                          defaultValue={user.email}
                           placeholder="Email"
                           type="text"
                         ></Form.Control>
@@ -92,7 +124,7 @@ function User() {
                       <Form.Group>
                         <label>Old Password</label>
                         <Form.Control
-                          defaultValue=""
+                          defaultValue={user.password}
                           placeholder="Password"
                           type="password"
                         ></Form.Control>

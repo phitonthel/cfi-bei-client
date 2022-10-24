@@ -107,7 +107,7 @@ function SelfAssessment() {
           timer: 1000
         })
       } catch (error) {
-        console.log({error})
+        console.log({ error })
         Swal.fire({
           position: 'top',
           icon: 'error',
@@ -167,14 +167,20 @@ function SelfAssessment() {
         data={assessments}
       /> */}
 
-      {
-        assessments.map(assessment => Card(assessment, handlers))
-      }
+      <div className='col-10'>
+        <div className='mb-4'>
+          <h4>Instructions</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        {
+          assessments.map(assessment => Card(assessment, handlers))
+        }
 
-      <div className="d-flex flex-row-reverse">
-        <button type="button" className="btn btn-primary" onClick={() => handlers.submit()}>
-          Submit {assessments.filter(assessment => assessment.assignedScore).length} / {assessments.length} Assessments
-        </button>
+        <div className="d-flex flex-row-reverse">
+          <button type="button" className="btn btn-primary" onClick={() => handlers.submit()}>
+            Submit {assessments.filter(assessment => assessment.assignedScore).length} / {assessments.length} Assessments
+          </button>
+        </div>
       </div>
     </>
   );
