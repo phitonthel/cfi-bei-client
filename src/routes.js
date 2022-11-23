@@ -27,6 +27,8 @@ import Login from "views/Login";
 import Subordinates from "views/Subordinates";
 import SelfAssessment from "views/SelfAssessment";
 import PeerAssessment from "views/PeerAssessment";
+import PeerAssessmentTable from "views/PeerAssessmentTable";
+
 
 import Article from "views/article";
 
@@ -91,7 +93,7 @@ const dashboardRoutes = [
   {
     path: "/subordinates",
     name: "Subordinates",
-    icon: "nc-icon nc-paper-2",
+    icon: "nc-icon nc-chart-pie-35",
     component: Subordinates,
     layout: "/admin",
   },
@@ -107,6 +109,13 @@ const dashboardRoutes = [
     name: "Peer Assessment",
     icon: "nc-icon nc-paper-2",
     component: PeerAssessment,
+    layout: "/admin",
+  },
+  {
+    path: "/peer-assessment-table",
+    name: "Peer Assessment Table",
+    icon: "nc-icon nc-paper-2",
+    component: PeerAssessmentTable,
     layout: "/admin",
   },
 ];

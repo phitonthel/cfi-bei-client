@@ -22,12 +22,12 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Status</h4>,
-    cell: row => row.status,
+    name: <h4>Assigned</h4>,
+    cell: row => row.assigned,
   },
   {
-    name: <h4>Approval</h4>,
-    cell: row => row.approval,
+    name: <h4>Reviewed</h4>,
+    cell: row => row.reviewed,
   },
   {
     name: <h4>Actions</h4>,
@@ -80,8 +80,8 @@ function Subordinates() {
             fullname: user.username,
             division: user.Division.name,
             role: user.Role.name,
-            status: user.isFilledByAssigned ? 'FINISHED' : 'UNFINISHED',
-            approval: user.isFilledByReviewer ? 'APPROVED' : 'UNAPPROVED',
+            assigned: user.assignedStatus,
+            reviewed: user.reviewerStatus,
             actions: Actions(user.id)
           }
         }));

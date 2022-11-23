@@ -15,8 +15,13 @@ export const Card = (assessment, handlers) => {
   return (
     <div>
       <div className="card text-center mx-6">
-        <div className='d-flex flex-row-reverse m-1'>
-          <span class="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore)}</span>
+        <div className='d-flex justify-content-between m-1'>
+          <h4 className='p-0 m-0'>
+            {/* <span class="badge badge-dark">{'Expected Score: ' + renderScore(assessment.expectedScore)}</span> */}
+          </h4>
+          <h4 className='p-0 m-0'>
+            <span class="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore)}</span>
+          </h4>
         </div>
         <div className="card-header">
           <h3>{assessment.category}</h3>
@@ -30,15 +35,14 @@ export const Card = (assessment, handlers) => {
         </div>
 
         <div className="card-footer text-muted">
-          {/* 2 days ago */}
           {!assessment.shouldShowCriterias &&
-            <a href="#" className="link-primary" onClick={() => handlers.expand(assessment.id)}>Expand</a>
+            <a style={{ cursor: 'pointer' }} className="link-primary" onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (expand)</a>
           }
           {assessment.shouldShowCriterias &&
             <>
               <div className="row">
                 <div className="col">
-                  <a href="#" className="link-primary" onClick={() => handlers.expand(assessment.id)}>Collapse</a>
+                  <a style={{ cursor: 'pointer'}} className="link-primary" onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (collapse)</a>
                 </div>
                 <div className="col">
                   {

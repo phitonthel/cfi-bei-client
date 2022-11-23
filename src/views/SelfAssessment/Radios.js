@@ -6,8 +6,8 @@ export const Radios = (assessment, handlers) => {
   // console.log({assignedScore})
 
   const generateClass = (score) => score == assignedScore 
-    ? 'btn btn-outline-primary btn-block btn-sm active' 
-    : 'btn btn-outline-primary btn-block btn-sm'
+    ? 'btn btn-outline-dark btn-block btn-sm active' 
+    : 'btn btn-outline-dark btn-block btn-sm'
 
   return (
     <>

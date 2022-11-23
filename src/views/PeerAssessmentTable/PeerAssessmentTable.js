@@ -4,36 +4,62 @@ import Swal from 'sweetalert2';
 
 import DataTable from 'react-data-table-component';
 
-import { Card } from './Card'
-
 const columns = [
   {
     name: <h4>Category</h4>,
     selector: row => row.category,
-    cell: row => <div style={{ fontSize: 16, fontWeight: 800 }}>{row.category}</div>,
+    cell: row =>
+      <div style={{ fontSize: 16 }}>
+        {row.category}
+        <a href='#' className="badge badge-secondary mx-2">
+          ...
+        </a>
+      </div>,
     sortable: true,
   },
   {
     name: <h4>Title</h4>,
     selector: row => row.title,
-    cell: row => <div style={{ fontSize: 16, fontWeight: 800 }}>{row.title}</div>,
+    cell: row => <div style={{ fontSize: 16 }}>{row.title}</div>,
     sortable: true,
   },
   {
-    name: <h4>Level</h4>,
-    cell: row => row.level,
+    name: <h4>Expected Score</h4>,
+    cell: row => <div style={{ fontSize: 16 }}>{row.expectedScore}</div>,
   },
   {
-    name: <h4>Actions</h4>,
-    cell: row => row.actions,
+    name: <h4>Assigned Score</h4>,
+    cell: row => <div style={{ fontSize: 16 }}>{row.assignedScore}</div>,
+  },
+  {
+    name: <h4>Reviewer Score</h4>,
+    cell: row => <div style={{ fontSize: 16 }}>{row.reviewerScore}</div>,
   },
 ];
 
+const renderScore = (score) => {
+  if (score === 1) return 'KNOWLEDGEABLE'
+  if (score === 2) return 'PRACTITIONER'
+  if (score === 3) return 'ADVANCED'
+  if (score === 4) return 'EXPERT'
+  return 'N/A'
+}
+
+const renderDropdown = () => {
+  return (
+    <select className="form-select form-select-sm" aria-label=".form-select example">
+      <option selected>Override Assigned Score:</option>
+      <option value="1">KNOWLEDGEABLE</option>
+      <option value="2">PRACTITIONER</option>
+      <option value="3">ADVANCED</option>
+      <option value="3">EXPERT</option>
+    </select>
+  )
+}
+
 function SelfAssessment() {
   const [assessments, setAssessments] = useState([])
-  const [assessmentForm, setFormAssessment] = useState({})
-
-  const [assessmentForms, setFormAssessments] = useState({})
+  const [peerName, setPeerName] = useState()
 
 
   const handleRadio = (e, assessmentId) => {
@@ -119,67 +145,50 @@ function SelfAssessment() {
     }
   }
 
-  // const handlerButton = (assessmentId, score) => {
-  //   assessments.forEach(assessment => {
-  //     if (assessment.id === assessmentId) {
-  //       assessment.assignedScore = score
-  //     }
-  //   });
-  //   console.log({assessments})
-  //   setAssessments(assessments)
-  // }
-
   useEffect(() => {
-    axios.get('http://localhost:8001/assessment/self', {
+    const assignedId = localStorage.getItem('peer_id')
+    axios.get(`http://localhost:8001/assessment/detail?assignedId=${assignedId}`, {
       headers: {
         access_token: localStorage.getItem('access_token')
       }
     })
       .then((response) => {
-        localStorage.setItem('self_assessment', '{}')
+        setPeerName(response.data[0].assigned.username)
         setAssessments(response.data.map(assessment => {
           return {
             id: assessment.id,
-            assignedScore: assessment.assignedScore,
-            reviewerScore: assessment.reviewerScore,
-            expectedScore: assessment.CompetencyRole.expectedScore,
+            assignedScore: renderScore(assessment.assignedScore),
+            // reviewerScore: assessment.reviewerScore,
+            reviewerScore: renderDropdown(),
+            expectedScore: renderScore(assessment.CompetencyRole.expectedScore),
             category: assessment.CompetencyRole.Competency.category,
             title: assessment.CompetencyRole.Competency.title,
             description: assessment.CompetencyRole.Competency.description,
             options: assessment.CompetencyRole.Competency.options,
-            shouldShowCriterias: false
-            // level: Radios(assessment.id, handleRadioWithLocalStorage),
-            // actions: <div className='d-flex justify-content-center'>
-            //   <a href='#' className='text-danger mx-2'><b>See Detail</b></a>
-            // </div>
           }
         }));
       });
   }, [])
-
   return (
     <>
-      {/* <span className="badge badge-primary">
-        {assessments.filter(assessment => assessment.assignedScore).length} / {assessments.length} Assessments
-      </span> */}
+      <div className='col-12'>
+        <div>
+          <h2>{peerName}</h2>
+        </div>
 
-      {/* <DataTable
-        columns={columns}
-        data={assessments}
-      /> */}
-
-      <div className='col-10'>
         <div className='mb-4'>
           <h4>Instructions</h4>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         </div>
-        {
-          assessments.map(assessment => Card(assessment, handlers))
-        }
 
-        <div className="d-flex flex-row-reverse">
-          <button type="button" className="btn btn-primary" onClick={() => handlers.submit()}>
-            Submit {assessments.filter(assessment => assessment.assignedScore).length} / {assessments.length} Assessments
+        <DataTable
+          columns={columns}
+          data={assessments}
+        />
+
+        <div className="d-flex flex-row-reverse my-2">
+          <button type="button" className="btn btn-primary btn-sm" onClick={() => handlers.submit()}>
+            Save
           </button>
         </div>
       </div>

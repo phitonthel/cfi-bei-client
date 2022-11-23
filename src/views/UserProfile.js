@@ -16,12 +16,27 @@ import {
   Col,
 } from "react-bootstrap";
 
+
 function User() {
   const history = useHistory()
 
   const [user, setUser] = useState({})
 
-  
+  const [input, setInput] = useState({});
+
+  const [inputUsername, setInputUsername] = useState('')
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    console.log({ value }, { name })
+
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:8001/user/self-detail`, {
@@ -38,11 +53,35 @@ function User() {
           division: response.data.Division.name,
           role: response.data.Role.name,
           email: response.data.email
-        
+
         })
       })
       .catch(error => console.log(error));
   }, [])
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('trigger')
+    console.log({ input })
+
+    fetch(`http://localhost:8001/user/update-profile`, {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        access_token: localStorage.getItem("access_token"),
+      },
+      body: JSON.stringify({
+        username: input.username,
+        email: input.email
+      }),
+    })
+      .then((result) => {
+        console.log({ result })
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+  };
 
   return (
     <>
@@ -54,8 +93,8 @@ function User() {
                 <Card.Title as="h4">Edit Profile</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Form>
-                <Row>
+                <Form onSubmit={handleSubmit}>
+                  <Row>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Company (disabled)</label>
@@ -70,7 +109,7 @@ function User() {
                   </Row>
 
                   <Row>
-                  <Col className="pr-1" md="5">
+                    <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Division (disabled)</label>
                         <Form.Control
@@ -99,11 +138,12 @@ function User() {
                       <Form.Group>
                         <label>Username</label>
                         <Form.Control
-    
+                          onChange={handleChange}
                           defaultValue={user.username}
                           placeholder="Company"
                           type="text"
-                          
+                          name="username"
+
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -111,9 +151,11 @@ function User() {
                       <Form.Group>
                         <label>Email</label>
                         <Form.Control
+                          onChange={handleChange}
                           defaultValue={user.email}
                           placeholder="Email"
                           type="text"
+                          name="email"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -134,14 +176,16 @@ function User() {
                       <Form.Group>
                         <label>New Password</label>
                         <Form.Control
+                          onChange={handleChange}
                           defaultValue=""
                           placeholder="New Password"
                           type="password"
+                          name="password"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
-              
+
                   <Button
                     className="btn-fill pull-right"
                     type="submit"

@@ -4,8 +4,8 @@ export const Radios = (assessment, handlers) => {
   const reviewerScore = assessment.reviewerScore
 
   const generateClass = (score) => score == reviewerScore 
-    ? 'btn btn-outline-primary btn-block btn-sm active' 
-    : 'btn btn-outline-primary btn-block btn-sm'
+    ? 'btn btn-outline-dark btn-block btn-sm active' 
+    : 'btn btn-outline-dark btn-block btn-sm'
 
   return (
     <>
