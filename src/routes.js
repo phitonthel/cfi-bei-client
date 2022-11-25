@@ -28,7 +28,7 @@ import Subordinates from "views/Subordinates";
 import SelfAssessment from "views/SelfAssessment";
 import PeerAssessment from "views/PeerAssessment";
 import PeerAssessmentTable from "views/PeerAssessmentTable";
-
+import Reports from "views/Reports";
 
 import Article from "views/article";
 
@@ -116,6 +116,13 @@ const dashboardRoutes = [
     name: "Peer Assessment Table",
     icon: "nc-icon nc-paper-2",
     component: PeerAssessmentTable,
+    layout: "/admin",
+  },
+  {
+    path: "/reports",
+    name: "Reports",
+    icon: "nc-icon nc-paper-2",
+    component: Reports,
     layout: "/admin",
   },
 ];

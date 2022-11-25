@@ -2,59 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-import DataTable from 'react-data-table-component';
 
 import { Card } from './Card'
-
-const columns = [
-  {
-    name: <h4>Category</h4>,
-    selector: row => row.category,
-    cell: row => <div style={{ fontSize: 16, fontWeight: 800 }}>{row.category}</div>,
-    sortable: true,
-  },
-  {
-    name: <h4>Title</h4>,
-    selector: row => row.title,
-    cell: row => <div style={{ fontSize: 16, fontWeight: 800 }}>{row.title}</div>,
-    sortable: true,
-  },
-  {
-    name: <h4>Level</h4>,
-    cell: row => row.level,
-  },
-  {
-    name: <h4>Actions</h4>,
-    cell: row => row.actions,
-  },
-];
+import { Instructions } from './Instructions'
 
 function SelfAssessment() {
   const [assessments, setAssessments] = useState([])
-  const [assessmentForm, setFormAssessment] = useState({})
+  const [hasAgreed, setHasAgreed] = useState(false)
 
-  const [assessmentForms, setFormAssessments] = useState({})
-
-
-  const handleRadio = (e, assessmentId) => {
-    setFormAssessment({
-      ...assessmentForm,
-      [assessmentId]: e.target.value
-    })
-  }
-
-  const handleClickButton = () => { }
-
-  const handleRadioWithLocalStorage = (e, assessmentId) => {
-    const currentStorage = JSON.parse(localStorage.getItem('self_assessment'))
-    const payload = {
-      ...currentStorage,
-      [assessmentId]: e.target.value
-    }
-    localStorage.setItem('self_assessment', JSON.stringify(payload))
-    setFormAssessment(payload)
-  }
-
+  // handlers for assessment
   const handlers = {
     button: (assessmentId, score) => {
       assessments.forEach(assessment => {
@@ -119,16 +75,6 @@ function SelfAssessment() {
     }
   }
 
-  // const handlerButton = (assessmentId, score) => {
-  //   assessments.forEach(assessment => {
-  //     if (assessment.id === assessmentId) {
-  //       assessment.assignedScore = score
-  //     }
-  //   });
-  //   console.log({assessments})
-  //   setAssessments(assessments)
-  // }
-
   useEffect(() => {
     axios.get('http://localhost:8001/assessment/self', {
       headers: {
@@ -136,7 +82,6 @@ function SelfAssessment() {
       }
     })
       .then((response) => {
-        localStorage.setItem('self_assessment', '{}')
         setAssessments(response.data.map(assessment => {
           return {
             id: assessment.id,
@@ -148,31 +93,23 @@ function SelfAssessment() {
             description: assessment.CompetencyRole.Competency.description,
             options: assessment.CompetencyRole.Competency.options,
             shouldShowCriterias: false
-            // level: Radios(assessment.id, handleRadioWithLocalStorage),
-            // actions: <div className='d-flex justify-content-center'>
-            //   <a href='#' className='text-danger mx-2'><b>See Detail</b></a>
-            // </div>
           }
         }));
       });
   }, [])
 
+  if (!hasAgreed) {
+    return (
+      <div className='mb-4'>
+        <Instructions setHasAgreed={setHasAgreed} />
+      </div>
+    )
+  }
+
   return (
     <>
-      {/* <span className="badge badge-primary">
-        {assessments.filter(assessment => assessment.assignedScore).length} / {assessments.length} Assessments
-      </span> */}
-
-      {/* <DataTable
-        columns={columns}
-        data={assessments}
-      /> */}
-
       <div className='col-10'>
-        <div className='mb-4'>
-          <h4>Instructions</h4>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </div>
+
         {
           assessments.map(assessment => Card(assessment, handlers))
         }

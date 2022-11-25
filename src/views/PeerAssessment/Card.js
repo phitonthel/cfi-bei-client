@@ -17,10 +17,10 @@ export const Card = (assessment, handlers) => {
       <div className="card text-center mx-6">
         <div className='d-flex justify-content-between m-1'>
           <h4 className='p-0 m-0'>
-            <span class="badge badge-dark">{'Expected Score: ' + renderScore(assessment.expectedScore)}</span>
+            <span className="badge badge-dark">{'Expected Score: ' + renderScore(assessment.expectedScore)}</span>
           </h4>
           <h4 className='p-0 m-0'>
-          <span class="badge badge-dark">{'Score by Assigned: ' + renderScore(assessment.assignedScore)}</span>
+          <span className="badge badge-dark">{'Score by Assigned: ' + renderScore(assessment.assignedScore)}</span>
           </h4>
         </div>
         <div className="card-header">

@@ -17,10 +17,10 @@ export const Card = (assessment, handlers) => {
       <div className="card text-center mx-6">
         <div className='d-flex justify-content-between m-1'>
           <h4 className='p-0 m-0'>
-            {/* <span class="badge badge-dark">{'Expected Score: ' + renderScore(assessment.expectedScore)}</span> */}
+            {/* <span className="badge badge-dark">{'Expected Score: ' + renderScore(assessment.expectedScore)}</span> */}
           </h4>
           <h4 className='p-0 m-0'>
-            <span class="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore)}</span>
+            <span className="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore)}</span>
           </h4>
         </div>
         <div className="card-header">
@@ -28,7 +28,7 @@ export const Card = (assessment, handlers) => {
         </div>
         <div className="card-body">
           <h4 className="card-title">{assessment.title}</h4>
-          <p className="card-text">{assessment.description}</p>
+          <p className="card-text mx-4">{assessment.description}</p>
 
           {Radios(assessment, handlers)}
 
@@ -42,7 +42,7 @@ export const Card = (assessment, handlers) => {
             <>
               <div className="row">
                 <div className="col">
-                  <a style={{ cursor: 'pointer'}} className="link-primary" onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (collapse)</a>
+                  <a style={{ cursor: 'pointer' }} className="link-primary" onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (collapse)</a>
                 </div>
                 <div className="col">
                   {
