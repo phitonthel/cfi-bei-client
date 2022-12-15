@@ -32,7 +32,17 @@ import Reports from "views/Reports";
 
 import Article from "views/article";
 
-const dashboardRoutes = [
+export const guestRoutes = [
+  {
+    path: "/login",
+    name: "Login",
+    icon: "nc-icon nc-bell-55",
+    component: Login,
+    layout: "/admin",
+  }
+]
+
+export const baseRoutes = [
   // {
   //   upgrade: true,
   //   path: "/upgrade",
@@ -121,10 +131,8 @@ const dashboardRoutes = [
   {
     path: "/reports",
     name: "Reports",
-    icon: "nc-icon nc-paper-2",
+    icon: "nc-icon nc-notes",
     component: Reports,
     layout: "/admin",
   },
 ];
-
-export default dashboardRoutes;

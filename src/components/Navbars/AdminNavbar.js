@@ -19,7 +19,8 @@ import React, { Component } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
-import routes from "routes.js";
+import { baseRoutes } from '../../routes'
+import { logout } from "../../apis/user/auth";
 
 function Header() {
 
@@ -39,16 +40,16 @@ function Header() {
   };
 
   const getBrandText = () => {
-    for (let i = 0; i < routes.length; i++) {
-      if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
-        return routes[i].name;
+    for (let i = 0; i < baseRoutes.length; i++) {
+      if (location.pathname.indexOf(baseRoutes[i].layout + baseRoutes[i].path) !== -1) {
+        return baseRoutes[i].name;
       }
     }
     return "Brand";
   };
 
-  const getUsernameFromLocalStorage = () => {
-    return localStorage.getItem("username"); 
+  const getFullnameFromLocalStorage = () => {
+    return localStorage.getItem("fullname");
   }
 
   return (
@@ -205,11 +206,10 @@ function Header() {
             <Nav.Item>
               <Nav.Link
                 className="m-0"
-                href="#pablo"
+                href="#"
                 onClick={(e) => {
                   e.preventDefault()
-                  localStorage.removeItem("access_token"); 
-                  localStorage.removeItem("username"); 
+                  logout()
                   history.push('/admin/login');
                 }}
               >
@@ -220,12 +220,17 @@ function Header() {
             <Nav.Item>
               <Nav.Link
                 className="m-0"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  history.push('/admin/user');
+                }}
               >
                 {/* <span className="no-icon">BARTOLOMEUS DELPHITO</span> */}
-                <span className="no-icon">{getUsernameFromLocalStorage()}</span>
+                <span className="no-icon">{getFullnameFromLocalStorage()}</span>
               </Nav.Link>
             </Nav.Item>
-            
+
           </Nav>
         </Navbar.Collapse>
       </Container>

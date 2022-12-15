@@ -87,14 +87,14 @@ export const Instructions = (props) => {
             onClick={() => {
               setHasRead(!hasRead)
             }}></input>
-          <label className="form-check-label" for="flexCheckDefault">
+          <label className="form-check-label" htmlFor="flexCheckDefault">
             Saya telah membaca dan memahami instruksi yang diberikan.
           </label>
         </div>
       </div>
       {
         hasRead && <div className="row justify-content-center m-2">
-          <button type="button" class="btn btn-primary btn-sm" onClick={() => {
+          <button type="button" className="btn btn-secondary btn-fill btn-sm" onClick={() => {
             props.setHasAgreed(true)
             document.querySelector(".main-panel").scrollTo(0,0)
           }}>

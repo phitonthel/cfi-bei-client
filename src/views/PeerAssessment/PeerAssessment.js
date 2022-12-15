@@ -5,6 +5,9 @@ import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
 
 import { Card } from './Card'
+import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
+import { submitScore } from '../../apis/assessment/submitScore';
+import { fetchById } from '../../apis/assessment/fetchById';
 
 function SelfAssessment() {
   const [assessments, setAssessments] = useState([])
@@ -31,65 +34,43 @@ function SelfAssessment() {
     },
     submit: async () => {
       try {
-        const payload = assessments.map(assessment => {
-          return {
-            assessmentId: assessment.id,
-            reviewerScore: assessment.reviewerScore
-          }
-        })
-
-        const promises = payload.map(e => {
-          return axios({
-            method: 'POST',
-            url: 'http://localhost:8001/assessment/reviewer',
-            headers: {
-              access_token: localStorage.getItem('access_token')
-            },
-            data: {
-              assessmentId: e.assessmentId,
-              reviewerScore: e.reviewerScore,
-            }
-          });
+        const promises = assessments.map(assessment => {
+          return submitScore({
+            assessmentId: e.assessmentId,
+            reviewerScore: e.reviewerScore,
+          })
         })
 
         await Promise.all(promises)
 
-        Swal.fire({
-          position: 'top',
-          icon: 'success',
-          text: 'Your work has been saved',
-          showConfirmButton: false,
-          timer: 1000
-        })
+        fireSwalSuccess('Your work has been saved!')
       } catch (error) {
-        console.log({ error })
+        fireSwalError(error)
       }
     }
   }
 
-  useEffect(() => {
-    const assignedId = localStorage.getItem('peer_id')
-    axios.get(`http://localhost:8001/assessment/detail?assignedId=${assignedId}`, {
-      headers: {
-        access_token: localStorage.getItem('access_token')
-      }
-    })
-      .then((response) => {
-        setPeerName(response.data[0].assigned.username)
-        setAssessments(response.data.map(assessment => {
-          return {
-            id: assessment.id,
-            assignedName: assessment.assigned.username,
-            assignedScore: assessment.assignedScore,
-            reviewerScore: assessment.reviewerScore,
-            category: assessment.CompetencyRole.Competency.category,
-            title: assessment.CompetencyRole.Competency.title,
-            description: assessment.CompetencyRole.Competency.description,
-            options: assessment.CompetencyRole.Competency.options,
-            shouldShowCriterias: false
-          }
-        }));
-      });
+  useEffect(async () => {
+    try {
+      const assignedId = localStorage.getItem('peer_id')
+      const { data } = await fetchById({ assignedId })
+      setPeerName(data[0].assigned.nik)
+      setAssessments(data.map(assessment => {
+        return {
+          id: assessment.id,
+          assignedName: assessment.assigned.nik,
+          assignedScore: assessment.assignedScore,
+          reviewerScore: assessment.reviewerScore,
+          category: assessment.CompetencyRole.Competency.category,
+          title: assessment.CompetencyRole.Competency.title,
+          description: assessment.CompetencyRole.Competency.description,
+          options: assessment.CompetencyRole.Competency.options,
+          shouldShowCriterias: false
+        }
+      }));
+    } catch (error) {
+      fireSwalError(error)
+    }
   }, [])
 
   return (
@@ -103,7 +84,7 @@ function SelfAssessment() {
           <h4>Instructions</h4>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         </div>
-        
+
         {
           assessments.map(assessment => Card(assessment, handlers))
         }

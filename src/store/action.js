@@ -1,3 +1,5 @@
+import { config } from '../env'
+
 const SET_USER = "user/set"
 
 export function setUser(payload) {
@@ -10,7 +12,7 @@ export function setUser(payload) {
 export function editUser(payload) {
   return () => {
     return new Promise((resolve, reject) => {
-      fetch(`http://localhost:8001/user/update-profile`, {
+      fetch(`${config.baseUrl}/user/update-profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

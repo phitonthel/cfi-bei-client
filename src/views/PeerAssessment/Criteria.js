@@ -10,7 +10,7 @@ export const Criteria = (assessment, handlers) => {
               <li className="list-group-item">{option.level}</li>
               <li className="list-group-item list-group-item-light text-left">
                 {
-                  option.criterias[0].map((criteria, index) => {
+                  option.criterias.map((criteria, index) => {
                     return (
                       <div className="text-left">
                         {index + 1} {'.  '} {criteria}
