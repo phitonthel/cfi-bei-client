@@ -3,27 +3,19 @@ import { useLocation, useHistory } from "react-router-dom";
 import axios from 'axios';
 
 import DataTable from 'react-data-table-component';
+import { login } from '../../apis/user/auth';
 
 function Login() {
   const history = useHistory()
 
-  const [username, setUsername] = useState('')
+  const [nik, setNik] = useState('')
   const [password, setPassword] = useState('')
 
   const handleChange = async (event) => {
     event.preventDefault()
 
-    try {
-      const response = await axios.post('http://localhost:8001/user/login', {
-        username,
-        password
-      })
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('username', response.data.username);
-      history.push('/')
-    } catch (error) {
-      console.log(error);
-    }
+    await login({nik, password})
+    history.push('/')
   }
 
   return (
@@ -76,13 +68,13 @@ function Login() {
 
                       {/* <!-- Email input --> */}
                       <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="form3Example3">Username</label>
+                        <label className="form-label" htmlFor="form3Example3">NIK</label>
                         <input
                           type="username"
                           id="form3Example3"
                           className="form-control"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
+                          value={nik}
+                          onChange={(e) => setNik(e.target.value)}
                         />
                       </div>
 

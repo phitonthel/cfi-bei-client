@@ -18,15 +18,15 @@
 import React, { Component } from "react";
 import { useLocation, Route, Switch } from "react-router-dom";
 
-import AdminNavbar from "components/Navbars/AdminNavbar";
-import Footer from "components/Footer/Footer";
-import Sidebar from "components/Sidebar/Sidebar";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import AdminNavbar from "../components/Navbars/AdminNavbar";
+import Footer from '../components/Footer/Footer';
+import Sidebar from "../components/Sidebar/Sidebar";
+import FixedPlugin from "../components/FixedPlugin/FixedPlugin.js";
 import Login from "views/Login";
 
-import routes from "routes.js";
+import { guestRoutes, baseRoutes } from '../routes.js'
 
-import sidebarImage from "assets/img/sidebar-3.jpg";
+import sidebarImage from "assets/img/sidebar-7.jpg";
 
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
@@ -36,8 +36,9 @@ function Admin() {
   const location = useLocation();
   const mainPanel = React.useRef(null);
 
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
+  const getRoutes = (baseRoutes) => {
+    return baseRoutes.map((prop, key) => {
+      // condition for rendering access level goes here
       if (prop.layout === "/admin") {
         return (
           <Route
@@ -68,25 +69,15 @@ function Admin() {
 
   const access_token = localStorage.getItem("access_token");
 
-  const loginRoute = [
-    {
-      path: "/login",
-      name: "Login",
-      icon: "nc-icon nc-bell-55",
-      component: Login,
-      layout: "/admin",
-    }
-  ]
-
   if (!access_token) {
     return (
       <>
         <div className="wrapper">
-          <Sidebar color={color} image={hasImage ? image : ""} routes={loginRoute} />
+          <Sidebar color={color} image={hasImage ? image : ""} routes={guestRoutes} />
           <div className="main-panel" ref={mainPanel}>
             <AdminNavbar />
             <div className="content">
-              <Switch>{getRoutes(loginRoute)}</Switch>
+              <Switch>{getRoutes(guestRoutes)}</Switch>
             </div>
             <Footer />
           </div>
@@ -98,11 +89,11 @@ function Admin() {
   return (
     <>
       <div className="wrapper">
-        <Sidebar color={color} image={hasImage ? image : ""} routes={routes} />
+        <Sidebar color={color} image={hasImage ? image : ""} routes={baseRoutes} />
         <div className="main-panel" ref={mainPanel}>
           <AdminNavbar />
           <div className="content">
-            <Switch>{getRoutes(routes)}</Switch>
+            <Switch>{getRoutes(baseRoutes)}</Switch>
           </div>
           <Footer />
         </div>

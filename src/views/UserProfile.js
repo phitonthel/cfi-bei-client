@@ -15,22 +15,19 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { fetchSelfDetail } from '../apis/user/fetchSelfDetail';
+import { updateProfile } from '../apis/user/updateProfile';
+import { fireSwalError } from '../apis/fireSwal';
 
 
 function User() {
-  const history = useHistory()
-
   const [user, setUser] = useState({})
-
   const [input, setInput] = useState({});
 
-  const [inputUsername, setInputUsername] = useState('')
 
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
-
-    console.log({ value }, { name })
 
     setInput({
       ...input,
@@ -38,49 +35,32 @@ function User() {
     });
   };
 
-  useEffect(() => {
-    axios.get(`http://localhost:8001/user/self-detail`, {
-      headers: {
-        access_token: localStorage.getItem('access_token')
-      }
-    })
-      .then((response) => {
-        console.log(response);
-
-        setUser({
-          username: response.data.username,
-          password: response.data.password,
-          division: response.data.Division.name,
-          role: response.data.Role.name,
-          email: response.data.email
-
-        })
+  useEffect(async () => {
+    try {
+      const data = await fetchSelfDetail()
+      setUser({
+        username: data.username,
+        password: data.password,
+        division: data.Division.name,
+        role: data.Role.name,
+        email: data.email
       })
-      .catch(error => console.log(error));
+    } catch (error) {
+      fireSwalError(error)
+    }
   }, [])
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log('trigger')
-    console.log({ input })
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
 
-    fetch(`http://localhost:8001/user/update-profile`, {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        access_token: localStorage.getItem("access_token"),
-      },
-      body: JSON.stringify({
+      await updateProfile({
         username: input.username,
         email: input.email
-      }),
-    })
-      .then((result) => {
-        console.log({ result })
       })
-      .catch((err) => {
-        console.log(err)
-      });
+    } catch (error) {
+      fireSwalError(error)
+    }
   };
 
   return (
@@ -136,13 +116,13 @@ function User() {
                   <Row>
                     <Col className="pr-1" md="5">
                       <Form.Group>
-                        <label>Username</label>
+                        <label>NIK (disabled)</label>
                         <Form.Control
-                          onChange={handleChange}
-                          defaultValue={user.username}
+                          defaultValue={user.nik}
+                          disabled
                           placeholder="Company"
                           type="text"
-                          name="username"
+                          name="nik"
 
                         ></Form.Control>
                       </Form.Group>
@@ -187,7 +167,7 @@ function User() {
                   </Row>
 
                   <Button
-                    className="btn-fill pull-right"
+                    className=""
                     type="submit"
                     variant="info"
                   >

@@ -23,7 +23,7 @@ import { Nav } from "react-bootstrap";
 import logo from "assets/img/reactlogo.png";
 
 function Sidebar({ color, image, routes }) {
-  const exlucdedRoutes = ['Peer Assessment', 'Peer Assessment Table']
+  const excludedRoutes = ['Peer Assessment', 'Peer Assessment Table']
 
   const location = useLocation();
 
@@ -47,18 +47,18 @@ function Sidebar({ color, image, routes }) {
           >
             <div className="logo-img">
               <img
-                src={require("assets/img/idx.jpeg").default}
+                src={require("assets/img/idx.png").default}
                 alt="..."
               />
             </div>
           </a>
           <a className="simple-text" href="">
-            IDX CFI BEI
+            IDX CFI
           </a>
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if (!prop.redirect && !exlucdedRoutes.includes(prop.name))
+            if (!prop.redirect && !excludedRoutes.includes(prop.name))
               return (
                 <li
                   className={

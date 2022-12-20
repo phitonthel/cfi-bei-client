@@ -36,13 +36,13 @@ export const Card = (assessment, handlers) => {
 
         <div className="card-footer text-muted">
           {!assessment.shouldShowCriterias &&
-            <a style={{ cursor: 'pointer' }} className="link-primary" onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (expand)</a>
+            <a className="link" style={{ cursor: 'pointer' }} onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (expand)</a>
           }
           {assessment.shouldShowCriterias &&
             <>
               <div className="row">
                 <div className="col">
-                  <a style={{ cursor: 'pointer' }} className="link-primary" onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (collapse)</a>
+                  <a className="link" style={{ cursor: 'pointer' }} onClick={() => handlers.expand(assessment.id)}>Penunjukan perilaku masing-masing level (collapse)</a>
                 </div>
                 <div className="col">
                   {

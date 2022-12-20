@@ -4,11 +4,14 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import DataTable from 'react-data-table-component';
+import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
+import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 
 const columns = [
   {
     name: <h4>Name</h4>,
     selector: row => row.fullname,
+    width: '300px',
     sortable: true,
   },
   {
@@ -19,15 +22,18 @@ const columns = [
   {
     name: <h4>Role</h4>,
     selector: row => row.role,
+    width: '500px',
     sortable: true,
   },
   {
     name: <h4>Assigned</h4>,
-    cell: row => row.assigned,
+    selector: row => row.assigned,
+    sortable: true,
   },
   {
     name: <h4>Reviewed</h4>,
-    cell: row => row.reviewed,
+    selector: row => row.reviewed,
+    sortable: true,
   },
   {
     name: <h4>Actions</h4>,
@@ -40,13 +46,14 @@ function Subordinates() {
 
   const [subordinates, setSubordinates] = useState([])
 
-  const Actions = (userId) => {
+  const Actions = (user) => {
     return (
       <div>
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
-            localStorage.setItem('peer_id', userId)
-            history.push('/admin/peer-assessment')
+            localStorage.setItem('peer_id', user.id)
+            // localStorage.setItem('peer_fullname', user.fullname)
+            history.push('/admin/peer-assessment-table')
           }}
         >
           Assess
@@ -58,35 +65,35 @@ function Subordinates() {
     )
   }
 
-  useEffect(() => {
-    axios.get("http://localhost:8001/user/list-subordinate", {
-      headers: {
-        access_token: localStorage.getItem('access_token')
+  useEffect(async () => {
+    try {
+      const { data } = await fetchSubordinates()
+      console.log()
+      if (data.message) {
+        return Swal.fire({
+          position: 'top',
+          text: data.message,
+          showConfirmButton: false,
+          timer: 1000
+        })
       }
-    })
-      .then((response) => {
-        if (response.data.message) {
-          return Swal.fire({
-            position: 'top',
-            text: response.data.message,
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }
 
-        setSubordinates(response.data.map(user => {
-          return {
-            id: user.id,
-            fullname: user.username,
-            division: user.Division.name,
-            role: user.Role.name,
-            assigned: user.assignedStatus,
-            reviewed: user.reviewerStatus,
-            actions: Actions(user.id)
-          }
-        }));
-      })
-      .catch(error => console.log(error));
+      setSubordinates(data.map(user => {
+        return {
+          id: user.id,
+          fullname: user.fullname,
+          division: user.Division.name,
+          // role: user.Role.name,
+          role: user.positionName,
+          assigned: user.assignedStatus,
+          reviewed: user.reviewerStatus,
+          actions: Actions(user)
+        }
+      }));
+    } catch (error) {
+      console.log({ error })
+      fireSwalError(error)
+    }
   }, [])
 
   return (
@@ -94,6 +101,7 @@ function Subordinates() {
       <DataTable
         columns={columns}
         data={subordinates}
+        highlightOnHover
       />
     </>
   );
