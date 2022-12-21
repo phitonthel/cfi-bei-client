@@ -16,7 +16,6 @@ function SelfAssessment() {
     <>
       <div className='row justify-content-center mb-4'>
         <select className="form-select form-select-sm col-2 mx-2" value={option} onChange={(e) => {
-          console.log(e.target.value)
           setOption(+e.target.value)
         }}>
           <option className="btn" >Select Report</option>

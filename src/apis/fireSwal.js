@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-export const fireSwalError = ({
+export const fireSwalError = (
   error,
-}) => {
+) => {
   Swal.fire({
     position: 'top',
     icon: 'error',
@@ -14,7 +14,6 @@ export const fireSwalError = ({
 }
 
 export const fireSwalSuccess = ({
-  icon,
   text,
 }) => {
   Swal.fire({

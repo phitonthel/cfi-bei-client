@@ -15,22 +15,31 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
-import Typography from "views/Typography.js";
-import Icons from "views/Icons.js";
-import Maps from "views/Maps.js";
-import Notifications from "views/Notifications.js";
-import Upgrade from "views/Upgrade.js";
-import Login from "views/Login";
+import Dashboard from "./views/Dashboard.js";
+import UserProfile from "./views/UserProfile.js";
+import Typography from "./views/Typography.js";
+import Icons from "./views/Icons.js";
+import Maps from "./views/Maps.js";
+import Notifications from "./views/Notifications.js";
+import Upgrade from "./views/Upgrade.js";
+import Login from "./views/Login";
 
-import Subordinates from "views/Subordinates";
-import SelfAssessment from "views/SelfAssessment";
-import PeerAssessment from "views/PeerAssessment";
-import PeerAssessmentTable from "views/PeerAssessmentTable";
-import Reports from "views/Reports";
+import Subordinates from "./views/Subordinates";
+import SelfAssessment from "./views/SelfAssessment";
+import PeerAssessmentTable from "./views/PeerAssessmentTable";
+import Reports from "./views/Reports";
+import Technical from "./views/Technical";
+import Behavioural from "./views/Behavioural";
 
-import Article from "views/article";
+import Article from "./views/article";
+
+const ACCESS_LEVEL = {
+  STAF: 'Staf',
+  KEPALA_UNIT: 'Kepala Unit',
+  KEPALA_KANTOR: 'Kepala Kantor',
+  KEPALA_DIVISI: 'Kepala Divisi',
+  SUPERADMIN: 'SUPERADMIN'
+}
 
 export const guestRoutes = [
   {
@@ -39,6 +48,7 @@ export const guestRoutes = [
     icon: "nc-icon nc-bell-55",
     component: Login,
     layout: "/admin",
+    access: null
   }
 ]
 
@@ -58,13 +68,6 @@ export const baseRoutes = [
   //   component: Dashboard,
   //   layout: "/admin",
   // },
-  {
-    path: "/user",
-    name: "User Profile",
-    icon: "nc-icon nc-circle-09",
-    component: UserProfile,
-    layout: "/admin",
-  },
   // {
   //   path: "/article",
   //   name: "Article",
@@ -101,25 +104,46 @@ export const baseRoutes = [
   //   layout: "/admin",
   // }
   {
+    path: "/user",
+    name: "User Profile",
+    icon: "nc-icon nc-circle-09",
+    component: UserProfile,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
+  },
+  {
     path: "/subordinates",
     name: "Subordinates",
     icon: "nc-icon nc-chart-pie-35",
     component: Subordinates,
     layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
   },
   {
-    path: "/self-assessment",
-    name: "Self Assessment",
+    path: "/self-assessment-behavioural",
+    name: "Behavioural Asm.",
     icon: "nc-icon nc-paper-2",
-    component: SelfAssessment,
+    component: Behavioural,
     layout: "/admin",
+    access: [
+      ACCESS_LEVEL.STAF,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
   },
   {
-    path: "/peer-assessment",
-    name: "Peer Assessment",
+    path: "/self-assessment-technical",
+    name: "Technical Asm.",
     icon: "nc-icon nc-paper-2",
-    component: PeerAssessment,
+    component: Technical,
     layout: "/admin",
+    access: [
+      ACCESS_LEVEL.STAF,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
   },
   {
     path: "/peer-assessment-table",
@@ -127,6 +151,12 @@ export const baseRoutes = [
     icon: "nc-icon nc-paper-2",
     component: PeerAssessmentTable,
     layout: "/admin",
+    access: [
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
   },
   {
     path: "/reports",
@@ -134,5 +164,8 @@ export const baseRoutes = [
     icon: "nc-icon nc-notes",
     component: Reports,
     layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN
+    ],
   },
 ];

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export const Instructions = (props) => {
+export const InstructionsTech = (props) => {
   const [hasRead, setHasRead] = useState(false)
 
   return (
@@ -12,10 +12,7 @@ export const Instructions = (props) => {
         <div className="card-body">
           <ol className="">
             <li className="m-1">
-              Anda akan diminta untuk melakukan penilaian terhadap diri sendiri/self-assessment mengenai kompetensi perilaku dan kompetensi teknis yang terkait dengan Anda.
-            </li>
-            <li className="m-1">
-              Pengisian dapat dilakukan menggunakan computer/laptop yang terkoneksi dengan internet.
+              Anda akan diminta untuk melakukan penilaian terhadap diri sendiri/self-assessment mengenai kompetensi teknis yang terkait dengan Anda.
             </li>
             <li className="m-1">
               Penilaian kompetensi ini bertujuan untuk mengetahui pengembangan kompetensi yang dibutuhkan oleh setiap Karyawan.
@@ -24,22 +21,19 @@ export const Instructions = (props) => {
               Dalam pengisian self-assessment dibutuhkan waktu sekitar 30-60 menit untuk memberikan self-assessment terhadap kompetensi yang terkait dengan posisi Anda.
             </li>
             <li className="m-1">
-              Anda perlu melakukan self-assessment dengan <b>cara memilih salah satu level</b> (<i>knowledgeable/practitioner/advanced/expert</i>) yang Anda rasa sesuai dengan diri Anda / sudah Anda miliki saat ini.
+              Anda perlu melakukan self-assessment dengan cara memilih <b>salah satu level</b> (<i>knowledgeable/practitioner/advanced/expert</i>) yang Anda rasa sesuai dengan diri Anda / sudah Anda miliki saat ini.
             </li>
             <li className="m-1">
-              Anda harus memberikan Penilaian terhadap seluruh kompetensi.
+              Anda harus memberikan penilaian terhadap seluruh kompetensi.
             </li>
             <li className="m-1">
-              Isilah dengan baik dan seksama.
-            </li>
-            <li className="m-1">
-              Anda dapat melihat progress pengerjaan self-assessment pada <b>bagian submit</b>.
+              Anda dapat melihat progress pengerjaan self-assessment pada <b>tombol submit</b>.
             </li>
             <li className="m-1">
               Setelah Anda mengisi Penilaian terhadap seluruh kompetensi, klik tombol submit.
             </li>
             <li className="m-1">
-              Anda dapat melihat kembali penilaian self-assessment melalui <b>tab self assessment</b>.
+              Anda dapat melihat kembali penilaian self-assessment melalui <b>tab assessment</b>.
             </li>
             <li className="m-1">
               Setelah anda melakukan self-assessment, atasan  langsung (Kepala Unit/Kepala Divisi) akan mereview/ menilai / memverifikasi nilai Anda. Nilai final adalah nilai yang telah diverifikasi atasan  langsung (Kepala Unit/Kepala Divisi).
@@ -102,8 +96,6 @@ export const Instructions = (props) => {
           </button>
         </div>
       }
-
-
 
     </>
   )

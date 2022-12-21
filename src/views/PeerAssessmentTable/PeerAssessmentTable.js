@@ -6,44 +6,16 @@ import DataTable from 'react-data-table-component';
 import { submitScore } from '../../apis/assessment/submitScore';
 import { fetchById } from '../../apis/assessment/fetchById';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
+import { renderScore } from '../../components/AssessmentCard'
+import { renderDropdown } from './renderDropdown'
+import { Criteria } from '../../components/Criteria'
+import { ExpandableInstructions } from '../../components/ExpandableInstructions'
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
-const renderScore = (score) => {
-  if (score === 1) return 'KNOWLEDGEABLE'
-  if (score === 2) return 'PRACTITIONER'
-  if (score === 3) return 'ADVANCED'
-  if (score === 4) return 'EXPERT'
-  return 'N/A'
-}
-
-function SelfAssessment() {
+function PeerAssessment() {
   const [assessments, setAssessments] = useState([])
   const [peerName, setPeerName] = useState()
-
-  const renderDropdown = (propAssessment) => {
-    return (
-      <select className="form-select form-select-sm" aria-label=".form-select example" value={propAssessment.reviewerScore ?? undefined}
-        onChange={(e) => {
-          const reviewerInputScore = e.target.value
-
-          setAssessments((assessments) => {
-            assessments.forEach(assessment => {
-              if (assessment.id === propAssessment.id) {
-                assessment.reviewerScore = reviewerInputScore
-              }
-            });
-
-            return [...assessments]
-          })
-        }
-        }>
-        <option disabled>SELECT SCORE</option>
-        <option value={1}>KNOWLEDGEABLE</option>
-        <option value={2}>PRACTITIONER</option>
-        <option value={3}>ADVANCED</option>
-        <option value={4}>EXPERT</option>
-      </select >
-    )
-  }
+  const [isLoading, setIsLoading] = useState(true)
 
   const handlers = {
     submit: async () => {
@@ -71,19 +43,23 @@ function SelfAssessment() {
       setPeerName(data[0].assigned.fullname)
 
       setAssessments(data.map(assessment => {
+        const type = assessment.CompetencyRole.Competency.type
         return {
           id: assessment.id,
-          assignedScore: renderScore(assessment.assignedScore),
+          assignedScore: renderScore(assessment.assignedScore, type),
           reviewerScore: assessment.reviewerScore,
-          expectedScore: renderScore(assessment.CompetencyRole.expectedScore),
+          expectedScore: renderScore(assessment.CompetencyRole.expectedScore, type),
           category: assessment.CompetencyRole.Competency.category,
           title: assessment.CompetencyRole.Competency.title,
           description: assessment.CompetencyRole.Competency.description,
+          type,
           options: assessment.CompetencyRole.Competency.options,
         }
       }));
     } catch (error) {
       fireSwalError(error)
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
@@ -97,6 +73,7 @@ function SelfAssessment() {
           {row.category}
         </div>,
       sortable: true,
+      width: '300px'
     },
     {
       name: <h4>Title</h4>,
@@ -104,39 +81,67 @@ function SelfAssessment() {
       cell: row =>
         <div style={{ fontSize: 16 }}>
           {row.title}
-          {/* <a href='#' className="badge badge-secondary mx-2">
-            ...
-          </a> */}
         </div>,
       sortable: true,
-      width: '500px'
+      width: '400px'
+    },
+    {
+      name: <h4>Type</h4>,
+      selector: row => row.type,
+      cell: row => <div style={{ fontSize: 16 }}>{row.type}</div>,
+      sortable: true,
     },
     {
       name: <h4>Expected Score</h4>,
+      selector: row => row.expectedScore,
       cell: row => <div style={{ fontSize: 16 }}>{row.expectedScore}</div>,
+      sortable: true,
     },
     {
       name: <h4>Assigned Score</h4>,
-      // cell: row => <div style={{ fontSize: 16 }}>{row.assignedScore}</div>,
       cell: row => <div style={{ fontSize: 16 }}>{row.assignedScore}</div>,
     },
     {
       name: <h4>Reviewer Score</h4>,
-      // cell: row => <div style={{ fontSize: 16 }}>{row.reviewerScore}</div>,
-      cell: row => renderDropdown(row)
+      cell: row => renderDropdown(row, setAssessments)
     },
   ];
+
+  const ExpandedComponent = ({ data }) => {
+    return <>
+      <ul className="list-group m-4 px-4">
+        <li className="list-group-item"><b>{data.description}</b></li>
+      </ul>
+      <div className='mb-4'>
+        {Criteria(data)}
+      </div>
+    </>
+  }
+
+  const instructions = [
+    'Expected score adalah level kompetensi yang dipersyaratkan BEI untuk posisi tim Anda.',
+    'Assigned score adalah penilaian mandiri/self assessment yang sudah dilakukan oleh karyawan terkait/ tim Anda.',
+    'Reviewer score adalah penilaian/score/level yang akan anda berikan terhadap tim Anda.',
+    'Anda perlu melakukan penilaian dengan cara memilih salah satu level yang Anda rasa sesuai dengan diri tim Anda / sudah tim Anda miliki saat ini.',
+    'Isilah dengan jujur. Nilai yang Anda berikan bisa sama/lebih rendah/lebih tinggi dari assigned score/ self assessment tim Anda terhadap dirinya.',
+    'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
+    ' Setelah Anda memberikan penilaian terhadap seluruh kompetensi, klik tombol save.',
+    'Anda dapat melihat kembali penilaian anda terhadap tim anda melalui menu subordinates, lalu click assess.'
+  ]
+
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <>
       <div className='col-12'>
         <div>
-          <h2>{peerName}</h2>
+          <h2 style={{ margin: 0 }}>{peerName}</h2>
         </div>
 
-        <div className='mb-4'>
-          <h4>Instructions</h4>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <div className='mb-4 mx-2'>
+          <ExpandableInstructions instructions={instructions} />
         </div>
 
         <DataTable
@@ -144,6 +149,8 @@ function SelfAssessment() {
           data={assessments}
           defaultSortFieldId="category"
           highlightOnHover
+          expandableRows
+          expandableRowsComponent={ExpandedComponent}
         />
 
         <div className="d-flex flex-row-reverse my-2">
@@ -156,4 +163,4 @@ function SelfAssessment() {
   );
 };
 
-export default SelfAssessment
+export default PeerAssessment

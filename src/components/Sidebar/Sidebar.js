@@ -23,6 +23,8 @@ import { Nav } from "react-bootstrap";
 import logo from "assets/img/reactlogo.png";
 
 function Sidebar({ color, image, routes }) {
+  const level = localStorage.getItem("level");
+
   const excludedRoutes = ['Peer Assessment', 'Peer Assessment Table']
 
   const location = useLocation();
@@ -42,7 +44,6 @@ function Sidebar({ color, image, routes }) {
       <div className="sidebar-wrapper">
         <div className="logo d-flex align-items-center justify-content-start">
           <a
-            // href="https://www.creative-tim.com?ref=lbd-sidebar"
             className="simple-text logo-mini mx-1"
           >
             <div className="logo-img">
@@ -58,7 +59,15 @@ function Sidebar({ color, image, routes }) {
         </div>
         <Nav>
           {routes.map((prop, key) => {
-            if (!prop.redirect && !excludedRoutes.includes(prop.name))
+            const isRedirect = prop.redirect
+            const isIncludeExcluded = excludedRoutes.includes(prop.name) // remove routes from specific banlist
+            const isAccessValid = !level ? true : prop.access.includes(level)
+
+            if (
+              !isRedirect &&
+              !isIncludeExcluded &&
+              isAccessValid
+            )
               return (
                 <li
                   className={

@@ -25,7 +25,7 @@ const DivisionReport = () => {
   return (
     <>
       {loading &&
-        <LoadingSpinner />
+        <LoadingSpinner text={'This may take few minutes'}/>
       }
       <div className='col-12' style={{ visibility: isConvertedToDataTable ? 'visible' : 'hidden' }}>
         <DivisionTable

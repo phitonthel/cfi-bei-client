@@ -4,8 +4,10 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
-export const fetchSelfAssessment = async () => {
-  const { data } = await axios.get(`${config.baseUrl}/assessment/self`, {
+export const fetchSelfAssessment = async (type) => {
+  const query = `?type=${type}`
+  
+  const { data } = await axios.get(`${config.baseUrl}/assessment/self${query}`, {
     headers: {
       access_token: localStorage.getItem('access_token')
     }

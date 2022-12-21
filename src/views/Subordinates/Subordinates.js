@@ -6,6 +6,8 @@ import Swal from 'sweetalert2'
 import DataTable from 'react-data-table-component';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
+import { ExpandableInstructions } from '../../components/ExpandableInstructions';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 
 const columns = [
   {
@@ -45,6 +47,7 @@ function Subordinates() {
   const history = useHistory()
 
   const [subordinates, setSubordinates] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const Actions = (user) => {
     return (
@@ -52,15 +55,14 @@ function Subordinates() {
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
             localStorage.setItem('peer_id', user.id)
-            // localStorage.setItem('peer_fullname', user.fullname)
             history.push('/admin/peer-assessment-table')
           }}
         >
           Assess
         </a>
-        <a href='#' className="badge badge-success mx-1">
+        {/* <a href='#' className="badge badge-success mx-1">
           Approve
-        </a>
+        </a> */}
       </div>
     )
   }
@@ -68,7 +70,6 @@ function Subordinates() {
   useEffect(async () => {
     try {
       const { data } = await fetchSubordinates()
-      console.log()
       if (data.message) {
         return Swal.fire({
           position: 'top',
@@ -93,11 +94,25 @@ function Subordinates() {
     } catch (error) {
       console.log({ error })
       fireSwalError(error)
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
+  const instructions = [
+    'Anda diminta untuk melakukan penilaian terhadap kompetensi technical/behavioural bawahan langsung Anda (staf/kepala kantor/kepala unit).',
+    'Pilih menu assess untuk mulai menilai masing-masing anggota tim Anda.'
+  ]
+
+  if (isLoading) {
+    return <LoadingSpinner/>
+  }
+
   return (
     <>
+      <div className='m-4'>
+        <ExpandableInstructions instructions={instructions} />
+      </div>
       <DataTable
         columns={columns}
         data={subordinates}
