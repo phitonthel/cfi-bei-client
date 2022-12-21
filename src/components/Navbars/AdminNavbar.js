@@ -45,7 +45,7 @@ function Header() {
         return baseRoutes[i].name;
       }
     }
-    return "Brand";
+    return "";
   };
 
   const getFullnameFromLocalStorage = () => {

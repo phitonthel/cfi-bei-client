@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const Criteria = (assessment, handlers) => {
+export const Criteria = (assessment) => {
   return (
     <div>
       {
@@ -8,17 +8,17 @@ export const Criteria = (assessment, handlers) => {
           return (
             <ul className="list-group mx-4 px-4">
               <li className="list-group-item">{option.level}</li>
-              <li className="list-group-item list-group-item-light text-left">
+              <div className="list-group-item">
                 {
                   option.criterias.map((criteria, index) => {
                     return (
-                      <div className="text-left">
-                        {index + 1} {'.  '} {criteria}
+                      <div className="mx-2 text-left col" key={index}>
+                        {criteria}
                       </div>
                     )
                   })
                 }
-              </li>
+              </div>
 
             </ul>
           )

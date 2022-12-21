@@ -1,4 +1,6 @@
-export const LoadingSpinner = () => {
+export const LoadingSpinner = ({
+  text,
+}) => {
   return (
     <div className="">
       <div className='d-flex justify-content-center' style={{ marginTop: '80px' }}>
@@ -10,7 +12,7 @@ export const LoadingSpinner = () => {
         Loading
       </div>
       <div className='d-flex justify-content-center'>
-        This may take few minutes
+        {text}
       </div>
     </div>
   )

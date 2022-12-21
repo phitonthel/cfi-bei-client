@@ -36,10 +36,19 @@ function Admin() {
   const location = useLocation();
   const mainPanel = React.useRef(null);
 
-  const getRoutes = (baseRoutes) => {
+  const access_token = localStorage.getItem("access_token");
+  const level = localStorage.getItem("level");
+
+  const getRoutes = (baseRoutes, level) => {
     return baseRoutes.map((prop, key) => {
       // condition for rendering access level goes here
-      if (prop.layout === "/admin") {
+      // this is only for routes, not for Sidebar
+      const isLayoutValid = prop.layout === "/admin"
+      const isAccessValid = !level ? true : prop.access.includes(level)
+      if (
+        isLayoutValid &&
+        isAccessValid
+      ) {
         return (
           <Route
             path={prop.layout + prop.path}
@@ -67,8 +76,6 @@ function Admin() {
     }
   }, [location]);
 
-  const access_token = localStorage.getItem("access_token");
-
   if (!access_token) {
     return (
       <>
@@ -77,7 +84,7 @@ function Admin() {
           <div className="main-panel" ref={mainPanel}>
             <AdminNavbar />
             <div className="content">
-              <Switch>{getRoutes(guestRoutes)}</Switch>
+              <Switch>{getRoutes(guestRoutes, level)}</Switch>
             </div>
             <Footer />
           </div>
@@ -93,7 +100,7 @@ function Admin() {
         <div className="main-panel" ref={mainPanel}>
           <AdminNavbar />
           <div className="content">
-            <Switch>{getRoutes(baseRoutes)}</Switch>
+            <Switch>{getRoutes(baseRoutes, level)}</Switch>
           </div>
           <Footer />
         </div>

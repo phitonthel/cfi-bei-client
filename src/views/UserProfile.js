@@ -17,7 +17,7 @@ import {
 } from "react-bootstrap";
 import { fetchSelfDetail } from '../apis/user/fetchSelfDetail';
 import { updateProfile } from '../apis/user/updateProfile';
-import { fireSwalError } from '../apis/fireSwal';
+import { fireSwalError, fireSwalSuccess } from '../apis/fireSwal';
 
 
 function User() {
@@ -39,11 +39,10 @@ function User() {
     try {
       const data = await fetchSelfDetail()
       setUser({
-        username: data.username,
-        password: data.password,
-        division: data.Division.name,
-        role: data.Role.name,
-        email: data.email
+        nik: data?.nik,
+        division: data?.Division?.name,
+        role: data?.positionName,
+        email: data?.email
       })
     } catch (error) {
       fireSwalError(error)
@@ -51,14 +50,18 @@ function User() {
   }, [])
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
-
       await updateProfile({
-        username: input.username,
-        email: input.email
+        email: input.email,
+        oldPassword: input.oldPassword,
+        newPassword: input.newPassword,
+      })
+      fireSwalSuccess({
+        text: 'Your profile has been updated!'
       })
     } catch (error) {
+      console.log(error);
       fireSwalError(error)
     }
   };
@@ -122,7 +125,6 @@ function User() {
                           disabled
                           placeholder="Company"
                           type="text"
-                          name="nik"
 
                         ></Form.Control>
                       </Form.Group>
@@ -146,9 +148,10 @@ function User() {
                       <Form.Group>
                         <label>Old Password</label>
                         <Form.Control
-                          defaultValue={user.password}
+                          onChange={handleChange}
                           placeholder="Password"
                           type="password"
+                          name="oldPassword"
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -157,10 +160,9 @@ function User() {
                         <label>New Password</label>
                         <Form.Control
                           onChange={handleChange}
-                          defaultValue=""
                           placeholder="New Password"
                           type="password"
-                          name="password"
+                          name="newPassword"
                         ></Form.Control>
                       </Form.Group>
                     </Col>

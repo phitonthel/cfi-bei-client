@@ -14,11 +14,13 @@ export const login = async ({ nik, password }) => {
 
     const {
       access_token,
-      fullname
+      fullname,
+      level,
     } = response.data
 
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('fullname', fullname);
+    localStorage.setItem('level', level);
 
     Swal.fire({
       position: 'top',
@@ -41,6 +43,7 @@ export const login = async ({ nik, password }) => {
 export const logout = async () => {
   localStorage.removeItem("access_token");
   localStorage.removeItem("fullname");
+  localStorage.removeItem("level");
 
   // Swal.fire({
   //   position: 'top',
