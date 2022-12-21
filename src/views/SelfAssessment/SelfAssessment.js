@@ -5,12 +5,13 @@ import Swal from 'sweetalert2';
 import { fetchSelfAssessment, submitSelfAssessment } from '../../apis/assessment/fetchSelf'
 
 
-import { Card } from './Card'
-import { Instructions } from './Instructions'
+import { AssessmentCard } from '../../components/AssessmentCard'
+import { InstructionsTech } from './InstructionsTech'
+import { InstructionsBehav } from './InstructionsBehav'
 import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
 import { submitScore } from '../../apis/assessment/submitScore';
 
-const SelfAssessment = () => {
+const SelfAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
   const [hasAgreed, setHasAgreed] = useState(false)
 
@@ -52,19 +53,29 @@ const SelfAssessment = () => {
 
   useEffect(async () => {
     try {
-      const data = await fetchSelfAssessment()
+      const data = await fetchSelfAssessment(type)
       setAssessments(data)
     } catch (error) {
+      console.log(error)
       fireSwalError(error)
     }
   }, [])
 
   if (!hasAgreed) {
-    return (
-      <div className='mb-4'>
-        <Instructions setHasAgreed={setHasAgreed} />
-      </div>
-    )
+    if (type === 'TECHNICAL') {
+      return (
+        <div className='mb-4'>
+          <InstructionsTech setHasAgreed={setHasAgreed} />
+        </div>
+      )
+    }
+    if (type === 'BEHAVIOURAL') {
+      return (
+        <div className='mb-4'>
+          <InstructionsBehav setHasAgreed={setHasAgreed} />
+        </div>
+      )
+    }
   }
 
   return (
@@ -72,9 +83,16 @@ const SelfAssessment = () => {
       <div className='col-10'>
 
         {
-          assessments.map(assessment => Card(assessment, handlers))
+          assessments.map(assessment => AssessmentCard(assessment, handlers, type))
         }
 
+        <div className="d-flex flex-row-reverse">
+          {assessments.filter(assessment => assessment.assignedScore).length !== assessments.length &&
+            <p className='text-secondary' style={{ fontSize: 16 }}>
+              You haven't filled all the assessment. You can still submit and continue later.
+            </p>
+          }
+        </div>
         <div className="d-flex flex-row-reverse">
           <button type="button" className="btn btn-primary" onClick={() => handlers.submit()}>
             Submit {assessments.filter(assessment => assessment.assignedScore).length} / {assessments.length} Assessments

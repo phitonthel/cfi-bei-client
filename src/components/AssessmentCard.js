@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 
-import { Radios } from './Radios'
+import { AssessmentRadios } from './AssessmentRadios'
 import { Criteria } from './Criteria'
 
-export const Card = (assessment, handlers) => {
-  const renderScore = (score) => {
+export const renderScore = (score, type) => {
+  if (type === 'TECHNICAL') {
     if (score === 1) return 'KNOWLEDGEABLE'
     if (score === 2) return 'PRACTITIONER'
     if (score === 3) return 'ADVANCED'
     if (score === 4) return 'EXPERT'
-    return 'N/A'
   }
+  if (type === 'BEHAVIOURAL') {
+    if (score === 1) return 'BASIC'
+    if (score === 2) return 'CAPABLE'
+    if (score === 3) return 'INFLUENCING'
+    if (score === 4) return 'INSPIRING'
+  }
+  return 'N/A'
+}
 
+export const AssessmentCard = (assessment, handlers, type) => {
   return (
     <div>
       <div className="card text-center mx-6">
@@ -20,7 +28,7 @@ export const Card = (assessment, handlers) => {
             {/* <span className="badge badge-dark">{'Expected Score: ' + renderScore(assessment.expectedScore)}</span> */}
           </h4>
           <h4 className='p-0 m-0'>
-            <span className="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore)}</span>
+            <span className="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore, type)}</span>
           </h4>
         </div>
         <div className="card-header">
@@ -30,7 +38,7 @@ export const Card = (assessment, handlers) => {
           <h4 className="card-title">{assessment.title}</h4>
           <p className="card-text mx-4">{assessment.description}</p>
 
-          {Radios(assessment, handlers)}
+          {AssessmentRadios(assessment, handlers, type)}
 
         </div>
 
