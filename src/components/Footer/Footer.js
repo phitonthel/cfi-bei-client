@@ -25,30 +25,10 @@ class Footer extends Component {
         <Container fluid>
           <nav>
             <ul className="footer-menu">
-              <li>
-                <a href="#" onClick={(e) => e.preventDefault()}>
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={(e) => e.preventDefault()}>
-                  Company
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={(e) => e.preventDefault()}>
-                  Portfolio
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={(e) => e.preventDefault()}>
-                  Blog
-                </a>
-              </li>
             </ul>
             <p className="copyright text-center">
               © 2022 {" "}
-              <a href="">phitonthel</a>
+              <a href="">phitonthel x giovannyptr</a>
             </p>
           </nav>
         </Container>
