@@ -7,7 +7,6 @@ import { config } from '../../env';
 
 export const login = async ({ nik, password }) => {
   try {
-    console.log({config})
     const response = await axios.post(`${config.baseUrl}/user/login`, {
       nik,
       password

@@ -40,7 +40,6 @@ function Admin() {
   const level = localStorage.getItem("level");
 
   const getRoutes = (baseRoutes, level) => {
-    console.log({baseRoutes})
     return baseRoutes.map((prop, key) => {
       // condition for rendering access level goes here
       // this is only for routes, not for Sidebar
@@ -78,7 +77,6 @@ function Admin() {
   }, [location]);
 
   if (!access_token) {
-    console.log({guestRoutes}, {level});
     return (
       <>
         <div className="wrapper">
