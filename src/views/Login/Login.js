@@ -15,7 +15,7 @@ function Login() {
     event.preventDefault()
 
     await login({nik, password})
-    history.push('/')
+    history.push('/admin/self-assessment-behavioural')
   }
 
   return (
