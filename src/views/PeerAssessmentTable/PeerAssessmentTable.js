@@ -23,7 +23,7 @@ function PeerAssessment() {
         const promises = assessments.map(e => {
           return submitScore({
             assessmentId: e.id,
-            reviewerScore: e.reviewerScore ?? 1
+            reviewerScore: e.reviewerScore
           })
         })
 
@@ -44,10 +44,11 @@ function PeerAssessment() {
 
       setAssessments(data.map(assessment => {
         const type = assessment.CompetencyRole.Competency.type
+        console.log({assessment})
         return {
           id: assessment.id,
           assignedScore: renderScore(assessment.assignedScore, type),
-          reviewerScore: assessment.reviewerScore,
+          reviewerScore: assessment.reviewerScore ?? assessment.assignedScore ?? 1,
           expectedScore: renderScore(assessment.CompetencyRole.expectedScore, type),
           category: assessment.CompetencyRole.Competency.category,
           title: assessment.CompetencyRole.Competency.title,
