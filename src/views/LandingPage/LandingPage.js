@@ -22,7 +22,7 @@ function LandingPage() {
         <div class="container">
           <div class="row">
             <div class="col-lg-7 flex-column justify-content-center">
-              <h1 data-aos="fade-up" class="font-weight-bold text-danger">
+              <h1 data-aos="fade-up" style={{color: '#B73E3E'}} class="font-weight-bold">
                 Welcome to IDX Competency Fit Index Assessment Page
               </h1>
               <h4 class="font-weight-normal">
@@ -33,7 +33,7 @@ function LandingPage() {
               </h4>
               <div data-aos="fade-up" data-aos-delay="800">
                 <div class="" onClick={login}>
-                  <a href="" class="btn btn-danger btn-lg">
+                  <a href="" style={{color: '#B73E3E'}} class="btn btn-danger btn-lg">
                     <span>Login</span>
                   </a>
                 </div>
