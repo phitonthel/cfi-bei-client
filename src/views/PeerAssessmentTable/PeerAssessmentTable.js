@@ -11,15 +11,18 @@ import { renderDropdown } from './renderDropdown'
 import { Criteria } from '../../components/Criteria'
 import { ExpandableInstructions } from '../../components/ExpandableInstructions'
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { SubmitButton } from '../../components/SubmitButton';
 
 function PeerAssessment() {
   const [assessments, setAssessments] = useState([])
   const [peerName, setPeerName] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handlers = {
     submit: async () => {
       try {
+        setIsSubmitting(true)
         const promises = assessments.map(e => {
           return submitScore({
             assessmentId: e.id,
@@ -32,6 +35,8 @@ function PeerAssessment() {
         fireSwalSuccess('Your work has been saved!')
       } catch (error) {
         fireSwalError(error)
+      } finally {
+        setIsSubmitting(false)
       }
     }
   }
@@ -44,7 +49,7 @@ function PeerAssessment() {
 
       setAssessments(data.map(assessment => {
         const type = assessment.CompetencyRole.Competency.type
-        console.log({assessment})
+        console.log({ assessment })
         return {
           id: assessment.id,
           assignedScore: renderScore(assessment.assignedScore, type),
@@ -155,9 +160,14 @@ function PeerAssessment() {
         />
 
         <div className="d-flex flex-row-reverse my-2">
-          <button type="button" className="btn btn-primary btn-sm" onClick={() => handlers.submit()}>
+          {/* <button type="button" className="btn btn-primary btn-sm" onClick={() => handlers.submit()}>
             Save
-          </button>
+          </button> */}
+          <SubmitButton
+            text={'Submit Review'}
+            onClick={handlers.submit}
+            isSubmitting={isSubmitting}
+          />
         </div>
       </div>
     </>
