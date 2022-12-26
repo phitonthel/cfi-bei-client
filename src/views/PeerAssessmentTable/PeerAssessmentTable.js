@@ -130,7 +130,7 @@ function PeerAssessment() {
     'Reviewer score adalah penilaian/score/level yang akan anda berikan terhadap tim Anda.',
     'Anda perlu melakukan penilaian dengan cara memilih salah satu level yang Anda rasa sesuai dengan diri tim Anda / sudah tim Anda miliki saat ini.',
     'Isilah dengan jujur. Nilai yang Anda berikan bisa sama/lebih rendah/lebih tinggi dari assigned score/ self assessment tim Anda terhadap dirinya.',
-    'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
+    'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
     ' Setelah Anda memberikan penilaian terhadap seluruh kompetensi, klik tombol save.',
     'Anda dapat melihat kembali penilaian anda terhadap tim anda melalui menu subordinates, lalu click assess.'
   ]
