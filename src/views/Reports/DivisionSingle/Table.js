@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { DownloadButton } from '../../../components/DownloadButton';
 import { downloadTxtFile } from '../utils';
 
 // import { data } from './data'
@@ -25,14 +26,14 @@ function Table({
           <th rowSpan={2}>Nama</th>
           <th rowSpan={2}>Divisi</th>
           <th rowSpan={2}>Unit</th>
-          <th colSpan={numberOfCompetencies}>Level Kompetensi Yang Diharapkan</th>
-          <th colSpan={numberOfCompetencies}>Level Kompetensi Yang Ditunjukkan (Dinilai oleh Kepala Divisi) | Jika Tidak Diisi Oleh Atasan, Maka Nilai Diambil Oleh Bawahan. Jika Keduanya Tidak Mengisi, Maka Nol</th>
-          <th colSpan={numberOfCompetencies}>Gap</th>
-          <th colSpan={numberOfCompetencies}>Status</th>
           <th rowSpan={2}>Total Meet Technical</th>
           <th rowSpan={2}>Total Not Meet Technical</th>
           <th rowSpan={2}>Total Meet Behavioural</th>
           <th rowSpan={2}>Total Not Meet Behavioural</th>
+          <th colSpan={numberOfCompetencies}>Level Kompetensi Yang Diharapkan</th>
+          <th colSpan={numberOfCompetencies}>Level Kompetensi Yang Ditunjukkan (Dinilai oleh Kepala Divisi) | Jika Tidak Diisi Oleh Atasan, Maka Nilai Diambil Oleh Bawahan. Jika Keduanya Tidak Mengisi, Maka Nol</th>
+          <th colSpan={numberOfCompetencies}>Gap</th>
+          <th colSpan={numberOfCompetencies}>Status</th>
         </tr>
         <tr>
           {[1, 2, 3, 4].map(i => {
@@ -66,15 +67,15 @@ function Table({
 
   const createCsvHeaders = () => {
     const MAIN_COL = 5
-    const TAIL_COL = 4
+    const SECONDARY_COL = 4
     const numberOfCompetencies = uniqueAssociatedCompetencies.length
 
     const firstHeaders = `,`.repeat(MAIN_COL)
+      + `,`.repeat(SECONDARY_COL)
       + `Level Kompetensi Yang Diharapkan` + `,`.repeat(numberOfCompetencies)
       + `Level Kompetensi Yang Ditunjukkan (Dinilai oleh Kepala Divisi)` + `,`.repeat(numberOfCompetencies)
       + `Gap` + `,`.repeat(numberOfCompetencies)
       + `Status` + `,`.repeat(numberOfCompetencies)
-      + `,`.repeat(TAIL_COL)
 
     const secondHeaders = [
       'NIK',
@@ -82,14 +83,14 @@ function Table({
       'Nama',
       'Divisi',
       'Unit',
-      ...uniqueAssociatedCompetencies,
-      ...uniqueAssociatedCompetencies,
-      ...uniqueAssociatedCompetencies,
-      ...uniqueAssociatedCompetencies,
       'Total Meet Technical',
       'Total Not Meet Technical',
       'Total Meet Behavioural',
       'Total Not Meet Behavioural',
+      ...uniqueAssociatedCompetencies,
+      ...uniqueAssociatedCompetencies,
+      ...uniqueAssociatedCompetencies,
+      ...uniqueAssociatedCompetencies,
     ]
 
     return {
@@ -128,17 +129,12 @@ function Table({
 
   return (
     <>
-      <div className="d-flex flex-row-reverse">
-        <button
-          className='btn btn-primary btn-sm m-1'
-          onClick={() => downloadTxtFile(
-            createCsv(),
-            `reports_${divisionType}_${new Date().getTime()}.csv`
-          )}
-        >
-          Download CSV
-        </button>
-      </div>
+      <DownloadButton
+        onClick={() => downloadTxtFile(
+          createCsv(),
+          `reports_${divisionType}_${new Date().getTime()}.csv`
+        )}
+      />
       <table id="division-single-report" className="display nowrap" style={{ width: '1000%' }}>
         {renderHeaders()}
         {renderBody()}

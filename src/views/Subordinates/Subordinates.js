@@ -8,6 +8,8 @@ import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
+import { downloadTxtFile } from '../Reports/utils';
+import { DownloadButton } from '../../components/DownloadButton';
 
 const columns = [
   {
@@ -67,6 +69,21 @@ function Subordinates() {
     )
   }
 
+  const createCsv = () => {
+    let headers = `Name,Division,Role,Assigned,Reviewed,Total Assessment\n`
+
+    subordinates.forEach(subordinate => {
+      headers += subordinate.fullname + ','
+      headers += subordinate.division + ','
+      headers += subordinate.role + ','
+      headers += subordinate.assigned.split(' / ')[0] + ','
+      headers += subordinate.reviewed.split(' / ')[0] + ','
+      headers += subordinate.reviewed.split(' / ')[1].split(' ')[0] + '\n'
+    });
+
+    return headers
+  }
+
   useEffect(async () => {
     try {
       const { data } = await fetchSubordinates()
@@ -84,7 +101,6 @@ function Subordinates() {
           id: user.id,
           fullname: user.fullname,
           division: user.Division.name,
-          // role: user.Role.name,
           role: user.positionName,
           assigned: user.assignedStatus,
           reviewed: user.reviewerStatus,
@@ -105,7 +121,7 @@ function Subordinates() {
   ]
 
   if (isLoading) {
-    return <LoadingSpinner/>
+    return <LoadingSpinner />
   }
 
   return (
@@ -113,6 +129,12 @@ function Subordinates() {
       <div className='m-4'>
         <ExpandableInstructions instructions={instructions} />
       </div>
+      <DownloadButton
+        onClick={() => downloadTxtFile(
+          createCsv(),
+          `subordinates_${new Date().getTime()}.csv`
+        )}
+      />
       <DataTable
         columns={columns}
         data={subordinates}

@@ -19,7 +19,7 @@ export const fireSwalSuccess = ({
   Swal.fire({
     position: 'top',
     icon: 'success',
-    text: text ?? 'Your work has been saved',
+    text: text ?? 'Your work has been submitted',
     showConfirmButton: false,
     timer: 1000
   })

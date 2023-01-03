@@ -28,7 +28,7 @@ const SelfAssessment = (type) => {
       })
       await Promise.all(promises)
 
-      fireSwalSuccess('Your work has been saved!')
+      fireSwalSuccess('Your work has been submitted!')
     } catch (error) {
       fireSwalError(error)
     } finally {

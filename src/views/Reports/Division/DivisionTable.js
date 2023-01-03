@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { DownloadButton } from '../../../components/DownloadButton';
 import { downloadTxtFile } from '../utils';
 
 import { dataFactory } from './dataFactory'
 // import { data } from './data'
 
-const Table = ({ 
+const Table = ({
   data,
   setIsLoading
 }) => {
@@ -134,16 +135,12 @@ const Table = ({
 
   return (
     <>
-      <div className="d-flex flex-row-reverse">
-        <button
-          className='btn btn-primary btn-sm m-1'
-          onClick={() => downloadTxtFile(
-            createCsv(data),
-            `reports_division_all_${new Date().getTime()}.csv`
-          )}>
-          Download CSV
-        </button>
-      </div>
+      <DownloadButton
+        onClick={() => downloadTxtFile(
+          createCsv(data),
+          `reports_division_all_${new Date().getTime()}.csv`
+        )}
+      />
       <table id="division-all-report" className="display nowrap" style={{ width: '200%' }}>
         {renderHeaders(data)}
         {renderRows(data)}

@@ -32,7 +32,7 @@ function PeerAssessment() {
 
         await Promise.all(promises)
 
-        fireSwalSuccess('Your work has been saved!')
+        fireSwalSuccess('Your work has been submitted!')
       } catch (error) {
         fireSwalError(error)
       } finally {
@@ -48,7 +48,6 @@ function PeerAssessment() {
       setPeerName(data[0].assigned.fullname)
 
       setAssessments(data.map(assessment => {
-        console.log({ assessment })
         const type = assessment.CompetencyRole.Competency?.type
         return {
           id: assessment.id,
