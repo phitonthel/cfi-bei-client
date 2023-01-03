@@ -36,7 +36,7 @@ export const InstructionsBehav = (props) => {
               Anda dapat melihat kembali penilaian self-assessment melalui <b>tab assessment</b>.
             </li>
             <li className="m-1">
-              Setelah anda melakukan self-assessment, atasan  langsung (Kepala Unit/Kepala Divisi) akan mereview/ menilai / memverifikasi nilai Anda. Nilai final adalah nilai yang telah diverifikasi atasan  langsung (Kepala Unit/Kepala Divisi).
+              Setelah anda melakukan self-assessment, atasan  langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) akan mereview/ menilai / memverifikasi nilai Anda. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi).
             </li>
           </ol>
         </div>

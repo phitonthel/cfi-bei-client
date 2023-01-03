@@ -11,19 +11,22 @@ import { renderDropdown } from './renderDropdown'
 import { Criteria } from '../../components/Criteria'
 import { ExpandableInstructions } from '../../components/ExpandableInstructions'
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { SubmitButton } from '../../components/SubmitButton';
 
 function PeerAssessment() {
   const [assessments, setAssessments] = useState([])
   const [peerName, setPeerName] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handlers = {
     submit: async () => {
       try {
+        setIsSubmitting(true)
         const promises = assessments.map(e => {
           return submitScore({
             assessmentId: e.id,
-            reviewerScore: e.reviewerScore ?? 1
+            reviewerScore: e.reviewerScore
           })
         })
 
@@ -32,6 +35,8 @@ function PeerAssessment() {
         fireSwalSuccess('Your work has been saved!')
       } catch (error) {
         fireSwalError(error)
+      } finally {
+        setIsSubmitting(false)
       }
     }
   }
@@ -43,17 +48,18 @@ function PeerAssessment() {
       setPeerName(data[0].assigned.fullname)
 
       setAssessments(data.map(assessment => {
-        const type = assessment.CompetencyRole.Competency.type
+        console.log({ assessment })
+        const type = assessment.CompetencyRole.Competency?.type
         return {
           id: assessment.id,
           assignedScore: renderScore(assessment.assignedScore, type),
-          reviewerScore: assessment.reviewerScore,
+          reviewerScore: assessment.reviewerScore ?? assessment.assignedScore ?? 1,
           expectedScore: renderScore(assessment.CompetencyRole.expectedScore, type),
-          category: assessment.CompetencyRole.Competency.category,
-          title: assessment.CompetencyRole.Competency.title,
-          description: assessment.CompetencyRole.Competency.description,
+          category: assessment.CompetencyRole.Competency?.category,
+          title: assessment.CompetencyRole.Competency?.title,
+          description: assessment.CompetencyRole.Competency?.description,
           type,
-          options: assessment.CompetencyRole.Competency.options,
+          options: assessment.CompetencyRole.Competency?.options,
         }
       }));
     } catch (error) {
@@ -124,7 +130,7 @@ function PeerAssessment() {
     'Reviewer score adalah penilaian/score/level yang akan anda berikan terhadap tim Anda.',
     'Anda perlu melakukan penilaian dengan cara memilih salah satu level yang Anda rasa sesuai dengan diri tim Anda / sudah tim Anda miliki saat ini.',
     'Isilah dengan jujur. Nilai yang Anda berikan bisa sama/lebih rendah/lebih tinggi dari assigned score/ self assessment tim Anda terhadap dirinya.',
-    'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
+    'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
     ' Setelah Anda memberikan penilaian terhadap seluruh kompetensi, klik tombol save.',
     'Anda dapat melihat kembali penilaian anda terhadap tim anda melalui menu subordinates, lalu click assess.'
   ]
@@ -154,9 +160,14 @@ function PeerAssessment() {
         />
 
         <div className="d-flex flex-row-reverse my-2">
-          <button type="button" className="btn btn-primary btn-sm" onClick={() => handlers.submit()}>
+          {/* <button type="button" className="btn btn-primary btn-sm" onClick={() => handlers.submit()}>
             Save
-          </button>
+          </button> */}
+          <SubmitButton
+            text={'Submit Review'}
+            onClick={handlers.submit}
+            isSubmitting={isSubmitting}
+          />
         </div>
       </div>
     </>

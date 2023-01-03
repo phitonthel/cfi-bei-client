@@ -10,10 +10,31 @@ import { InstructionsTech } from './InstructionsTech'
 import { InstructionsBehav } from './InstructionsBehav'
 import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
 import { submitScore } from '../../apis/assessment/submitScore';
+import { SubmitButton } from '../../components/SubmitButton';
 
 const SelfAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
   const [hasAgreed, setHasAgreed] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const submit = async () => {
+    try {
+      setIsSubmitting(true)
+      const promises = assessments.map(assessment => {
+        return submitScore({
+          assessmentId: assessment.id,
+          assignedScore: assessment.assignedScore
+        })
+      })
+      await Promise.all(promises)
+
+      fireSwalSuccess('Your work has been saved!')
+    } catch (error) {
+      fireSwalError(error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   // handlers for assessment
   const handlers = {
@@ -39,15 +60,26 @@ const SelfAssessment = (type) => {
     },
     // send request to server
     submit: async () => {
-      const promises = assessments.map(assessment => {
-        return submitScore({
-          assessmentId: assessment.id,
-          assignedScore: assessment.assignedScore
-        })
-      })
-      await Promise.all(promises)
+      const numberOfAssessmentCompleted = assessments.filter(assessment => assessment.assignedScore).length
 
-      fireSwalSuccess('Your work has been saved!')
+      if (numberOfAssessmentCompleted !== assessments.length) {
+        const result = await Swal.fire({
+          title: `${numberOfAssessmentCompleted}/${assessments.length} Assessment!`,
+          text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: `Yes, submit and continue later`,
+          cancelButtonText: `Cancel`,
+        })
+
+        if (result.isConfirmed) {
+          await submit()
+        }
+        return
+      }
+      await submit()
     }
   }
 
@@ -78,6 +110,8 @@ const SelfAssessment = (type) => {
     }
   }
 
+  const buttonText = `Submit ${assessments.filter(assessment => assessment.assignedScore).length}/${assessments.length} Assessments`
+
   return (
     <>
       <div className='col-10'>
@@ -85,18 +119,12 @@ const SelfAssessment = (type) => {
         {
           assessments.map(assessment => AssessmentCard(assessment, handlers, type))
         }
-
         <div className="d-flex flex-row-reverse">
-          {assessments.filter(assessment => assessment.assignedScore).length !== assessments.length &&
-            <p className='text-secondary' style={{ fontSize: 16 }}>
-              You haven't filled all the assessment. You can still submit and continue later.
-            </p>
-          }
-        </div>
-        <div className="d-flex flex-row-reverse">
-          <button type="button" className="btn btn-primary" onClick={() => handlers.submit()}>
-            Submit {assessments.filter(assessment => assessment.assignedScore).length} / {assessments.length} Assessments
-          </button>
+          <SubmitButton
+            text={buttonText}
+            onClick={handlers.submit}
+            isSubmitting={isSubmitting}
+          />
         </div>
       </div>
     </>

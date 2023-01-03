@@ -25,7 +25,7 @@ import logo from "assets/img/reactlogo.png";
 function Sidebar({ color, image, routes }) {
   const level = localStorage.getItem("level");
 
-  const excludedRoutes = ['Peer Assessment', 'Peer Assessment Table']
+  const excludedRoutes = ['Peer Assessment', 'Peer Assessment Table', 'Landing Page', 'Login']
 
   const location = useLocation();
 

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { downloadTxtFile } from '../utils';
 
 import { dataFactory } from './dataFactory'
 // import { data } from './data'
 
 const Table = ({ 
   data,
-  setIsConvertedToDataTable,
-  setLoading
+  setIsLoading
 }) => {
-  if (data.length === 0) return null
+  if (!data) return null
 
-  const createHeaders = (data) => {
+  const createCsvHeaders = (data) => {
     const competencies = Object.keys(data[0].competencies)
 
     let firstHeader = `,,,`
@@ -109,7 +109,7 @@ const Table = ({
   }
 
   const createCsv = (data) => {
-    const headers = createHeaders(data)
+    const headers = createCsvHeaders(data)
 
     let rows = ``
     createRows(data).forEach(row => {
@@ -118,15 +118,6 @@ const Table = ({
     });
 
     return headers + rows
-  }
-
-  const downloadTxtFile = (data) => {
-    const element = document.createElement("a");
-    const file = new Blob([createCsv(data)], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = "report.csv";
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
   }
 
   const renderTable = () => {
@@ -138,28 +129,24 @@ const Table = ({
 
   useEffect(async () => {
     renderTable()
-    setIsConvertedToDataTable(true)
-    setLoading(false)
+    setIsLoading(false)
   }, [])
-
-  const rows = renderRows(data)
 
   return (
     <>
       <div className="d-flex flex-row-reverse">
         <button
           className='btn btn-primary btn-sm m-1'
-          onClick={() => downloadTxtFile(data)}>
+          onClick={() => downloadTxtFile(
+            createCsv(data),
+            `reports_division_all_${new Date().getTime()}.csv`
+          )}>
           Download CSV
         </button>
       </div>
       <table id="division-all-report" className="display nowrap" style={{ width: '200%' }}>
-        {
-          renderHeaders(data)
-        }
-        {
-          rows
-        }
+        {renderHeaders(data)}
+        {renderRows(data)}
         <tfoot>
         </tfoot>
       </table></>

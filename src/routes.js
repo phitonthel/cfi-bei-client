@@ -23,6 +23,7 @@ import Maps from "./views/Maps.js";
 import Notifications from "./views/Notifications.js";
 import Upgrade from "./views/Upgrade.js";
 import Login from "./views/Login";
+import LandingPage from "./views/LandingPage/LandingPage.js";
 
 import Subordinates from "./views/Subordinates";
 import SelfAssessment from "./views/SelfAssessment";
@@ -43,13 +44,21 @@ const ACCESS_LEVEL = {
 
 export const guestRoutes = [
   {
+    path: "/home",
+    name: "Landing Page",
+    icon: "nc-icon nc-bell-55",
+    component: LandingPage,
+    layout: "/admin",
+    access: null
+  },
+  {
     path: "/login",
     name: "Login",
     icon: "nc-icon nc-bell-55",
     component: Login,
     layout: "/admin",
     access: null
-  }
+  },
 ]
 
 export const baseRoutes = [

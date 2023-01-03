@@ -131,13 +131,14 @@ function User() {
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
-                        <label>Email</label>
+                        <label>Email (disabled)</label>
                         <Form.Control
                           onChange={handleChange}
                           defaultValue={user.email}
                           placeholder="Email"
                           type="text"
                           name="email"
+                          disabled
                         ></Form.Control>
                       </Form.Group>
                     </Col>

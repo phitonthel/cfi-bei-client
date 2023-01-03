@@ -210,7 +210,7 @@ function Header() {
                 onClick={(e) => {
                   e.preventDefault()
                   logout()
-                  history.push('/admin/login');
+                  history.push('/admin/home');
                 }}
               >
                 <span className="no-icon">Log out</span>
