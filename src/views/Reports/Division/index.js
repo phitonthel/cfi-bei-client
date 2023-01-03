@@ -6,32 +6,32 @@ import DivisionTable from './DivisionTable'
 import { LoadingSpinner } from '../../../components/LoadingSpinner'
 import { fireSwalError } from '../../../apis/fireSwal';
 import { fetchDivisionReport } from '../../../apis/report/division';
+import { useFetch } from '../../../apis/useFetch';
 
 const DivisionReport = () => {
-  const [isConvertedToDataTable, setIsConvertedToDataTable] = useState(false)
-
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
+  // const [data, setData] = useState(null)
+  const { data } = useFetch(`/report/division`)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(async () => {
-    try {
-      const data = await fetchDivisionReport()
-      setData(data)
-    } catch (error) {
-      fireSwalError(error)
-    }
+    // try {
+    //   const data = await fetchDivisionReport()
+    //   setData(data)
+    // } catch (error) {
+    //   fireSwalError(error)
+    // }
   }, [])
+
+  if (!data) return (
+    <LoadingSpinner text={'This may take few minutes'} />
+  )
 
   return (
     <>
-      {loading &&
-        <LoadingSpinner text={'This may take few minutes'}/>
-      }
-      <div className='col-12' style={{ visibility: isConvertedToDataTable ? 'visible' : 'hidden' }}>
+      <div>
         <DivisionTable
           data={data}
-          setIsConvertedToDataTable={setIsConvertedToDataTable}
-          setLoading={setLoading}
+          setIsLoading={setIsLoading}
         />
       </div>
     </>

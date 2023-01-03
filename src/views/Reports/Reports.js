@@ -4,37 +4,69 @@ import Swal from 'sweetalert2';
 
 import DivisionReport from './Division/index'
 import DivisionSingleReport from './DivisionSingle/index'
+import UserReport from './User/index'
+
+import { useFetch } from '../../apis/useFetch'
 
 function SelfAssessment() {
-  const [option, setOption] = useState(0)
-  const [division, setDivision] = useState(0)
+  const [reportType, setReportType] = useState(0)
+  const [divisionType, setDivisionType] = useState('')
+
+  const [renderOption, setRenderOption] = useState({
+    reportType: 0,
+    divisionType: '',
+  })
+
+  const { data: divisions } = useFetch('/division')
 
   useEffect(() => {
-  }, [])
+    setDivisionType(divisions?.[0])
+  }, [divisions])
 
   return (
     <>
       <div className='row justify-content-center mb-4'>
-        <select className="form-select form-select-sm col-2 mx-2" value={option} onChange={(e) => {
-          setOption(+e.target.value)
-        }}>
+        <select
+          className="form-select form-select-sm col-2 mx-2"
+          value={reportType}
+          onChange={(e) => {
+            setReportType(+e.target.value)
+          }}
+        >
           <option className="btn" >Select Report</option>
           <option className="btn" value="1">Rekap Seluruh Divisi</option>
           <option className="btn" value="2">Rekap Per Divisi</option>
           <option className="btn" value="3">Rekap Per Individu</option>
         </select>
-        {/* { option === 2 &&
-          <select className="form-select form-select-sm col-2 mx-2" value={division} defaultValue>
+        {reportType === 2 &&
+          <select
+            className="form-select form-select-sm col-2 mx-2"
+            value={divisionType}
+            onChange={(e) => {
+              setDivisionType(e.target.value)
+            }}
+          >
             <option className="btn" disabled>Select Division</option>
-            <option className="btn" value="1" onClick={() => setDivision(1)}>Sumber Daya Manusia</option>
-            <option className="btn" value="2" onClick={() => setDivision(2)}>Pengawasan Transaksi</option>
+            {divisions.map(division => <option className="btn" key={division} value={division}>{division}</option>)}
           </select>
-        } */}
-        <button type="button" className="btn btn-dark btn-fill btn-sm mx-2">Get Report</button>
+        }
+        <button
+          type="button"
+          className="btn btn-dark btn-fill btn-sm mx-2"
+          onClick={() => {
+            setRenderOption({
+              reportType,
+              divisionType,
+            })
+          }}
+        >
+          Get Report
+        </button>
       </div>
 
-      { option === 1 && <DivisionReport /> }
-      {/* { option === 2 && <DivisionSingleReport /> } */}
+      {renderOption.reportType === 1 && <DivisionReport />}
+      {renderOption.reportType === 2 && <DivisionSingleReport divisionType={renderOption.divisionType} />}
+      {renderOption.reportType === 3 && <UserReport />}
     </>
   );
 };

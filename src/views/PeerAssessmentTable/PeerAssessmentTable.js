@@ -48,18 +48,18 @@ function PeerAssessment() {
       setPeerName(data[0].assigned.fullname)
 
       setAssessments(data.map(assessment => {
-        const type = assessment.CompetencyRole.Competency.type
         console.log({ assessment })
+        const type = assessment.CompetencyRole.Competency?.type
         return {
           id: assessment.id,
           assignedScore: renderScore(assessment.assignedScore, type),
           reviewerScore: assessment.reviewerScore ?? assessment.assignedScore ?? 1,
           expectedScore: renderScore(assessment.CompetencyRole.expectedScore, type),
-          category: assessment.CompetencyRole.Competency.category,
-          title: assessment.CompetencyRole.Competency.title,
-          description: assessment.CompetencyRole.Competency.description,
+          category: assessment.CompetencyRole.Competency?.category,
+          title: assessment.CompetencyRole.Competency?.title,
+          description: assessment.CompetencyRole.Competency?.description,
           type,
-          options: assessment.CompetencyRole.Competency.options,
+          options: assessment.CompetencyRole.Competency?.options,
         }
       }));
     } catch (error) {
