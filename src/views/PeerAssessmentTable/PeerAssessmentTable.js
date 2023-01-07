@@ -52,7 +52,7 @@ function PeerAssessment() {
         return {
           id: assessment.id,
           assignedScore: renderScore(assessment.assignedScore, type),
-          reviewerScore: assessment.reviewerScore ?? assessment.assignedScore ?? 1,
+          reviewerScore: assessment.reviewerScore ?? assessment.assignedScore ?? 0,
           expectedScore: renderScore(assessment.CompetencyRole.expectedScore, type),
           category: assessment.CompetencyRole.Competency?.category,
           title: assessment.CompetencyRole.Competency?.title,
@@ -159,9 +159,6 @@ function PeerAssessment() {
         />
 
         <div className="d-flex flex-row-reverse my-2">
-          {/* <button type="button" className="btn btn-primary btn-sm" onClick={() => handlers.submit()}>
-            Save
-          </button> */}
           <SubmitButton
             text={'Submit Review'}
             onClick={handlers.submit}

@@ -18,6 +18,7 @@ export const renderDropdown = (propAssessment, setAssessments) => {
       }
       }>
       <option disabled>SELECT SCORE</option>
+      <option value={0}>{renderScore(0, propAssessment.type)}</option>
       <option value={1}>{renderScore(1, propAssessment.type)}</option>
       <option value={2}>{renderScore(2, propAssessment.type)}</option>
       <option value={3}>{renderScore(3, propAssessment.type)}</option>

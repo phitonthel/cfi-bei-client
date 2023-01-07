@@ -60,7 +60,7 @@ const SelfAssessment = (type) => {
     },
     // send request to server
     submit: async () => {
-      const numberOfAssessmentCompleted = assessments.filter(assessment => assessment.assignedScore).length
+      const numberOfAssessmentCompleted = assessments.filter(assessment => assessment.assignedScore !== null).length
 
       if (numberOfAssessmentCompleted !== assessments.length) {
         const result = await Swal.fire({
@@ -110,7 +110,7 @@ const SelfAssessment = (type) => {
     }
   }
 
-  const buttonText = `Submit ${assessments.filter(assessment => assessment.assignedScore).length}/${assessments.length} Assessments`
+  const buttonText = `Submit ${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length} Assessments`
 
   return (
     <>
