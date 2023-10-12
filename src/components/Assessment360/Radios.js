@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { renderScore } from './AssessmentCard';
+import { renderScore } from './renderScore';
 
-export const AssessmentRadios = (assessment, handlers, type) => {
+export const Radios = (assessment, handlers, type) => {
   const assignedScore = assessment.assignedScore
 
   const generateClass = (score) => score == assignedScore
@@ -10,35 +10,31 @@ export const AssessmentRadios = (assessment, handlers, type) => {
 
   return (
     <>
-      <div className='col my-2'>
+      <div className='col my-4'>
         <div className='row d-flex justify-content-center'>
-          <div className="col-3 m-1">
-            <button className={generateClass(0)} onClick={() => handlers.button(assessment.id, 0)}>
-              {renderScore(0, type)}
-            </button>
-          </div>
-        </div>
-        <div className='row d-flex justify-content-center'>
-          <div className="col-3 m-1">
+          <div className="col-2 m-1">
             <button className={generateClass(1)} onClick={() => handlers.button(assessment.id, 1)}>
               {renderScore(1, type)}
             </button>
           </div>
-          <div className="col-3 m-1">
+          <div className="col-2 m-1">
             <button className={generateClass(2)} onClick={() => handlers.button(assessment.id, 2)}>
               {renderScore(2, type)}
             </button>
           </div>
-        </div>
-        <div className='row d-flex justify-content-center'>
-          <div className="col-3 m-1">
+          <div className="col-2 m-1">
             <button className={generateClass(3)} onClick={() => handlers.button(assessment.id, 3)}>
               {renderScore(3, type)}
             </button>
           </div>
-          <div className="col-3 m-1">
+          <div className="col-2 m-1">
             <button className={generateClass(4)} onClick={() => handlers.button(assessment.id, 4)}>
               {renderScore(4, type)}
+            </button>
+          </div>
+          <div className="col-2 m-1">
+            <button className={generateClass(5)} onClick={() => handlers.button(assessment.id, 5)}>
+              {renderScore(5, type)}
             </button>
           </div>
         </div>

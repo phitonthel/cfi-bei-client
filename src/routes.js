@@ -27,10 +27,16 @@ import LandingPage from "./views/LandingPage/LandingPage.js";
 
 import Subordinates from "./views/Subordinates";
 import SelfAssessment from "./views/SelfAssessment";
-import PeerAssessmentTable from "./views/PeerAssessmentTable";
 import Reports from "./views/Reports";
 import Technical from "./views/Technical";
 import Behavioural from "./views/Behavioural";
+import FeedbackForms from "./views/FeedbackForms/FeedbackForms.js";
+import IndividualReport from "./views/FeedbackReport/IndividualReport.js";
+import NominatePeers from "./views/NominatePeers";
+import ReviewNominations from "./views/ReviewNominations/index.js";
+
+import PeerAssessmentTable from "./views/PeerAssessmentTable";
+import FeedbackForm from "./views/FeedbackForms/FeedbackForm.js";
 
 import Article from "./views/article";
 
@@ -49,7 +55,8 @@ export const guestRoutes = [
     icon: "nc-icon nc-bell-55",
     component: LandingPage,
     layout: "/admin",
-    access: null
+    access: null,
+    hidden: true,
   },
   {
     path: "/login",
@@ -57,7 +64,8 @@ export const guestRoutes = [
     icon: "nc-icon nc-bell-55",
     component: Login,
     layout: "/admin",
-    access: null
+    access: null,
+    hidden: true,
   },
 ]
 
@@ -111,7 +119,9 @@ export const baseRoutes = [
   //   icon: "nc-icon nc-bell-55",
   //   component: Notifications,
   //   layout: "/admin",
-  // }
+  //   access: Object.values(ACCESS_LEVEL),
+  //   hidden: false,
+  // },
   {
     path: "/user",
     name: "User Profile",
@@ -119,33 +129,22 @@ export const baseRoutes = [
     component: UserProfile,
     layout: "/admin",
     access: Object.values(ACCESS_LEVEL),
+    hidden: false,
   },
+  // {
+  //   path: "/subordinates",
+  //   name: "Subordinates",
+  //   icon: "nc-icon nc-chart-pie-35",
+  //   component: Subordinates,
+  //   layout: "/admin",
+  //   access: Object.values(ACCESS_LEVEL),
+  //   hidden: false,
+  // },
   {
-    path: "/subordinates",
-    name: "Subordinates",
-    icon: "nc-icon nc-chart-pie-35",
-    component: Subordinates,
-    layout: "/admin",
-    access: Object.values(ACCESS_LEVEL),
-  },
-  {
-    path: "/self-assessment-behavioural",
-    name: "Behavioural Asm.",
-    icon: "nc-icon nc-paper-2",
-    component: Behavioural,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.STAF,
-      ACCESS_LEVEL.KEPALA_UNIT,
-      ACCESS_LEVEL.KEPALA_KANTOR,
-      ACCESS_LEVEL.KEPALA_DIVISI,
-    ],
-  },
-  {
-    path: "/self-assessment-technical",
-    name: "Technical Asm.",
-    icon: "nc-icon nc-paper-2",
-    component: Technical,
+    path: "/nominate-peers",
+    name: "Nominate Peers",
+    icon: "nc-icon nc-favourite-28",
+    component: NominatePeers,
     layout: "/admin",
     access: [
       ACCESS_LEVEL.STAF,
@@ -153,6 +152,85 @@ export const baseRoutes = [
       ACCESS_LEVEL.KEPALA_KANTOR,
       ACCESS_LEVEL.KEPALA_DIVISI,
     ],
+    hidden: false,
+  },
+  {
+    path: "/review-nominations",
+    name: "Review Nominations",
+    icon: "nc-icon nc-fav-remove",
+    component: ReviewNominations,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
+    hidden: false,
+  },
+  {
+    path: "/feedback-forms",
+    name: "Feedback Forms",
+    icon: "nc-icon nc-ruler-pencil",
+    component: FeedbackForms,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.STAF,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
+    hidden: false,
+  },
+  {
+    path: "/individual-report",
+    name: "Individual Report",
+    icon: "nc-icon nc-chart-bar-32",
+    component: IndividualReport,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.STAF,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
+    hidden: false,
+  },
+  // {
+  //   path: "/self-assessment-behavioural",
+  //   name: "Behavioural Asm.",
+  //   icon: "nc-icon nc-paper-2",
+  //   component: Behavioural,
+  //   layout: "/admin",
+    // access: [
+    //   ACCESS_LEVEL.STAF,
+    //   ACCESS_LEVEL.KEPALA_UNIT,
+    //   ACCESS_LEVEL.KEPALA_KANTOR,
+    //   ACCESS_LEVEL.KEPALA_DIVISI,
+    // ],
+  //   hidden: false,
+  // },
+  // {
+  //   path: "/self-assessment-technical",
+  //   name: "Technical Asm.",
+  //   icon: "nc-icon nc-paper-2",
+  //   component: Technical,
+  //   layout: "/admin",
+  //   access: [
+  //     ACCESS_LEVEL.STAF,
+  //     ACCESS_LEVEL.KEPALA_UNIT,
+  //     ACCESS_LEVEL.KEPALA_KANTOR,
+  //     ACCESS_LEVEL.KEPALA_DIVISI,
+  //   ],
+  //   hidden: false,
+  // },
+  {
+    path: "/reports",
+    name: "Reports",
+    icon: "nc-icon nc-notes",
+    component: Reports,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN
+    ],
+    hidden: false,
   },
   {
     path: "/peer-assessment-table",
@@ -166,15 +244,20 @@ export const baseRoutes = [
       ACCESS_LEVEL.KEPALA_DIVISI,
       ACCESS_LEVEL.SUPERADMIN,
     ],
+    hidden: true,
   },
   {
-    path: "/reports",
-    name: "Reports",
-    icon: "nc-icon nc-notes",
-    component: Reports,
+    path: "/feedback-form",
+    name: "Feedback Form",
+    icon: "nc-icon nc-paper-2",
+    component: FeedbackForm,
     layout: "/admin",
     access: [
-      ACCESS_LEVEL.SUPERADMIN
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+      ACCESS_LEVEL.SUPERADMIN,
     ],
+    hidden: true,
   },
 ];

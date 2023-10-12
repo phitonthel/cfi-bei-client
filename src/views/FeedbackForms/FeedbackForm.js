@@ -5,17 +5,26 @@ import Swal from 'sweetalert2';
 import { fetchSelfAssessment, submitSelfAssessment } from '../../apis/assessment/fetchSelf'
 
 
-import { AssessmentCard } from '../../components/AssessmentCard'
-import { InstructionsTech } from './InstructionsTech'
-import { InstructionsBehav } from './InstructionsBehav'
+import { AssessmentCard } from '../../components/Assessment360/Card'
+import { Instructions } from './Instructions'
 import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
 import { submitScore } from '../../apis/assessment/submitScore';
 import { SubmitButton } from '../../components/SubmitButton';
+import OpenFeedbackForm from './OpenFeedbackForm';
+import { fetchById } from '../../apis/assessment/fetchById';
 
-const SelfAssessment = (type) => {
+const FeedbackForm = () => {
   const [assessments, setAssessments] = useState([])
-  const [hasAgreed, setHasAgreed] = useState(false)
+  const [openAssessments, setOpenAssessments] = useState([])
+  const [peerName, setPeerName] = useState()
+  const [hasAgreed, setHasAgreed] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const numberOfAssessmentCompleted = assessments.filter(assessment => assessment.assignedScore !== null).length
+  const numberOfOpenAssessmentCompleted = Object.values(openAssessments).filter((asm => asm !== '')).length
+
+  const totalAssessmentCompleted = numberOfAssessmentCompleted + numberOfOpenAssessmentCompleted
+  const totalAssessment = assessments.length + 3
 
   const submit = async () => {
     try {
@@ -47,24 +56,11 @@ const SelfAssessment = (type) => {
       });
       setAssessments([...assessments])
     },
-    // expand/collapse the criterias
-    expand: (assessmentId) => {
-      assessments.forEach(assessment => {
-        if (assessment.id === assessmentId) {
-          assessment.shouldShowCriterias = assessment.shouldShowCriterias
-            ? false
-            : true
-        }
-      });
-      setAssessments([...assessments])
-    },
     // send request to server
     submit: async () => {
-      const numberOfAssessmentCompleted = assessments.filter(assessment => assessment.assignedScore !== null).length
-
-      if (numberOfAssessmentCompleted !== assessments.length) {
+      if (totalAssessmentCompleted !== totalAssessment) {
         const result = await Swal.fire({
-          title: `${numberOfAssessmentCompleted}/${assessments.length} Assessment!`,
+          title: `${totalAssessmentCompleted}/${totalAssessment} Assessment!`,
           text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
           icon: 'warning',
           showCancelButton: true,
@@ -85,8 +81,14 @@ const SelfAssessment = (type) => {
 
   useEffect(async () => {
     try {
-      const data = await fetchSelfAssessment(type)
-      setAssessments(data)
+      const assessments = await fetchSelfAssessment('BEHAVIOURAL')
+      // const assessments = []
+      setAssessments(assessments)
+
+      const assignedId = localStorage.getItem('peer_id')
+      const { data } = await fetchById({ assignedId })
+      setPeerName(data[0].assigned.fullname)
+
     } catch (error) {
       console.log(error)
       fireSwalError(error)
@@ -94,31 +96,27 @@ const SelfAssessment = (type) => {
   }, [])
 
   if (!hasAgreed) {
-    if (type === 'TECHNICAL') {
-      return (
-        <div className='mb-4'>
-          <InstructionsTech setHasAgreed={setHasAgreed} />
-        </div>
-      )
-    }
-    if (type === 'BEHAVIOURAL') {
-      return (
-        <div className='mb-4'>
-          <InstructionsBehav setHasAgreed={setHasAgreed} />
-        </div>
-      )
-    }
+    return (
+      <div className='mb-4'>
+        <Instructions setHasAgreed={setHasAgreed} />
+      </div>
+    )
   }
 
-  const buttonText = `Submit ${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length} Assessments`
+  // const buttonText = `Submit ${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length} Assessments`
+  const buttonText = `Submit ${totalAssessmentCompleted}/${totalAssessment} Assessments`
 
   return (
     <>
       <div className='col-10'>
+        <div className="mb-4">
+          <h2 style={{ margin: 0 }}>{peerName}</h2>
+        </div><hr></hr>
 
         {
-          assessments.map(assessment => AssessmentCard(assessment, handlers, type))
+          assessments.map((assessment, idx) => AssessmentCard(idx, assessment, handlers, '360'))
         }
+        <OpenFeedbackForm setOpenAssessments={setOpenAssessments} />
         <div className="d-flex flex-row-reverse">
           <SubmitButton
             text={buttonText}
@@ -131,4 +129,4 @@ const SelfAssessment = (type) => {
   );
 };
 
-export default SelfAssessment
+export default FeedbackForm

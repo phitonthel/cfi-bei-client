@@ -9,7 +9,7 @@ import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { downloadTxtFile } from '../Reports/utils';
-import { DownloadButton } from '../../components/DownloadButton';
+import ButtonWithModal from '../../components/Modal/ButtonWithModal'
 
 const columns = [
   {
@@ -24,19 +24,13 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Role</h4>,
-    selector: row => row.role,
-    width: '500px',
+    name: <h4>Level</h4>,
+    selector: row => row.level,
     sortable: true,
   },
   {
-    name: <h4>Assigned</h4>,
-    selector: row => row.assigned,
-    sortable: true,
-  },
-  {
-    name: <h4>Reviewed</h4>,
-    selector: row => row.reviewed,
+    name: <h4>Status</h4>,
+    selector: row => row.isNominated,
     sortable: true,
   },
   {
@@ -56,32 +50,18 @@ function Subordinates() {
       <div>
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
-            localStorage.setItem('peer_id', user.id)
-            history.push('/admin/peer-assessment-table')
           }}
         >
-          Assess
+          Nominate
         </a>
-        {/* <a href='#' className="badge badge-success mx-1">
-          Approve
-        </a> */}
+        <a href='#' className="badge badge-danger mx-1"
+          onClick={() => {
+          }}
+        >
+          Un-nominate
+        </a>
       </div>
     )
-  }
-
-  const createCsv = () => {
-    let headers = `Name,Division,Role,Assigned,Reviewed,Total Assessment\n`
-
-    subordinates.forEach(subordinate => {
-      headers += subordinate.fullname + ','
-      headers += subordinate.division + ','
-      headers += subordinate.role + ','
-      headers += subordinate.assigned.split(' / ')[0] + ','
-      headers += subordinate.reviewed.split(' / ')[0] + ','
-      headers += subordinate.reviewed.split(' / ')[1].split(' ')[0] + '\n'
-    });
-
-    return headers
   }
 
   useEffect(async () => {
@@ -101,9 +81,8 @@ function Subordinates() {
           id: user.id,
           fullname: user.fullname,
           division: user.Division.name,
-          role: user.positionName,
-          assigned: user.assignedStatus,
-          reviewed: user.reviewerStatus,
+          level: user.level,
+          isNominated: 'Un-nominated',
           actions: Actions(user)
         }
       }));
@@ -116,8 +95,7 @@ function Subordinates() {
   }, [])
 
   const instructions = [
-    'Anda diminta untuk melakukan penilaian terhadap kompetensi technical/behavioural bawahan langsung Anda (staf/kepala kantor/kepala unit).',
-    'Pilih menu assess untuk mulai menilai masing-masing anggota tim Anda.'
+    'Anda diminta untuk memilih...',
   ]
 
   if (isLoading) {
@@ -129,12 +107,11 @@ function Subordinates() {
       <div className='m-4'>
         <ExpandableInstructions instructions={instructions} />
       </div>
-      <DownloadButton
-        onClick={() => downloadTxtFile(
-          createCsv(),
-          `subordinates_${new Date().getTime()}.csv`
-        )}
-      />
+
+      <div className="d-flex justify-content-end m-2">
+        < ButtonWithModal buttonText={'Nominate Peers From Other Division'} />
+      </div>
+
       <DataTable
         columns={columns}
         data={subordinates}

@@ -24,19 +24,13 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Role</h4>,
-    selector: row => row.role,
-    width: '500px',
+    name: <h4>Level</h4>,
+    selector: row => row.level,
     sortable: true,
   },
   {
-    name: <h4>Assigned</h4>,
-    selector: row => row.assigned,
-    sortable: true,
-  },
-  {
-    name: <h4>Reviewed</h4>,
-    selector: row => row.reviewed,
+    name: <h4>Feedback Given</h4>,
+    selector: row => row.feedbackCompleted,
     sortable: true,
   },
   {
@@ -45,10 +39,10 @@ const columns = [
   },
 ];
 
-function Subordinates() {
+function FeedbackForms() {
   const history = useHistory()
 
-  const [subordinates, setSubordinates] = useState([])
+  const [ratees, setRatees] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const Actions = (user) => {
@@ -56,37 +50,22 @@ function Subordinates() {
       <div>
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
+            // localStorage.setItem('feedback_form_id', user.id)
             localStorage.setItem('peer_id', user.id)
-            history.push('/admin/peer-assessment-table')
+            history.push('/admin/feedback-form')
           }}
         >
-          Assess
+          Review
         </a>
-        {/* <a href='#' className="badge badge-success mx-1">
-          Approve
-        </a> */}
       </div>
     )
   }
 
-  const createCsv = () => {
-    let headers = `Name,Division,Role,Assigned,Reviewed,Total Assessment\n`
-
-    subordinates.forEach(subordinate => {
-      headers += subordinate.fullname + ','
-      headers += subordinate.division + ','
-      headers += subordinate.role + ','
-      headers += subordinate.assigned.split(' / ')[0] + ','
-      headers += subordinate.reviewed.split(' / ')[0] + ','
-      headers += subordinate.reviewed.split(' / ')[1].split(' ')[0] + '\n'
-    });
-
-    return headers
-  }
-
   useEffect(async () => {
     try {
-      const { data } = await fetchSubordinates()
+      let { data } = await fetchSubordinates()
+      data = data.slice(0, 10).filter(user => user.level !== 'Staf')
+
       if (data.message) {
         return Swal.fire({
           position: 'top',
@@ -96,17 +75,51 @@ function Subordinates() {
         })
       }
 
-      setSubordinates(data.map(user => {
+      // temp
+      const ni = {
+        id: 'xxx',
+        fullname: 'NI WAYAN YADNYA WATI',
+        division: 'Sumber Daya Manusia',
+        level: 'Kepala Divisi',
+        feedbackCompleted: '0 / 22 Assessments',
+      }
+
+      const users = data.map((user, idx) => {
         return {
           id: user.id,
           fullname: user.fullname,
           division: user.Division.name,
-          role: user.positionName,
-          assigned: user.assignedStatus,
-          reviewed: user.reviewerStatus,
+          level: user.level,
+          // feedbackCompleted: user.feedbackCompleted,
+          feedbackCompleted: '0 / 22 Assessments',
           actions: Actions(user)
         }
-      }));
+      })
+
+      // setRatees(data.map((user, idx) => {
+      //   return {
+      //     id: user.id,
+      //     fullname: user.fullname,
+      //     division: user.Division.name,
+      //     level: user.level,
+      //     // feedbackCompleted: user.feedbackCompleted,
+      //     feedbackCompleted: '0 / 22 Assessments',
+      //     actions: Actions(user)
+      //   }
+      // }));
+
+      setRatees([
+        ...users,
+        {
+          id: 'xxx',
+          fullname: 'NI WAYAN YADNYA WATI',
+          division: 'Sumber Daya Manusia',
+          level: 'Kepala Divisi',
+          feedbackCompleted: '0 / 22 Assessments',
+          actions: Actions(data[0])
+        }
+      ])
+
     } catch (error) {
       console.log({ error })
       fireSwalError(error)
@@ -116,8 +129,8 @@ function Subordinates() {
   }, [])
 
   const instructions = [
-    'Anda diminta untuk melakukan penilaian terhadap kompetensi technical/behavioural bawahan langsung Anda (staf/kepala kantor/kepala unit).',
-    'Pilih menu assess untuk mulai menilai masing-masing anggota tim Anda.'
+    `Anda diminta untuk melakukan penilaian terhadap kompetensi kolega Anda`,
+    `Pilih menu 'Review' untuk mulai menilai masing-masing anggota tim Anda.`
   ]
 
   if (isLoading) {
@@ -129,19 +142,13 @@ function Subordinates() {
       <div className='m-4'>
         <ExpandableInstructions instructions={instructions} />
       </div>
-      <DownloadButton
-        onClick={() => downloadTxtFile(
-          createCsv(),
-          `subordinates_${new Date().getTime()}.csv`
-        )}
-      />
       <DataTable
         columns={columns}
-        data={subordinates}
+        data={ratees}
         highlightOnHover
       />
     </>
   );
 };
 
-export default Subordinates
+export default FeedbackForms

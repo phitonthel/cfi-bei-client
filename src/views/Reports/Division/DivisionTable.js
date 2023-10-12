@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { DownloadButton } from '../../../components/DownloadButton';
 import { downloadTxtFile } from '../utils';
 
 import { dataFactory } from './dataFactory'
 // import { data } from './data'
 
-const Table = ({ 
+const Table = ({
   data,
   setIsLoading
 }) => {
   if (!data) return null
 
   const createCsvHeaders = (data) => {
+    const MAIN_COL = 6
+
     const competencies = Object.keys(data[0].competencies)
 
-    let firstHeader = `,,,`
+    let firstHeader = `,`.repeat(MAIN_COL)
     competencies.forEach(competency => {
       firstHeader += `${competency},,,,`
     });
 
-    let secondHeader = `,,,`
+    let secondHeader = `,`.repeat(MAIN_COL)
     competencies.forEach(() => {
       secondHeader += "Meet,,Not Meet,,"
     });
 
-    let thirdHeader = `No,Divisi,Jumlah Karyawan,`
+    let thirdHeader = `No,Divisi,Jumlah Karyawan,Jumlah Kompetensi Per Divisi,Average Meet Kompetensi Divisi,Average Not Meet Kompetensi Divisi,`
     competencies.forEach(() => {
       thirdHeader += "Jumlah Karyawan,Persentase,Jumlah Karyawan,Persentase,"
     });
@@ -39,6 +42,9 @@ const Table = ({
       rowArr.push(i + 1)
       rowArr.push(row.divisionName)
       rowArr.push(row.numberOfStaff)
+      rowArr.push(row.totalCompetencies)
+      rowArr.push(row.avgMeetPercentage)
+      rowArr.push(row.avgNotMeetPercentage)
       competencies.forEach(competency => {
         rowArr.push(row.competencies[competency].meet.numberOfStaff)
         rowArr.push(row.competencies[competency].meet.percentage)
@@ -59,6 +65,9 @@ const Table = ({
           <th rowSpan={3}>No</th>
           <th rowSpan={3}>Divisi</th>
           <th rowSpan={3}>Jumlah Karyawan</th>
+          <th rowSpan={3}>Jumlah Kompetensi Per Divisi</th>
+          <th rowSpan={3}>Average Meet Kompetensi Divisi</th>
+          <th rowSpan={3}>Average Not Meet Kompetensi Divisi</th>
           {
             competencies.map(competency =>
               <th colSpan={4} key={competency}>Kompetensi {competency}</th>
@@ -134,16 +143,12 @@ const Table = ({
 
   return (
     <>
-      <div className="d-flex flex-row-reverse">
-        <button
-          className='btn btn-primary btn-sm m-1'
-          onClick={() => downloadTxtFile(
-            createCsv(data),
-            `reports_division_all_${new Date().getTime()}.csv`
-          )}>
-          Download CSV
-        </button>
-      </div>
+      <DownloadButton
+        onClick={() => downloadTxtFile(
+          createCsv(data),
+          `reports_division_all_${new Date().getTime()}.csv`
+        )}
+      />
       <table id="division-all-report" className="display nowrap" style={{ width: '200%' }}>
         {renderHeaders(data)}
         {renderRows(data)}

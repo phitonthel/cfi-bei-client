@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import { faker } from '@faker-js/faker';
 
 import DataTable from 'react-data-table-component';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
@@ -9,7 +10,7 @@ import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { downloadTxtFile } from '../Reports/utils';
-import { DownloadButton } from '../../components/DownloadButton';
+import ButtonWithModal from '../../components/Modal/ButtonWithModal'
 
 const columns = [
   {
@@ -24,23 +25,28 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Role</h4>,
-    selector: row => row.role,
-    width: '500px',
+    name: <h4>Level</h4>,
+    selector: row => row.level,
     sortable: true,
   },
   {
-    name: <h4>Assigned</h4>,
-    selector: row => row.assigned,
+    name: <h4>Reviewer</h4>,
+    selector: row => row.reviewer,
     sortable: true,
   },
   {
-    name: <h4>Reviewed</h4>,
-    selector: row => row.reviewed,
+    name: <h4>Reviewer Division</h4>,
+    selector: row => row.reviewerDivision,
+    sortable: true,
+  },
+  {
+    name: <h4>Reviewer Level</h4>,
+    selector: row => row.reviewerLevel,
     sortable: true,
   },
   {
     name: <h4>Actions</h4>,
+    width: '300px',
     cell: row => row.actions,
   },
 ];
@@ -54,34 +60,20 @@ function Subordinates() {
   const Actions = (user) => {
     return (
       <div>
-        <a href='#' className="badge badge-primary mx-1"
+        <a href='#' className="badge badge-secondary mx-1"
           onClick={() => {
-            localStorage.setItem('peer_id', user.id)
-            history.push('/admin/peer-assessment-table')
           }}
         >
-          Assess
+          Details
         </a>
-        {/* <a href='#' className="badge badge-success mx-1">
-          Approve
-        </a> */}
+        <a href='#' className="badge badge-danger mx-1"
+          onClick={() => {
+          }}
+        >
+          Delete
+        </a>
       </div>
     )
-  }
-
-  const createCsv = () => {
-    let headers = `Name,Division,Role,Assigned,Reviewed,Total Assessment\n`
-
-    subordinates.forEach(subordinate => {
-      headers += subordinate.fullname + ','
-      headers += subordinate.division + ','
-      headers += subordinate.role + ','
-      headers += subordinate.assigned.split(' / ')[0] + ','
-      headers += subordinate.reviewed.split(' / ')[0] + ','
-      headers += subordinate.reviewed.split(' / ')[1].split(' ')[0] + '\n'
-    });
-
-    return headers
   }
 
   useEffect(async () => {
@@ -96,14 +88,22 @@ function Subordinates() {
         })
       }
 
-      setSubordinates(data.map(user => {
+      const multipliedData = []
+      data.slice(0, 2).forEach(user => {
+        multipliedData.push(user)
+        multipliedData.push(user)
+        multipliedData.push(user)
+      });
+
+      setSubordinates(multipliedData.map(user => {
         return {
-          id: user.id,
+          // id: user.id,
           fullname: user.fullname,
           division: user.Division.name,
-          role: user.positionName,
-          assigned: user.assignedStatus,
-          reviewed: user.reviewerStatus,
+          level: user.level,
+          reviewer: faker.person.fullName(),
+          reviewerDivision: 'Sumber Daya Manusia',
+          reviewerLevel: 'Staff',
           actions: Actions(user)
         }
       }));
@@ -116,8 +116,7 @@ function Subordinates() {
   }, [])
 
   const instructions = [
-    'Anda diminta untuk melakukan penilaian terhadap kompetensi technical/behavioural bawahan langsung Anda (staf/kepala kantor/kepala unit).',
-    'Pilih menu assess untuk mulai menilai masing-masing anggota tim Anda.'
+    'Anda diminta untuk memilih...',
   ]
 
   if (isLoading) {
@@ -129,12 +128,11 @@ function Subordinates() {
       <div className='m-4'>
         <ExpandableInstructions instructions={instructions} />
       </div>
-      <DownloadButton
-        onClick={() => downloadTxtFile(
-          createCsv(),
-          `subordinates_${new Date().getTime()}.csv`
-        )}
-      />
+
+      <div className="d-flex justify-content-end m-2">
+        < ButtonWithModal buttonText={'Nominate Peers'} />
+      </div>
+
       <DataTable
         columns={columns}
         data={subordinates}

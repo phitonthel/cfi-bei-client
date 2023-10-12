@@ -32,7 +32,7 @@ function PeerAssessment() {
 
         await Promise.all(promises)
 
-        fireSwalSuccess('Your work has been saved!')
+        fireSwalSuccess('Your work has been submitted!')
       } catch (error) {
         fireSwalError(error)
       } finally {
@@ -48,12 +48,11 @@ function PeerAssessment() {
       setPeerName(data[0].assigned.fullname)
 
       setAssessments(data.map(assessment => {
-        console.log({ assessment })
         const type = assessment.CompetencyRole.Competency?.type
         return {
           id: assessment.id,
           assignedScore: renderScore(assessment.assignedScore, type),
-          reviewerScore: assessment.reviewerScore ?? assessment.assignedScore ?? 1,
+          reviewerScore: assessment.reviewerScore ?? assessment.assignedScore ?? 0,
           expectedScore: renderScore(assessment.CompetencyRole.expectedScore, type),
           category: assessment.CompetencyRole.Competency?.category,
           title: assessment.CompetencyRole.Competency?.title,
@@ -160,9 +159,6 @@ function PeerAssessment() {
         />
 
         <div className="d-flex flex-row-reverse my-2">
-          {/* <button type="button" className="btn btn-primary btn-sm" onClick={() => handlers.submit()}>
-            Save
-          </button> */}
           <SubmitButton
             text={'Submit Review'}
             onClick={handlers.submit}

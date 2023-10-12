@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { DownloadButton } from '../../../components/DownloadButton';
 import { downloadTxtFile } from '../utils';
 
 // import { data } from './data'
@@ -101,7 +102,6 @@ function Table({ reports, setIsLoading }) {
     let headers = createCsvHeaders()
 
     rows.forEach(row => {
-      console.log({row});
       headers += row.join(',') + '\n'
     });
 
@@ -123,17 +123,12 @@ function Table({ reports, setIsLoading }) {
 
   return (
     <>
-      <div className="d-flex flex-row-reverse">
-        <button
-          className='btn btn-primary btn-sm m-1'
-          onClick={() => downloadTxtFile(
-            createCsv(),
-            `reports_users_${new Date().getTime()}.csv`
-          )}
-        >
-          Download CSV
-        </button>
-      </div>
+      <DownloadButton
+        onClick={() => downloadTxtFile(
+          createCsv(),
+          `reports_users_${new Date().getTime()}.csv`
+        )}
+      />
       <table id="user-report" className="display nowrap" style={{ width: '1000%' }}>
         {renderHeaders()}
         {renderBody()}
