@@ -25,8 +25,6 @@ import logo from "assets/img/reactlogo.png";
 function Sidebar({ color, image, routes }) {
   const level = localStorage.getItem("level");
 
-  const excludedRoutes = ['Peer Assessment', 'Peer Assessment Table', 'Landing Page', 'Login']
-
   const location = useLocation();
 
   const activeRoute = (routeName) => {
@@ -60,12 +58,12 @@ function Sidebar({ color, image, routes }) {
         <Nav>
           {routes.map((prop, key) => {
             const isRedirect = prop.redirect
-            const isIncludeExcluded = excludedRoutes.includes(prop.name) // remove routes from specific banlist
             const isAccessValid = !level ? true : prop.access.includes(level)
+            const isHiddenFromSidebar = prop.hidden
 
             if (
               !isRedirect &&
-              !isIncludeExcluded &&
+              !isHiddenFromSidebar &&
               isAccessValid
             )
               return (
