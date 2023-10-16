@@ -34,6 +34,7 @@ import FeedbackForms from "./views/FeedbackForms/FeedbackForms.js";
 import IndividualReport from "./views/FeedbackReport/IndividualReport.js";
 import NominatePeers from "./views/NominatePeers";
 import ReviewNominations from "./views/ReviewNominations/index.js";
+import AddUserForm from "views/Add User/FormAddUser.js";
 
 import PeerAssessmentTable from "./views/PeerAssessmentTable";
 import FeedbackForm from "./views/FeedbackForms/FeedbackForm.js";
@@ -151,6 +152,17 @@ export const baseRoutes = [
       ACCESS_LEVEL.KEPALA_UNIT,
       ACCESS_LEVEL.KEPALA_KANTOR,
       ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
+    hidden: false,
+  },
+  {
+    path: "/add-user",
+    name: "Add New User",
+    icon: "nc-icon nc-circle-09",
+    component: AddUserForm,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN,
     ],
     hidden: false,
   },
