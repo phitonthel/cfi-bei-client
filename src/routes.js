@@ -40,6 +40,7 @@ import PeerAssessmentTable from "./views/PeerAssessmentTable";
 import FeedbackForm from "./views/FeedbackForms/FeedbackForm.js";
 
 import Article from "./views/article";
+import UserManagement from "views/Add User/UserManagement.js";
 
 const ACCESS_LEVEL = {
   STAF: 'Staf',
@@ -156,10 +157,10 @@ export const baseRoutes = [
     hidden: false,
   },
   {
-    path: "/add-user",
-    name: "Add New User",
+    path: "/user-management",
+    name: "User Management",
     icon: "nc-icon nc-circle-09",
-    component: AddUserForm,
+    component: UserManagement,
     layout: "/admin",
     access: [
       ACCESS_LEVEL.SUPERADMIN,
