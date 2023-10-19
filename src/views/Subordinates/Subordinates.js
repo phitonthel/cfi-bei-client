@@ -10,6 +10,7 @@ import { ExpandableInstructions } from '../../components/ExpandableInstructions'
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { downloadTxtFile } from '../Reports/utils';
 import { DownloadButton } from '../../components/DownloadButton';
+import { convertISODateToDDMMYYYY } from '../../utils/date'
 
 const columns = [
   {
@@ -27,6 +28,11 @@ const columns = [
     name: <h4>Role</h4>,
     selector: row => row.role,
     width: '500px',
+    sortable: true,
+  },
+  {
+    name: <h4>Last Updated</h4>,
+    selector: row => row.updatedAt,
     sortable: true,
   },
   {
@@ -102,6 +108,7 @@ function Subordinates() {
           fullname: user.fullname,
           division: user.Division.name,
           role: user.positionName,
+          updatedAt: convertISODateToDDMMYYYY(user.updatedAt),
           assigned: user.assignedStatus,
           reviewed: user.reviewerStatus,
           actions: Actions(user)
