@@ -41,7 +41,7 @@ function Header() {
 
   const getBrandText = () => {
     for (let i = 0; i < baseRoutes.length; i++) {
-      if (location.pathname.indexOf(baseRoutes[i].layout + baseRoutes[i].path) !== -1) {
+      if (location.pathname == (baseRoutes[i].layout + baseRoutes[i].path)) {
         return baseRoutes[i].name;
       }
     }

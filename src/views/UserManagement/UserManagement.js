@@ -29,11 +29,6 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Status</h4>,
-    selector: row => row.isNominated,
-    sortable: true,
-  },
-  {
     name: <h4>Actions</h4>,
     cell: row => row.actions,
   },

@@ -27,7 +27,7 @@ const columns = [
   {
     name: <h4>Role</h4>,
     selector: row => row.role,
-    width: '500px',
+    width: '450px',
     sortable: true,
   },
   {
