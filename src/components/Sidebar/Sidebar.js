@@ -107,8 +107,8 @@ function Sidebar({ color, image, routes }) {
                     className="custom-nav-dropdown"
                     title={
                       <>
-                        {/* <i className={prop.icon} style={{ marginRight: '10px', fontSize: '20px' }} /> */}
-                        <span style={{ fontSize: '18px' }}>{prop.name}</span>
+                        <i className={prop.icon} style={{ marginRight: '10px', fontSize: '16px' }} />
+                        <span style={{ marginLeft: '6px', fontSize: '14px' }}>{prop.name}</span>
                       </>
                     }
                     id={`nav-dropdown-${key}`}
