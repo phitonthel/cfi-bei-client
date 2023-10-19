@@ -35,11 +35,13 @@ import FeedbackForms from "./views/FeedbackForms/FeedbackForms.js";
 import IndividualReport from "./views/FeedbackReport/IndividualReport.js";
 import NominatePeers from "./views/NominatePeers";
 import ReviewNominations from "./views/ReviewNominations/index.js";
+import AddUserForm from "views/Add User/FormAddUser.js";
 
 import PeerAssessmentTable from "./views/PeerAssessmentTable";
 import FeedbackForm from "./views/FeedbackForms/FeedbackForm.js";
 
 import Article from "./views/article";
+import UserManagement from "views/Add User/UserManagement.js";
 
 const ACCESS_LEVEL = {
   STAF: 'Staf',
@@ -161,6 +163,17 @@ export const baseRoutes = [
       ACCESS_LEVEL.KEPALA_UNIT,
       ACCESS_LEVEL.KEPALA_KANTOR,
       ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
+    hidden: false,
+  },
+  {
+    path: "/user-management",
+    name: "User Management",
+    icon: "nc-icon nc-circle-09",
+    component: UserManagement,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN,
     ],
     hidden: false,
   },

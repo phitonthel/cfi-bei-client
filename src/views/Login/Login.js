@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useHistory } from "react-router-dom";
+import { Modal, Button } from 'react-bootstrap'; // Importing necessary components from react-bootstrap
 import axios from 'axios';
 
 import DataTable from 'react-data-table-component';
@@ -13,6 +14,7 @@ function Login() {
   const [nik, setNik] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showModal, setShowModal] = useState(false); // State to handle modal visibility
 
   const handleChange = async (event) => {
     event.preventDefault()
@@ -28,11 +30,17 @@ function Login() {
     }
   }
 
+  const handleForgotPassword = () => {
+    setShowModal(true);
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  }
+
   return (
     <>
-      {/* <!-- Section: Design Block --> */}
       <section className="">
-        {/* <!-- Jumbotron --> */}
         <div className="px-4 py-5 px-md-5 text-center text-lg-start" style={{ "backgroundColor": "hsl(0, 0%, 96%)" }}>
           <div className="container">
             <div className="row gx-lg-5 align-items-center">
@@ -47,7 +55,6 @@ function Login() {
                         </h2>
                       </div>
 
-                      {/* <!-- NIK input --> */}
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="form3Example3">NIK</label>
                         <input
@@ -59,8 +66,7 @@ function Login() {
                         />
                       </div>
 
-                      {/* <!-- Password input --> */}
-                      <div className="form-outline mb-4">
+                      <div className="form-outline mb-2">
                         <label className="form-label" htmlFor="form3Example4">Password</label>
                         <input
                           type="password"
@@ -71,39 +77,33 @@ function Login() {
                         />
                       </div>
 
+                      {/* Forgot Password Text */}
+                      <div className="text-end mb-4">
+                        <span className="text-danger"  style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={handleForgotPassword}>
+                          Forgot Password?
+                        </span>
+                      </div>
+
                       <SubmitButton
                         text={'Sign In'}
                         onClick={event => handleChange(event)}
                         isSubmitting={isSubmitting}
                       />
 
-                      {/* <button
-                        type=""
-                        className="btn btn-primary btn-block mb-4"
-                        onClick={event => handleChange(event)}
-                      >
-                        Sign In
-                      </button> */}
-
-                      {/* <!-- Register buttons --> */}
-                      {/* <div className="text-center">
-                        <p>or sign up with:</p>
-                        <button type="button" className="btn btn-link btn-floating mx-1">
-                          <i className="fab fa-facebook-f"></i>
-                        </button>
-
-                        <button type="button" className="btn btn-link btn-floating mx-1">
-                          <i className="fab fa-google"></i>
-                        </button>
-
-                        <button type="button" className="btn btn-link btn-floating mx-1">
-                          <i className="fab fa-twitter"></i>
-                        </button>
-
-                        <button type="button" className="btn btn-link btn-floating mx-1">
-                          <i className="fab fa-github"></i>
-                        </button>
-                      </div> */}
+                      {/* Forgot Password Modal */}
+                      <Modal show={showModal} onHide={handleCloseModal}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Forgot Password</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          Please check your email to change password.
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button variant="secondary" onClick={handleCloseModal}>
+                            Close
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
                     </form>
                   </div>
                 </div>
@@ -116,4 +116,4 @@ function Login() {
   )
 };
 
-export default Login
+export default Login;
