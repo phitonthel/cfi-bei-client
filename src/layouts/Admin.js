@@ -28,6 +28,18 @@ import { guestRoutes, baseRoutes } from '../routes.js'
 
 import sidebarImage from "assets/img/sidebar-7.jpg";
 
+export const flattenRoutes = (routes) => {
+  return routes.flatMap(route => {
+    if (!route.children) {
+      return route;
+    }
+    return [
+      { ...route },
+      ...route.children
+    ];
+  });
+};
+
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
@@ -40,7 +52,7 @@ function Admin() {
   const level = localStorage.getItem("level");
 
   const getRoutes = (baseRoutes, level) => {
-    return baseRoutes.map((prop, key) => {
+    return flattenRoutes(baseRoutes).map((prop, key) => {
       // condition for rendering access level goes here
       // this is only for routes, not for Sidebar
       const isLayoutValid = prop.layout === "/admin"

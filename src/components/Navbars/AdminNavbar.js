@@ -21,6 +21,7 @@ import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
 import { baseRoutes } from '../../routes'
 import { logout } from "../../apis/user/auth";
+import { flattenRoutes } from "layouts/Admin";
 
 function Header() {
 
@@ -40,9 +41,10 @@ function Header() {
   };
 
   const getBrandText = () => {
-    for (let i = 0; i < baseRoutes.length; i++) {
-      if (location.pathname == (baseRoutes[i].layout + baseRoutes[i].path)) {
-        return baseRoutes[i].name;
+    const flatRoutes = flattenRoutes(baseRoutes)
+    for (let i = 0; i < flatRoutes.length; i++) {
+      if (location.pathname == (flatRoutes[i].layout + flatRoutes[i].path)) {
+        return flatRoutes[i].name;
       }
     }
     return "";
