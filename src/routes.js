@@ -107,6 +107,8 @@ export const baseRoutes = [
   //   icon: "nc-icon nc-atom",
   //   component: Icons,
   //   layout: "/admin",
+  //   access: Object.values(ACCESS_LEVEL),
+  //   hidden: false,
   // },
   // {
   //   path: "/maps",
@@ -178,7 +180,7 @@ export const baseRoutes = [
   {
     path: "/360",
     name: "360 Feedback",
-    icon: "nc-icon nc-paper-2",
+    icon: "nc-icon nc-bullet-list-67",
     layout: "/admin",
     access: [
       ACCESS_LEVEL.STAF,
@@ -235,7 +237,7 @@ export const baseRoutes = [
   {
     path: "/cfi",
     name: "C. Fit Index",
-    icon: "nc-icon nc-paper-2",
+    icon: "nc-icon nc-bullet-list-67",
     layout: "/admin",
     access: [
       ACCESS_LEVEL.STAF,
