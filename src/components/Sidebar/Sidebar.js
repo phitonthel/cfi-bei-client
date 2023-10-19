@@ -28,7 +28,7 @@ function Sidebar({ color, image, routes }) {
   const location = useLocation();
 
   const activeRoute = (routeName) => {
-    return location.pathname.indexOf(routeName) > -1 ? "active" : "";
+    return location.pathname == routeName ? "active" : "";
   };
 
   return (
