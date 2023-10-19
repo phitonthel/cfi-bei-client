@@ -25,6 +25,7 @@ import Upgrade from "./views/Upgrade.js";
 import Login from "./views/Login";
 import LandingPage from "./views/LandingPage/LandingPage.js";
 
+import Announcement from "./views/Announcement";
 import Subordinates from "./views/Subordinates";
 import SelfAssessment from "./views/SelfAssessment";
 import Reports from "./views/Reports";
@@ -123,6 +124,15 @@ export const baseRoutes = [
   //   hidden: false,
   // },
   {
+    path: "/announcement",
+    name: "Announcement",
+    icon: "nc-icon nc-bell-55",
+    component: Announcement,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
+    hidden: false,
+  },
+  {
     path: "/user",
     name: "User Profile",
     icon: "nc-icon nc-circle-09",
@@ -131,15 +141,15 @@ export const baseRoutes = [
     access: Object.values(ACCESS_LEVEL),
     hidden: false,
   },
-  // {
-  //   path: "/subordinates",
-  //   name: "Subordinates",
-  //   icon: "nc-icon nc-chart-pie-35",
-  //   component: Subordinates,
-  //   layout: "/admin",
-  //   access: Object.values(ACCESS_LEVEL),
-  //   hidden: false,
-  // },
+  {
+    path: "/subordinates",
+    name: "Subordinates",
+    icon: "nc-icon nc-chart-pie-35",
+    component: Subordinates,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
+    hidden: false,
+  },
   {
     path: "/nominate-peers",
     name: "Nominate Peers",
@@ -193,34 +203,34 @@ export const baseRoutes = [
     ],
     hidden: false,
   },
-  // {
-  //   path: "/self-assessment-behavioural",
-  //   name: "Behavioural Asm.",
-  //   icon: "nc-icon nc-paper-2",
-  //   component: Behavioural,
-  //   layout: "/admin",
-    // access: [
-    //   ACCESS_LEVEL.STAF,
-    //   ACCESS_LEVEL.KEPALA_UNIT,
-    //   ACCESS_LEVEL.KEPALA_KANTOR,
-    //   ACCESS_LEVEL.KEPALA_DIVISI,
-    // ],
-  //   hidden: false,
-  // },
-  // {
-  //   path: "/self-assessment-technical",
-  //   name: "Technical Asm.",
-  //   icon: "nc-icon nc-paper-2",
-  //   component: Technical,
-  //   layout: "/admin",
-  //   access: [
-  //     ACCESS_LEVEL.STAF,
-  //     ACCESS_LEVEL.KEPALA_UNIT,
-  //     ACCESS_LEVEL.KEPALA_KANTOR,
-  //     ACCESS_LEVEL.KEPALA_DIVISI,
-  //   ],
-  //   hidden: false,
-  // },
+  {
+    path: "/self-assessment-behavioural",
+    name: "Behavioural Asm.",
+    icon: "nc-icon nc-paper-2",
+    component: Behavioural,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.STAF,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
+    hidden: false,
+  },
+  {
+    path: "/self-assessment-technical",
+    name: "Technical Asm.",
+    icon: "nc-icon nc-paper-2",
+    component: Technical,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.STAF,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+    ],
+    hidden: false,
+  },
   {
     path: "/reports",
     name: "Reports",

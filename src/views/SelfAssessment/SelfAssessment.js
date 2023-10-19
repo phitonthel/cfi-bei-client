@@ -11,6 +11,7 @@ import { InstructionsBehav } from './InstructionsBehav'
 import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
 import { submitScore } from '../../apis/assessment/submitScore';
 import { SubmitButton } from '../../components/SubmitButton';
+import { FloatingMessage } from '../../components/FloatingMessage'
 
 const SelfAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
@@ -110,11 +111,21 @@ const SelfAssessment = (type) => {
     }
   }
 
-  const buttonText = `Submit ${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length} Assessments`
+  const assessmentsPercentage = `${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length}`
+  const buttonText = `Submit ${assessmentsPercentage} Assessments`
 
   return (
     <>
       <div className='col-10'>
+        <FloatingMessage
+          title={`Progress`}
+          text={`${assessmentsPercentage} Assessment`}
+        />
+
+        {/* { FloatingMessage({
+          title: "Progress",
+          text: `${assessmentsPercentage} Assessment`
+        }) } */}
 
         {
           assessments.map(assessment => AssessmentCard(assessment, handlers, type))
