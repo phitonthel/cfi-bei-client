@@ -11,6 +11,7 @@ import { ExpandableInstructions } from '../../components/ExpandableInstructions'
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import ButtonWithModal from '../../components/Modal/ButtonWithModal';
 
+
 const columns = [
   {
     name: <h4>Name</h4>,
@@ -44,14 +45,26 @@ function Subordinates() {
   const [subordinates, setSubordinates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+
+
   const nominateUser = async (userId) => {
-   
     try {
-      
+
+      console.log("Nominate User ID:", userId);
+      console.log("Subordinates:", subordinates);
+      const selectedUser = subordinates.find(user => user.id === userId);
+      if (!selectedUser) throw new Error("User not found");
+
+      const nominatedStaff = subordinates.filter(user => user.status === 'nominated' && user.level === 'staff').length;
+
+      if (selectedUser.level === 'staff' && nominatedStaff >= 3) {
+        throw new Error("You can't nominate more than 3 staff");
+      }
+
       await nominatePeers({
         reviewerId: userId
-      })
-      fireSwalSuccess({text: 'User Nominated Successfully!'});
+      });
+      fireSwalSuccess({ text: 'User Nominated Successfully!' });
       await fetchNominationUser();
     } catch (error) {
       const revertedSubordinates = subordinates.map(subordinate => {
@@ -61,16 +74,15 @@ function Subordinates() {
         return subordinate;
       });
       setSubordinates(revertedSubordinates);
-    
+
       console.error("Error nominating user:", error);
-      fireSwalError(error);
+      fireSwalError({ text: error.message || 'An error occurred while nominating the user.' });
     }
   }
-
   const unnominateUser = async (userId) => {
     try {
       await unnominatePeers({ reviewerId: userId });
-      fireSwalSuccess({text: 'User Un-nominated Successfully!'});
+      fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
       await fetchNominationUser();
     } catch (error) {
       console.error("Error unnominating user:", error);
@@ -78,8 +90,8 @@ function Subordinates() {
     }
   }
 
- 
-  const fetchNominationUser= async () => {
+
+  const fetchNominationUser = async () => {
     try {
       const { data } = await fetchNomination();
       if (data.message) {
@@ -105,26 +117,26 @@ function Subordinates() {
       setIsLoading(false);
     }
   };
-  
+
 
   const Actions = (user) => (
     <div style={{ display: 'flex', gap: '10px' }}>
-      <button 
+      <button
         className="btn btn-primary btn-sm"
-        style={{ padding: '0.25rem 0.5rem' }} 
+        style={{ padding: '0.25rem 0.5rem' }}
         onClick={(e) => {
-          e.preventDefault();  
+          e.preventDefault();
           nominateUser(user.id);
         }}
       >
         Nominate
       </button>
-      
-      <button 
+
+      <button
         className="btn btn-danger btn-sm"
         style={{ padding: '0.25rem 0.5rem' }}
         onClick={(e) => {
-          e.preventDefault();  
+          e.preventDefault();
           unnominateUser(user.id);
         }}
       >
@@ -132,7 +144,7 @@ function Subordinates() {
       </button>
     </div>
   );
-  
+
 
   useEffect(() => {
     fetchNominationUser();
