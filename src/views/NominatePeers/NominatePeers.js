@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
+
 import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
+import { unnominatePeers } from '../../apis/assessment/unnominatePeers'
 import { nominatePeers } from 'apis/assessment/nominatePeers';
 import { fetchNomination } from '../../apis/user/fetchNomination'
-import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
-import { fireSwalError, fireSwalNominated } from '../../apis/fireSwal';
+import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import ButtonWithModal from '../../components/Modal/ButtonWithModal';
@@ -45,20 +45,13 @@ function Subordinates() {
   const [isLoading, setIsLoading] = useState(true);
 
   const nominateUser = async (userId) => {
-    // const updatedSubordinates = subordinates.map(subordinate => {
-    //   if (subordinate.id === userId) {
-    //     return { ...subordinate, status: 'Nominated' };
-    //   }
-    //   return subordinate;
-    // });
-    // setSubordinates(updatedSubordinates);
-
+   
     try {
       
       await nominatePeers({
         reviewerId: userId
       })
-      fireSwalNominated('User Nominated Successfully!');
+      fireSwalSuccess({text: 'User Nominated Successfully!'});
       await fetchNominationUser();
     } catch (error) {
       const revertedSubordinates = subordinates.map(subordinate => {
@@ -70,6 +63,17 @@ function Subordinates() {
       setSubordinates(revertedSubordinates);
     
       console.error("Error nominating user:", error);
+      fireSwalError(error);
+    }
+  }
+
+  const unnominateUser = async (userId) => {
+    try {
+      await unnominatePeers({ reviewerId: userId });
+      fireSwalSuccess({text: 'User Un-nominated Successfully!'});
+      await fetchNominationUser();
+    } catch (error) {
+      console.error("Error unnominating user:", error);
       fireSwalError(error);
     }
   }
@@ -104,14 +108,31 @@ function Subordinates() {
   
 
   const Actions = (user) => (
-    <div>
-      <a href="#" className="badge badge-primary mx-1" onClick={(e) => {
-        e.preventDefault();  
-        nominateUser(user.id);
-      }}>Nominate</a>
-      {/* Add logic for Un-nominate  */}
+    <div style={{ display: 'flex', gap: '10px' }}>
+      <button 
+        className="btn btn-primary btn-sm"
+        style={{ padding: '0.25rem 0.5rem' }} 
+        onClick={(e) => {
+          e.preventDefault();  
+          nominateUser(user.id);
+        }}
+      >
+        Nominate
+      </button>
+      
+      <button 
+        className="btn btn-danger btn-sm"
+        style={{ padding: '0.25rem 0.5rem' }}
+        onClick={(e) => {
+          e.preventDefault();  
+          unnominateUser(user.id);
+        }}
+      >
+        Un-nominate
+      </button>
     </div>
   );
+  
 
   useEffect(() => {
     fetchNominationUser();
