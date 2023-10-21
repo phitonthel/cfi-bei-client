@@ -4,7 +4,6 @@ import Swal from 'sweetalert2';
 
 import { fetchSelfAssessment, submitSelfAssessment } from '../../apis/assessment/fetchSelf'
 
-
 import { AssessmentCard } from '../../components/Assessment360/Card'
 import { Instructions } from './Instructions'
 import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
@@ -12,6 +11,7 @@ import { submitScore } from '../../apis/assessment/submitScore';
 import { SubmitButton } from '../../components/SubmitButton';
 import OpenFeedbackForm from './OpenFeedbackForm';
 import { fetchById } from '../../apis/assessment/fetchById';
+import { FloatingMessage } from '../../components/FloatingMessage';
 
 const FeedbackForm = () => {
   const [assessments, setAssessments] = useState([])
@@ -103,8 +103,8 @@ const FeedbackForm = () => {
     )
   }
 
-  // const buttonText = `Submit ${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length} Assessments`
-  const buttonText = `Submit ${totalAssessmentCompleted}/${totalAssessment} Assessments`
+  const assessmentsPercentage = `${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length}`
+  const buttonText = `Submit ${assessmentsPercentage} Assessments`
 
   return (
     <>
@@ -112,6 +112,11 @@ const FeedbackForm = () => {
         <div className="mb-4">
           <h2 style={{ margin: 0 }}>{peerName}</h2>
         </div><hr></hr>
+
+        <FloatingMessage
+          title={`Progress`}
+          text={`${assessmentsPercentage} Assessment`}
+        />
 
         {
           assessments.map((assessment, idx) => AssessmentCard(idx, assessment, handlers, '360'))
