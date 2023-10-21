@@ -130,7 +130,7 @@ function Subordinates() {
       </div>
 
       <div className="d-flex justify-content-end m-2">
-        < ButtonWithModal buttonText={'Nominate Peers'} />
+        <ButtonWithModal buttonText={'Nominate Peers'} />
       </div>
 
       <DataTable
