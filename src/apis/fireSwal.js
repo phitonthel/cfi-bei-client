@@ -24,3 +24,15 @@ export const fireSwalSuccess = ({
     timer: 1000
   })
 }
+
+export const fireSwalNominated = ({
+  text,
+}) => {
+  Swal.fire({
+    position: 'top',
+    icon: 'success',
+    text: text ?? 'User Nominated Successfully!',
+    showConfirmButton: false,
+    timer: 1000
+  })
+}

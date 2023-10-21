@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
-import Swal from 'sweetalert2'
-
+import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
+import { nominatePeers } from 'apis/assessment/nominatePeers';
+import { fetchNomination } from '../../apis/user/fetchNomination'
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
-import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
+import { fireSwalError, fireSwalNominated } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
-import { downloadTxtFile } from '../Reports/utils';
-import ButtonWithModal from '../../components/Modal/ButtonWithModal'
+import ButtonWithModal from '../../components/Modal/ButtonWithModal';
 
 const columns = [
   {
@@ -30,7 +30,7 @@ const columns = [
   },
   {
     name: <h4>Status</h4>,
-    selector: row => row.isNominated,
+    selector: row => row.status,
     sortable: true,
   },
   {
@@ -40,66 +40,89 @@ const columns = [
 ];
 
 function Subordinates() {
-  const history = useHistory()
+  const history = useHistory();
+  const [subordinates, setSubordinates] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [subordinates, setSubordinates] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const nominateUser = async (userId) => {
+    // const updatedSubordinates = subordinates.map(subordinate => {
+    //   if (subordinate.id === userId) {
+    //     return { ...subordinate, status: 'Nominated' };
+    //   }
+    //   return subordinate;
+    // });
+    // setSubordinates(updatedSubordinates);
 
-  const Actions = (user) => {
-    return (
-      <div>
-        <a href='#' className="badge badge-primary mx-1"
-          onClick={() => {
-          }}
-        >
-          Nominate
-        </a>
-        <a href='#' className="badge badge-danger mx-1"
-          onClick={() => {
-          }}
-        >
-          Un-nominate
-        </a>
-      </div>
-    )
+    try {
+      
+      await nominatePeers({
+        reviewerId: userId
+      })
+      fireSwalNominated('User Nominated Successfully!');
+      await fetchNominationUser();
+    } catch (error) {
+      const revertedSubordinates = subordinates.map(subordinate => {
+        if (subordinate.id === userId) {
+          return { ...subordinate, status: 'Un-nominated' };
+        }
+        return subordinate;
+      });
+      setSubordinates(revertedSubordinates);
+    
+      console.error("Error nominating user:", error);
+      fireSwalError(error);
+    }
   }
 
-  useEffect(async () => {
+ 
+  const fetchNominationUser= async () => {
     try {
-      const { data } = await fetchSubordinates()
+      const { data } = await fetchNomination();
       if (data.message) {
         return Swal.fire({
           position: 'top',
           text: data.message,
           showConfirmButton: false,
           timer: 1000
-        })
+        });
       }
-
-      setSubordinates(data.map(user => {
-        return {
-          id: user.id,
-          fullname: user.fullname,
-          division: user.Division.name,
-          level: user.level,
-          isNominated: 'Un-nominated',
-          actions: Actions(user)
-        }
-      }));
+      setSubordinates(data.map(user => ({
+        id: user.id,
+        fullname: user.fullname,
+        division: user.Division.name,
+        level: user.level,
+        status: user.status,
+        actions: Actions(user)
+      })));
     } catch (error) {
-      console.log({ error })
-      fireSwalError(error)
+      console.log({ error });
+      fireSwalError(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [])
+  };
+  
+
+  const Actions = (user) => (
+    <div>
+      <a href="#" className="badge badge-primary mx-1" onClick={(e) => {
+        e.preventDefault();  
+        nominateUser(user.id);
+      }}>Nominate</a>
+      {/* Add logic for Un-nominate  */}
+    </div>
+  );
+
+  useEffect(() => {
+    fetchNominationUser();
+  }, []);
 
   const instructions = [
     'Anda diminta untuk memilih...',
-  ]
+  ];
 
   if (isLoading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   return (
@@ -107,11 +130,9 @@ function Subordinates() {
       <div className='m-4'>
         <ExpandableInstructions instructions={instructions} />
       </div>
-
       <div className="d-flex justify-content-end m-2">
-        < ButtonWithModal buttonText={'Nominate Peers From Other Division'} />
+        <ButtonWithModal buttonText={'Nominate Peers From Other Division'} />
       </div>
-
       <DataTable
         columns={columns}
         data={subordinates}
@@ -119,6 +140,6 @@ function Subordinates() {
       />
     </>
   );
-};
+}
 
-export default Subordinates
+export default Subordinates;
