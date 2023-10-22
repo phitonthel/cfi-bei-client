@@ -1,5 +1,5 @@
 import { useLocation, useHistory } from "react-router-dom";
-
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -28,6 +28,8 @@ export const login = async ({ nik, password }) => {
     showConfirmButton: false,
     timer: 1000
   })
+
+  return response.data
 }
 
 export const logout = async () => {

@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { config } from '../../env';
 
 export const nominatePeers = async ({
+    revieweeId,
     reviewerId,
   }) => {
     const response = await axios({
@@ -13,7 +14,8 @@ export const nominatePeers = async ({
         access_token: localStorage.getItem('access_token')
       },
       data: {
-        reviewerId
+        reviewerId,
+        revieweeId,
       }
     });
     return response
