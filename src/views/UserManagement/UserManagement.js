@@ -29,6 +29,11 @@ const columns = [
     sortable: true,
   },
   {
+    name: <h4>Password</h4>,
+    selector: row => row.password,
+    sortable: true,
+  },
+  {
     name: <h4>Actions</h4>,
     cell: row => row.actions,
   },
@@ -77,6 +82,7 @@ function UserManagement() {
           fullname: user.fullname,
           division: user.Division.name,
           level: user.level,
+          password: user.password,
           isNominated: 'Un-nominated',
           actions: Actions(user)
         }

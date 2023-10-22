@@ -70,7 +70,7 @@ function Subordinates() {
           onClick={() => {
           }}
         >
-          Delete
+          Un-nominate
         </a>
       </div>
     )
