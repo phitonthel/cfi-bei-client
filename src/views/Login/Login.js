@@ -96,7 +96,7 @@ function Login() {
                           <Modal.Title>Forgot Password</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                          Please check your email to change password.
+                          Please ask Superadmin for password.
                         </Modal.Body>
                         <Modal.Footer>
                           <Button variant="secondary" onClick={handleCloseModal}>
