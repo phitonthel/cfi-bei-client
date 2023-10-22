@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 
 import { fetchAllUsers } from '../../apis/user/fetchAllUsers';
 import SearchableDropdown from '../SearchableDropdown'
+import { nominatePeers } from '../../apis/assessment/nominatePeers';
 
 const NominatePeersModal = ({
   modalTitle,
   buttonText,
-  isSuperadmin 
+  isSuperadmin
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState([]);
@@ -20,10 +21,12 @@ const NominatePeersModal = ({
   const handleButtonClick = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log('Form submitted:', reviewee, reviewer, {authUser});
-    // handleCloseModal();
+    await nominatePeers({
+      revieweeId: reviewee.id || authUser.id,
+      reviewerId: reviewer.id
+    })
   };
 
   useEffect(async () => {
@@ -47,15 +50,18 @@ const NominatePeersModal = ({
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleFormSubmit}>
-            
-            <Form.Group controlId="input1">
-              <Form.Label>Reviewee</Form.Label>
-              <SearchableDropdown
-                users={users}
-                onChange={(selectedValue) => setReviewee(selectedValue)}
-                selected={reviewee}
-              />
-            </Form.Group>
+
+            {
+              isSuperadmin &&
+              <Form.Group controlId="input1">
+                <Form.Label>Reviewee</Form.Label>
+                <SearchableDropdown
+                  users={users}
+                  onChange={(selectedValue) => setReviewee(selectedValue)}
+                  selected={reviewee}
+                />
+              </Form.Group>
+            }
 
             <Form.Group controlId="input2">
               <Form.Label>Reviewer</Form.Label>
