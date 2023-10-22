@@ -2,26 +2,30 @@ import React, { useState } from 'react';
 import { useLocation, useHistory } from "react-router-dom";
 import { Modal, Button } from 'react-bootstrap'; // Importing necessary components from react-bootstrap
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
 import DataTable from 'react-data-table-component';
 import { login } from '../../apis/user/auth';
 import { SubmitButton } from '../../components/SubmitButton';
 import { fireSwalError } from '../../apis/fireSwal';
+import { setAuth } from "../../redux/authSlice";
 
 function Login() {
   const history = useHistory()
+  const dispatch = useDispatch();
 
   const [nik, setNik] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showModal, setShowModal] = useState(false); // State to handle modal visibility
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = async (event) => {
     event.preventDefault()
 
     try {
       setIsSubmitting(true)
-      await login({ nik, password })
+      const auth = await login({ nik, password })
+      dispatch(setAuth(auth));
       history.push('/admin/self-assessment-behavioural')
     } catch (error) {
       fireSwalError(error)

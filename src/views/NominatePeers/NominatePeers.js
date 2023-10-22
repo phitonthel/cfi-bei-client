@@ -9,7 +9,7 @@ import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalNominated } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
-import ButtonWithModal from '../../components/Modal/ButtonWithModal';
+import NominatePeersModal from '../../components/Modal/NominatePeersModal';
 
 const columns = [
   {
@@ -131,7 +131,10 @@ function Subordinates() {
         <ExpandableInstructions instructions={instructions} />
       </div>
       <div className="d-flex justify-content-end m-2">
-        <ButtonWithModal buttonText={'Nominate Peers From Other Division'} />
+        <NominatePeersModal
+          modalTitle={'Nominate Peers'}
+          buttonText={'Nominate Peers From Other Division'}
+        />
       </div>
       <DataTable
         columns={columns}
