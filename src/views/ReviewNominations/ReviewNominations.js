@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import { faker } from '@faker-js/faker';
 
 import DataTable from 'react-data-table-component';
+import { unnominatePeers } from 'apis/assessment/unnominatePeers';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
@@ -57,6 +58,19 @@ function Subordinates() {
   const [subordinates, setSubordinates] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
+  const unnominateUser = async (userId) => {
+    try {
+      await unnominatePeers({ reviewerId: userId });
+      fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
+      // await fetchNominationUser();
+    } catch (error) {
+      console.error("Error unnominating user:", error);
+      fireSwalError(error);
+    }
+  }
+
+
+
   const Actions = (user) => {
     return (
       <div>
@@ -67,8 +81,10 @@ function Subordinates() {
           Details
         </a>
         <a href='#' className="badge badge-danger mx-1"
-          onClick={() => {
-          }}
+          onClick={(e) => {
+          e.preventDefault();
+          unnominateUser(user.id);
+        }}
         >
           Un-nominate
         </a>
