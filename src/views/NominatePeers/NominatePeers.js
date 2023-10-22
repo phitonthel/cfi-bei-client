@@ -50,16 +50,16 @@ function Subordinates() {
   const nominateUser = async (userId) => {
     try {
 
-      console.log("Nominate User ID:", userId);
-      console.log("Subordinates:", subordinates);
-      const selectedUser = subordinates.find(user => user.id === userId);
-      if (!selectedUser) throw new Error("User not found");
+      // console.log("Nominate User ID:", userId);
+      // console.log("Subordinates:", subordinates);
+      // const selectedUser = subordinates.find(user => user.id === userId);
+      // if (!selectedUser) throw new Error("User not found");
 
-      const nominatedStaff = subordinates.filter(user => user.status === 'nominated' && user.level === 'staff').length;
+      // const nominatedStaff = subordinates.filter(user => user.status === 'nominated' && user.level === 'staff').length;
 
-      if (selectedUser.level === 'staff' && nominatedStaff >= 3) {
-        throw new Error("You can't nominate more than 3 staff");
-      }
+      // if (selectedUser.level === 'staff' && nominatedStaff >= 3) {
+      //   throw new Error("You can't nominate more than 3 staff");
+      // }
 
       await nominatePeers({
         reviewerId: userId
