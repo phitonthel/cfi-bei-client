@@ -41,6 +41,7 @@ import FeedbackForm from "./views/FeedbackForms/FeedbackForm.js";
 
 import Article from "./views/article";
 import UserManagement from "./views/UserManagement/UserManagement.js";
+import ApplicationSettings from "./views/ApplicationSettings/ApplicationSettings.js";
 
 const ACCESS_LEVEL = {
   STAF: 'Staf',
@@ -48,6 +49,18 @@ const ACCESS_LEVEL = {
   KEPALA_KANTOR: 'Kepala Kantor',
   KEPALA_DIVISI: 'Kepala Divisi',
   SUPERADMIN: 'SUPERADMIN'
+}
+
+export const APP_SETTINGS = {
+  "Tab for 360": "Tab for 360",
+  "Nominate 360 Peers": "Nominate 360 Peers",
+  "Give Feedback for 360": "Give Feedback for 360",
+  "Individual Report for 360": "Individual Report for 360",
+  "Tab for CFI": "Tab for CFI",
+  "Subordinates for CFI": "Subordinates for CFI",
+  "Behavioural Assessment for CFI": "Behavioural Assessment for CFI",
+  "Technical Assessment for CFI": "Technical Assessment for CFI",
+  "Announcement": "Announcement"
 }
 
 export const guestRoutes = [
@@ -134,11 +147,12 @@ export const baseRoutes = [
     layout: "/admin",
     access: Object.values(ACCESS_LEVEL),
     hidden: false,
+    visibilityByAppSetting: APP_SETTINGS.Announcement
   },
   {
     path: "/user",
     name: "User Profile",
-    icon: "nc-icon nc-circle-09",
+    icon: "nc-icon nc-single-02",
     component: UserProfile,
     layout: "/admin",
     access: Object.values(ACCESS_LEVEL),
@@ -149,6 +163,17 @@ export const baseRoutes = [
     name: "User Management",
     icon: "nc-icon nc-circle-09",
     component: UserManagement,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
+    hidden: false,
+  },
+  {
+    path: "/application-settings",
+    name: "Application Settings",
+    icon: "nc-icon nc-settings-gear-64",
+    component: ApplicationSettings,
     layout: "/admin",
     access: [
       ACCESS_LEVEL.SUPERADMIN,
@@ -189,6 +214,7 @@ export const baseRoutes = [
       ACCESS_LEVEL.KEPALA_DIVISI,
     ],
     hidden: false,
+    visibilityByAppSetting: APP_SETTINGS["Tab for 360"],
     children: [
       {
         path: "/nominate-peers",
@@ -197,12 +223,12 @@ export const baseRoutes = [
         component: NominatePeers,
         layout: "/admin",
         access: [
-          ACCESS_LEVEL.STAF,
           ACCESS_LEVEL.KEPALA_UNIT,
           ACCESS_LEVEL.KEPALA_KANTOR,
           ACCESS_LEVEL.KEPALA_DIVISI,
         ],
         hidden: false,
+        visibilityByAppSetting: APP_SETTINGS["Nominate 360 Peers"],
       },
       {
         path: "/feedback-forms",
@@ -217,6 +243,7 @@ export const baseRoutes = [
           ACCESS_LEVEL.KEPALA_DIVISI,
         ],
         hidden: false,
+        visibilityByAppSetting: APP_SETTINGS["Give Feedback for 360"],
       },
       {
         path: "/individual-report",
@@ -231,6 +258,7 @@ export const baseRoutes = [
           ACCESS_LEVEL.KEPALA_DIVISI,
         ],
         hidden: false,
+        visibilityByAppSetting: APP_SETTINGS["Individual Report for 360"],
       },
     ]
   },
@@ -246,6 +274,7 @@ export const baseRoutes = [
       ACCESS_LEVEL.KEPALA_DIVISI,
     ],
     hidden: false,
+    visibilityByAppSetting: APP_SETTINGS["Tab for CFI"],
     children: [
       {
         path: "/subordinates",
@@ -255,6 +284,7 @@ export const baseRoutes = [
         layout: "/admin",
         access: Object.values(ACCESS_LEVEL),
         hidden: false,
+        visibilityByAppSetting: APP_SETTINGS["Subordinates for CFI"]
       },
       {
         path: "/self-assessment-behavioural",
@@ -269,6 +299,7 @@ export const baseRoutes = [
           ACCESS_LEVEL.KEPALA_DIVISI,
         ],
         hidden: false,
+        visibilityByAppSetting: APP_SETTINGS["Behavioural Assessment for CFI"],
       },
       {
         path: "/self-assessment-technical",
@@ -283,6 +314,7 @@ export const baseRoutes = [
           ACCESS_LEVEL.KEPALA_DIVISI,
         ],
         hidden: false,
+        visibilityByAppSetting: APP_SETTINGS["Technical Assessment for CFI"],
       },
     ]
   },
@@ -307,6 +339,7 @@ export const baseRoutes = [
     component: FeedbackForm,
     layout: "/admin",
     access: [
+      ACCESS_LEVEL.STAF,
       ACCESS_LEVEL.KEPALA_UNIT,
       ACCESS_LEVEL.KEPALA_KANTOR,
       ACCESS_LEVEL.KEPALA_DIVISI,

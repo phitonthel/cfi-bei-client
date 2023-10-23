@@ -4,7 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import DataTable from 'react-data-table-component';
-import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
+import { fetchFeedbackFormUsers } from '../../apis/user/fetchFeedbackFormUsers';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
@@ -42,7 +42,7 @@ const columns = [
 function FeedbackForms() {
   const history = useHistory()
 
-  const [ratees, setRatees] = useState([])
+  const [reviewees, setReviewees] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const Actions = (user) => {
@@ -50,8 +50,7 @@ function FeedbackForms() {
       <div>
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
-            // localStorage.setItem('feedback_form_id', user.id)
-            localStorage.setItem('peer_id', user.id)
+            localStorage.setItem('360_reviewee_id', user.id)
             history.push('/admin/feedback-form')
           }}
         >
@@ -63,8 +62,7 @@ function FeedbackForms() {
 
   useEffect(async () => {
     try {
-      let { data } = await fetchSubordinates()
-      data = data.slice(0, 10).filter(user => user.level !== 'Staf')
+      let { data } = await fetchFeedbackFormUsers()
 
       if (data.message) {
         return Swal.fire({
@@ -75,50 +73,18 @@ function FeedbackForms() {
         })
       }
 
-      // temp
-      const ni = {
-        id: 'xxx',
-        fullname: 'NI WAYAN YADNYA WATI',
-        division: 'Sumber Daya Manusia',
-        level: 'Kepala Divisi',
-        feedbackCompleted: '0 / 22 Assessments',
-      }
-
       const users = data.map((user, idx) => {
         return {
           id: user.id,
           fullname: user.fullname,
           division: user.Division.name,
           level: user.level,
-          // feedbackCompleted: user.feedbackCompleted,
-          feedbackCompleted: '0 / 22 Assessments',
+          feedbackCompleted: user.feedbackCompleted,
           actions: Actions(user)
         }
       })
 
-      // setRatees(data.map((user, idx) => {
-      //   return {
-      //     id: user.id,
-      //     fullname: user.fullname,
-      //     division: user.Division.name,
-      //     level: user.level,
-      //     // feedbackCompleted: user.feedbackCompleted,
-      //     feedbackCompleted: '0 / 22 Assessments',
-      //     actions: Actions(user)
-      //   }
-      // }));
-
-      setRatees([
-        ...users,
-        {
-          id: 'xxx',
-          fullname: 'NI WAYAN YADNYA WATI',
-          division: 'Sumber Daya Manusia',
-          level: 'Kepala Divisi',
-          feedbackCompleted: '0 / 22 Assessments',
-          actions: Actions(data[0])
-        }
-      ])
+      setReviewees(users)
 
     } catch (error) {
       console.log({ error })
@@ -144,7 +110,7 @@ function FeedbackForms() {
       </div>
       <DataTable
         columns={columns}
-        data={ratees}
+        data={reviewees}
         highlightOnHover
       />
     </>

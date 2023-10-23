@@ -15,7 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component } from "react";
+import React, { useState, Component } from "react";
+import { useSelector } from 'react-redux';
 import { useLocation, Route, Switch } from "react-router-dom";
 
 import AdminNavbar from "../components/Navbars/AdminNavbar";
@@ -27,6 +28,9 @@ import Login from "views/Login";
 import { guestRoutes, baseRoutes } from '../routes.js'
 
 import sidebarImage from "assets/img/sidebar-7.jpg";
+import { fetchAppSettings } from "apis/applicationSetting/fetchAppSettings";
+
+import { APP_SETTINGS } from "../routes.js";
 
 export const flattenRoutes = (routes) => {
   return routes.flatMap(route => {
@@ -40,26 +44,101 @@ export const flattenRoutes = (routes) => {
   });
 };
 
+const hideRoutesByAppSettings = ({
+  routes,
+  appSettings,
+}) => {
+  const filteredRoutes = routes.filter(route => {
+    // Filter parent routes
+    if (route.visibilityByAppSetting) {
+      const setting = appSettings.find(s => s.name === route.visibilityByAppSetting);
+      if (setting && !setting.isEnabled) {
+        return false;
+      }
+    }
+
+    // Filter child routes
+    if (route.children) {
+      route.children = route.children.filter(child => {
+        if (child.visibilityByAppSetting) {
+          const childSetting = appSettings.find(s => s.name === child.visibilityByAppSetting);
+          if (childSetting && !childSetting.isEnabled) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    return true;
+  });
+
+  return filteredRoutes;
+}
+
+const hideRoutesByAccessLevel = ({
+  routes,
+  authUser,
+}) => {
+  // if guest, do not filter
+  if (!authUser.level) {
+    return routes
+  }
+
+  const filteredRoutes = routes.filter(route => {
+    // Filter parent routes
+    if (!route.access.includes(authUser.level)) {
+      return false
+    }
+
+    // Filter child routes
+    if (route.children) {
+      route.children = route.children.filter(child => {
+        if (!child.access.includes(authUser.level)) {
+          return false;
+        }
+        return true;
+      });
+    }
+
+    return true;
+  });
+
+  return filteredRoutes;
+}
+
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
+  const [appSettings, setAppSettings] = useState([])
+
+  const authUser = useSelector(state => state.auth.user);
 
   const location = useLocation();
   const mainPanel = React.useRef(null);
 
-  const access_token = localStorage.getItem("access_token");
-  const level = localStorage.getItem("level");
+  const routesByAppSettings = hideRoutesByAppSettings({
+    routes: baseRoutes,
+    appSettings,
+  })
 
-  const getRoutes = (baseRoutes, level) => {
-    return flattenRoutes(baseRoutes).map((prop, key) => {
+  const filteredRoutes = hideRoutesByAccessLevel({
+    routes: routesByAppSettings,
+    authUser,
+  })
+
+  const getRoutes = (routes, level) => {
+    const flatRoutes = flattenRoutes(routes)
+
+    return flatRoutes.map((prop, key) => {
       // condition for rendering access level goes here
       // this is only for routes, not for Sidebar
       const isLayoutValid = prop.layout === "/admin"
-      const isAccessValid = !level ? true : prop.access.includes(level)
+      // const isAccessValid = !level ? true : prop.access.includes(level)
       if (
-        isLayoutValid &&
-        isAccessValid
+        isLayoutValid
+        // isAccessValid
       ) {
         return (
           <Route
@@ -74,7 +153,7 @@ function Admin() {
     });
   };
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainPanel.current.scrollTop = 0;
@@ -86,9 +165,12 @@ function Admin() {
       var element = document.getElementById("bodyClick");
       element.parentNode.removeChild(element);
     }
+
+    const { data } = await fetchAppSettings()
+    setAppSettings(data)
   }, [location]);
 
-  if (!access_token) {
+  if (!localStorage.getItem('access_token')) {
     return (
       <>
         <div className="wrapper">
@@ -96,7 +178,7 @@ function Admin() {
           <div className="main-panel" ref={mainPanel}>
             <AdminNavbar />
             <div className="content">
-              <Switch>{getRoutes(guestRoutes, level)}</Switch>
+              <Switch>{getRoutes(guestRoutes)}</Switch>
             </div>
             <Footer />
           </div>
@@ -108,11 +190,11 @@ function Admin() {
   return (
     <>
       <div className="wrapper">
-        <Sidebar color={color} image={hasImage ? image : ""} routes={baseRoutes} />
+        <Sidebar color={color} image={hasImage ? image : ""} routes={filteredRoutes} />
         <div className="main-panel" ref={mainPanel}>
           <AdminNavbar />
           <div className="content">
-            <Switch>{getRoutes(baseRoutes, level)}</Switch>
+            <Switch>{getRoutes(filteredRoutes)}</Switch>
           </div>
           <Footer />
         </div>

@@ -16,6 +16,7 @@
 
 */
 import React, { Component } from "react";
+import { useSelector } from 'react-redux';
 import { useLocation, NavLink } from "react-router-dom";
 import { Nav, NavDropdown } from "react-bootstrap";
 import styled from 'styled-components';
@@ -54,7 +55,7 @@ const StyledDropdownItem = styled(NavLink)`
 `;
 
 function Sidebar({ color, image, routes }) {
-  const level = localStorage.getItem("level");
+  const authUser = useSelector(state => state.auth.user);
 
   const location = useLocation();
 
@@ -97,10 +98,11 @@ function Sidebar({ color, image, routes }) {
         <Nav>
           {routes.map((prop, key) => {
             const isRedirect = prop.redirect
-            const isAccessValid = !level ? true : prop.access.includes(level)
+            // const isAccessValid = !authUser.level ? true : prop.access.includes(authUser.level) // if guest, true
             const isHiddenFromSidebar = prop.hidden
 
-            if (!isRedirect && !isHiddenFromSidebar && isAccessValid) {
+            // if (!isRedirect && !isHiddenFromSidebar && isAccessValid) {
+              if (!isRedirect && !isHiddenFromSidebar) {
               if (prop.children) {
                 return (
                   <StyledNavDropdown

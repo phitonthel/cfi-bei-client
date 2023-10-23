@@ -6,7 +6,7 @@ const CardBreakdown = ({
   return (
     <div className="col-8 my-3">
       <div className="">
-        <div class="bg-secondary text-white p-1 px-2 rounded" style={{ fontSize: '18px' }}>
+        <div className="bg-secondary text-white p-1 px-2 rounded" style={{ fontSize: '18px' }}>
           { categoryName }
         </div>
         <table className="table table-bordered">
