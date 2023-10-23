@@ -5,11 +5,13 @@ import { useSelector } from 'react-redux';
 import { fetchAllUsers } from '../../apis/user/fetchAllUsers';
 import SearchableDropdown from '../SearchableDropdown'
 import { nominatePeers } from '../../apis/assessment/nominatePeers';
+import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 
 const NominatePeersModal = ({
   modalTitle,
   buttonText,
-  isSuperadmin
+  isSuperadmin,
+  onFormSubmit: notifyParent
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState([]);
@@ -22,11 +24,22 @@ const NominatePeersModal = ({
   const handleCloseModal = () => setShowModal(false);
 
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    await nominatePeers({
-      revieweeId: reviewee.id || authUser.id,
-      reviewerId: reviewer.id
-    })
+    try {
+      event.preventDefault();
+      await nominatePeers({
+        revieweeId: reviewee.id || authUser.id,
+        reviewerId: reviewer.id
+      })
+
+      fireSwalSuccess({ text: 'User Nominated Successfully!' });
+    } catch (error) {
+      fireSwalError(error)
+    } finally {
+      setShowModal(false);
+      if (notifyParent) {
+        notifyParent();
+      }
+    }
   };
 
   useEffect(async () => {

@@ -25,3 +25,39 @@ export const submitScore = async ({
   });
   return response
 }
+
+export const submitTsScore = async ({
+  tsAssessmentId,
+  score,
+}) => {
+  const response = await axios({
+    method: 'PUT',
+    url: `${config.baseUrl}/ts-assessment/score`,
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    },
+    data: {
+      tsAssessmentId,
+      score,
+    }
+  });
+  return response
+}
+
+export const submitTsEssay = async ({
+  tsEssayAssessmentId,
+  feedback,
+}) => {
+  const response = await axios({
+    method: 'PUT',
+    url: `${config.baseUrl}/ts-essay-assessment/feedback`,
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    },
+    data: {
+      tsEssayAssessmentId,
+      feedback,
+    }
+  });
+  return response
+}

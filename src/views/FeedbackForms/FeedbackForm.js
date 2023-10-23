@@ -1,41 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 import { fetchSelfAssessment, submitSelfAssessment } from '../../apis/assessment/fetchSelf'
+import { fetchFeedbackForm } from '../../apis/tsAssessment/fetchFeedbackForm';
 
 import { AssessmentCard } from '../../components/Assessment360/Card'
 import { Instructions } from './Instructions'
 import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
-import { submitScore } from '../../apis/assessment/submitScore';
+import { submitTsScore, submitTsEssay } from '../../apis/assessment/submitScore';
 import { SubmitButton } from '../../components/SubmitButton';
 import OpenFeedbackForm from './OpenFeedbackForm';
 import { fetchById } from '../../apis/assessment/fetchById';
 import { FloatingMessage } from '../../components/FloatingMessage';
+import QuestionForm from '../../components/QuestionForm/QuestionForm';
+
+const calculateAssessmentPercentage = ({
+  tsAssessments,
+  tsEssayAssessments,
+}) => {
+  const numberOfAssessmentCompleted = tsAssessments.filter(tsA => tsA.score !== null).length
+  const numberOfTsEssayAssessmentCompleted = Object.values(tsEssayAssessments).filter((tsAF => tsAF.feedback !== '')).length
+
+  const totalAssessmentCompleted = numberOfAssessmentCompleted + numberOfTsEssayAssessmentCompleted
+  const totalAssessment = tsAssessments.length + 9
+
+  return {
+    assessmentPercentage: `${totalAssessmentCompleted}/${totalAssessment}`,
+    totalAssessmentCompleted,
+    totalAssessment,
+  }
+}
 
 const FeedbackForm = () => {
-  const [assessments, setAssessments] = useState([])
-  const [openAssessments, setOpenAssessments] = useState([])
-  const [peerName, setPeerName] = useState()
+  const authUser = useSelector(state => state.auth.user);
+
+  const [tsAssessments, setTsAssessments] = useState([])
+  const [tsEssayAssessments, setTsEssayAssessments] = useState([])
+
+  const [peerName, setPeerName] = useState('')
   const [hasAgreed, setHasAgreed] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const numberOfAssessmentCompleted = assessments.filter(assessment => assessment.assignedScore !== null).length
-  const numberOfOpenAssessmentCompleted = Object.values(openAssessments).filter((asm => asm !== '')).length
-
-  const totalAssessmentCompleted = numberOfAssessmentCompleted + numberOfOpenAssessmentCompleted
-  const totalAssessment = assessments.length + 3
+  const { assessmentPercentage } = calculateAssessmentPercentage({
+    tsAssessments,
+    tsEssayAssessments,
+  })
 
   const submit = async () => {
     try {
       setIsSubmitting(true)
-      const promises = assessments.map(assessment => {
-        return submitScore({
-          assessmentId: assessment.id,
-          assignedScore: assessment.assignedScore
+
+      const tsAssessmentPromises = tsAssessments.map(tsA => {
+        return submitTsScore({
+          tsAssessmentId: tsA.id,
+          score: tsA.score
         })
       })
-      await Promise.all(promises)
+
+      const tsEssayAssessmentsPromises = tsEssayAssessments.map(tsEA => {
+        return submitTsEssay({
+          tsEssayAssessmentId: tsEA.id,
+          feedback: tsEA.feedback,
+        })
+      })
+
+      await Promise.all([
+        ...tsAssessmentPromises,
+        ...tsEssayAssessmentsPromises,
+      ])
 
       fireSwalSuccess('Your work has been submitted!')
     } catch (error) {
@@ -45,48 +80,19 @@ const FeedbackForm = () => {
     }
   }
 
-  // handlers for assessment
-  const handlers = {
-    // for users to input score
-    button: (assessmentId, score) => {
-      assessments.forEach(assessment => {
-        if (assessment.id === assessmentId) {
-          assessment.assignedScore = score
-        }
-      });
-      setAssessments([...assessments])
-    },
-    // send request to server
-    submit: async () => {
-      if (totalAssessmentCompleted !== totalAssessment) {
-        const result = await Swal.fire({
-          title: `${totalAssessmentCompleted}/${totalAssessment} Assessment!`,
-          text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: `Yes, submit and continue later`,
-          cancelButtonText: `Cancel`,
-        })
-
-        if (result.isConfirmed) {
-          await submit()
-        }
-        return
-      }
-      await submit()
-    }
-  }
-
   useEffect(async () => {
     try {
-      const assessments = await fetchSelfAssessment('BEHAVIOURAL')
-      // const assessments = []
-      setAssessments(assessments)
+      const response = await fetchFeedbackForm({
+        reviewerId: authUser.id,
+        revieweeId: localStorage.getItem('360_reviewee_id'),
+      })
 
-      const assignedId = localStorage.getItem('peer_id')
-      const { data } = await fetchById({ assignedId })
+      setTsAssessments(response.data.tsAssessments)
+      setTsEssayAssessments(response.data.tsEssayAssessments)
+      console.log(response.data);
+
+      const revieweeId = localStorage.getItem('360_reviewee_id')
+      const { data } = await fetchById({ assignedId: revieweeId })
       setPeerName(data[0].assigned.fullname)
 
     } catch (error) {
@@ -103,8 +109,7 @@ const FeedbackForm = () => {
     )
   }
 
-  const assessmentsPercentage = `${assessments.filter(assessment => assessment.assignedScore !== null).length}/${assessments.length}`
-  const buttonText = `Submit ${assessmentsPercentage} Assessments`
+  const buttonText = `Submit ${assessmentPercentage} Assessments`
 
   return (
     <>
@@ -115,17 +120,27 @@ const FeedbackForm = () => {
 
         <FloatingMessage
           title={`Progress`}
-          text={`${assessmentsPercentage} Assessment`}
+          text={`${assessmentPercentage} Assessment`}
         />
 
-        {
+        <QuestionForm
+          initialQuestions={tsAssessments}
+          setTsAssessments={setTsAssessments}
+        />
+
+        {/* {
           assessments.map((assessment, idx) => AssessmentCard(idx, assessment, handlers, '360'))
-        }
-        <OpenFeedbackForm setOpenAssessments={setOpenAssessments} />
+        } */}
+
+        <OpenFeedbackForm
+          initialTsEssayAssessments={tsEssayAssessments}
+          setTsEssayAssessments={setTsEssayAssessments}
+        />
+
         <div className="d-flex flex-row-reverse">
           <SubmitButton
             text={buttonText}
-            onClick={handlers.submit}
+            onClick={submit}
             isSubmitting={isSubmitting}
           />
         </div>
