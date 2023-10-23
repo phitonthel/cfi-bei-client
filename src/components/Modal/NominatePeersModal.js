@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { fetchAllUsers } from '../../apis/user/fetchAllUsers';
 import SearchableDropdown from '../SearchableDropdown'
-import { nominatePeers } from '../../apis/assessment/nominatePeers';
+import { nominatePeer } from '../../apis/assessment/nominatePeer';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 
 const NominatePeersModal = ({
@@ -26,7 +26,7 @@ const NominatePeersModal = ({
   const handleFormSubmit = async (event) => {
     try {
       event.preventDefault();
-      await nominatePeers({
+      await nominatePeer({
         revieweeId: reviewee.id || authUser.id,
         reviewerId: reviewer.id
       })
