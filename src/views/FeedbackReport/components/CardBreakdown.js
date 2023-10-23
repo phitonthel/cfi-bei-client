@@ -1,13 +1,11 @@
 import React from 'react';
 
-const CardBreakdown = ({
-  categoryName,
-}) => {
+const CardBreakdown = ({ categoryName, data }) => {
   return (
     <div className="col-8 my-3">
-      <div className="">
-        <div class="bg-secondary text-white p-1 px-2 rounded" style={{ fontSize: '18px' }}>
-          { categoryName }
+      <div>
+        <div className="bg-secondary text-white p-1 px-2 rounded" style={{ fontSize: '18px' }}>
+          {categoryName}
         </div>
         <table className="table table-bordered">
           <thead>
@@ -16,24 +14,13 @@ const CardBreakdown = ({
               <th>Score</th>
             </tr>
           </thead>
-
           <tbody>
-            <tr>
-              <td>Superior</td>
-              <td>4.5</td>
-            </tr>
-            <tr>
-              <td>Peers</td>
-              <td>4</td>
-            </tr>
-            <tr>
-              <td>Subordinates</td>
-              <td>3</td>
-            </tr>
-            <tr>
-              <td>Self</td>
-              <td>5</td>
-            </tr>
+            {data.map((assessment, index) => (
+              <tr key={index}>
+                <td>{assessment.reviewerId}</td>
+                <td>{assessment.score}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

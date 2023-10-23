@@ -1,10 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
 import jsPDF from 'jspdf';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import CardBreakdown from './components/CardBreakdown'
+import { fetchSelfDetail } from '../../apis/user/fetchSelfDetail';
+import { fetchSelfAssessment } from 'apis/assessment/fetchSelf';
+import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 
 // Dummy data for the graph
 const data = [
@@ -22,6 +25,60 @@ const data = [
 
 function IndividualReport() {
   const reportRef = useRef(null);
+
+  const [user, setUser] = useState({})
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(async () => {
+    try {
+      const data = await fetchSelfDetail()
+      setUser({
+        nik: data?.nik,
+        division: data?.Division?.name,
+        role: data?.positionName,
+        email: data?.email,
+        name: data?.fullname
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchSelfAssessmentData();
+  }, []);
+
+  const fetchSelfAssessmentData = async () => {
+    try {
+      const response = await fetchSelfAssessment();
+      console.log(response)
+      
+      if (!response || !response.data) {
+        console.error("Invalid response from fetchSelfAssessment:", response);
+        fireSwalError(error)
+      }
+  
+      const { data } = response;
+      
+      if (data.message) {
+        fireSwalError(error)
+      }
+  
+      setData(data.map(assessment => ({
+        revieweeId: assessment.revieweeId,
+        reviewerId: assessment.reviewerId,
+        score: assessment.score,
+        description: assessment.TsCompetencies.description,
+        title: assessment.TsCompetencies.title,
+      })));
+    } catch (error) {
+      console.error(error);
+      fireSwalError(error)
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleDownloadPDF = () => {
     if (reportRef.current) {
@@ -46,7 +103,7 @@ function IndividualReport() {
         <div className="container mt-4">
           <div class="text-center mb-4">
             <h1>360 Degree Feedback Report</h1>
-            <p class="lead">Feedback for: NI WAYAN YADNYA WATI</p>
+            <p class="lead">Feedback for: {user.name}</p>
           </div>
 
           <hr></hr>
@@ -62,19 +119,15 @@ function IndividualReport() {
                 <tbody>
                   <tr>
                     <td>NIK</td>
-                    <td>1282120528</td>
+                    <td>{user.nik}</td>
                   </tr>
                   <tr>
                     <td>Name</td>
-                    <td>NI WAYAN YADNYA WATI</td>
-                  </tr>
-                  <tr>
-                    <td>Date</td>
-                    <td>August 2, 1990</td>
+                    <td>{user.name}</td>
                   </tr>
                   <tr>
                     <td>Email</td>
-                    <td>niwayan.yadnya@idx.co.id</td>
+                    <td>{user.email}</td>
                   </tr>
                 </tbody>
               </table>
@@ -130,9 +183,9 @@ function IndividualReport() {
           <hr></hr>
           <div className="row mb-4 p-4">
             <h2>Feedback Scores - Detailed</h2>
-            < CardBreakdown categoryName={'Building Trust'} />
-            < CardBreakdown categoryName={'Customer Focus'} />
-            < CardBreakdown categoryName={'Facilitating Change'} />
+            {data.map((assessment, index) => (
+              <CardBreakdown key={index} categoryName={assessment.title} data={assessment} />
+            ))}
           </div>
 
           <hr></hr>
