@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 import { faker } from '@faker-js/faker';
 
 import DataTable from 'react-data-table-component';
-import { unnominatePeers } from 'apis/assessment/unnominatePeers';
+import { unnominatePeer } from '../../apis/assessment/unnominatePeer';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
@@ -60,7 +60,7 @@ function Subordinates() {
 
   const unnominateUser = async (userId) => {
     try {
-      await unnominatePeers({ reviewerId: userId });
+      await unnominatePeer({ reviewerId: userId });
       fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
       // await fetchNominationUser();
     } catch (error) {

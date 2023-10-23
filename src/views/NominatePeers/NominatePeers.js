@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
+import { useSelector } from 'react-redux';
 
-import { nominatePeers } from 'apis/assessment/nominatePeers';
+import { nominatePeer } from '../../apis/assessment/nominatePeer';
 
-import { unnominatePeers } from '../../apis/assessment/unnominatePeers'
+import { unnominatePeer } from '../../apis/assessment/unnominatePeer'
 import { fetchNomination } from '../../apis/user/fetchNomination'
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
@@ -51,9 +52,9 @@ function NominatePeers() {
   const [listUser, setListUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const authUser = useSelector(state => state.auth.user);
 
-
-  const nominateUser = async (userId) => {
+  const handleNominatePeer = async (userId) => {
     try {
       // const selectedUser = listUser.find(user => user.id === userId);
       // if (!selectedUser) throw new Error("User not found");
@@ -68,8 +69,9 @@ function NominatePeers() {
       //   throw new Error("You can't nominate more than 3 staff");
       // }
 
-      await nominatePeers({
-        reviewerId: userId
+      await nominatePeer({
+        revieweeId: authUser.id,
+        reviewerId: userId,
       });
       fireSwalSuccess({ text: 'User Nominated Successfully!' });
       await initListUser();
@@ -78,9 +80,12 @@ function NominatePeers() {
       fireSwalError(error);
     }
   }
-  const unnominateUser = async (userId) => {
+  const handleUnnominatePeer = async (userId) => {
     try {
-      await unnominatePeers({ reviewerId: userId });
+      await unnominatePeer({
+        revieweeId: authUser.id,
+        reviewerId: userId,
+      });
       fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
       await initListUser();
     } catch (error) {
@@ -124,7 +129,7 @@ function NominatePeers() {
         style={{ padding: '0.25rem 0.5rem' }}
         onClick={(e) => {
           e.preventDefault();
-          nominateUser(user.id);
+          handleNominatePeer(user.id);
         }}
       >
         Nominate
@@ -135,7 +140,7 @@ function NominatePeers() {
         style={{ padding: '0.25rem 0.5rem' }}
         onClick={(e) => {
           e.preventDefault();
-          unnominateUser(user.id);
+          handleUnnominatePeer(user.id);
         }}
       >
         Un-nominate
