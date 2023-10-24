@@ -16,37 +16,32 @@ function NominatePeers() {
   const [isLoading, setIsLoading] = useState(true);
   const authUser = useSelector(state => state.auth.user);
 
-  const handleNominatePeer = async (userId) => {
+  const validateUser = (userId) => {
+    const selectedUser = listUser.find(user => user.id === userId);
+    if (!selectedUser) throw new Error("User not found");
+
+    const nominatedStaff = listUser.filter(user => user.status === 'Nominated' && user.level === 'Staf').length;
+    const nominatedKadiv = listUser.filter(user => user.status === 'Nominated' && user.level === 'Kepala Divisi').length;
+    const nominatedKanit = listUser.filter(user => user.status === 'Nominated' && user.level === 'Kepala Unit').length;
+
+    if (selectedUser.level === 'Staf' && nominatedStaff > 3) {
+      throw new Error("You can't nominate more than 3 staff members");
+    }
+    else if (selectedUser.level === 'Kepala Divisi' && nominatedKadiv > 3) {
+      throw new Error("You can't nominate more than 3 Kepala Divisi");
+    }
+    else if (selectedUser.level === 'Kepala Unit' && nominatedKanit > 2) {
+      throw new Error("You can't nominate more than 2 Kepala Unit");
+    }
+
+    return selectedUser;
+  }
+
+  const handleNominateUser = async (selectedUser) => {
     try {
-      console.log("Nominate User ID:", userId);
-      console.log("List of Users:", listUser);
-
-      listUser.forEach(user => {
-        console.log(`User ID: ${user.id}, Status: ${user.status}, Level: ${user.level}`);
-      });
-
-      const selectedUser = listUser.find(user => user.id === userId);
-      if (!selectedUser) throw new Error("User not found");
-
-      const nominatedStaff = listUser.filter(user => user.status === 'Nominated' && user.level === 'Staf').length;
-      const nominatedKadiv = listUser.filter(user => user.status === 'Nominated' && user.level === 'Kepala Divisi').length;
-      const nominatedKanit = listUser.filter(user => user.status === 'Nominated' && user.level === 'Kepala Unit').length;
-
-      console.log('cek ini', nominatedStaff)
-
-      if (selectedUser.level === 'Staf' && nominatedStaff > 3) {
-        throw new Error("You can't nominate more than 3 staff members");
-      }
-      else if (selectedUser.level === 'Kepala Divisi' && nominatedKadiv > 3 ) {
-        throw new Error("You can't nominate more than 3 Kepala Divisi");
-      }
-      else if (selectedUser.level === 'Kepala Unit' && nominatedKanit > 2 ) {
-        throw new Error("You can't nominate more than 2 Kepala Unit");
-      }
-
       await nominatePeer({
         revieweeId: authUser.id,
-        reviewerId: userId,
+        reviewerId: selectedUser.id,
       });
       fireSwalSuccess({ text: 'User Nominated Successfully!' });
       await initListUser();
@@ -55,6 +50,17 @@ function NominatePeers() {
       fireSwalError(error);
     }
   }
+
+  const handleNominatePeer = async (userId) => {
+    try {
+      const selectedUser = validateUser(userId);
+      await handleNominateUser(selectedUser);
+    } catch (error) {
+      console.error(error);
+      fireSwalError(error);
+    }
+  }
+
 
   const handleUnnominatePeer = async (userId) => {
     try {
