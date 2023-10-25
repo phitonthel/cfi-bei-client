@@ -6,33 +6,33 @@ import { faker } from '@faker-js/faker';
 
 import DataTable from 'react-data-table-component';
 import { unnominatePeer } from '../../apis/assessment/unnominatePeer';
-import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
+import { fetchReviewNomination } from '../../apis/user/fetchReviewNomination';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { downloadTxtFile } from '../Reports/utils';
 import ButtonWithModal from '../../components/Modal/ButtonWithModal'
+import NominatePeersModal from '../../components/Modal/NominatePeersModal';
 
 const columns = [
   {
-    name: <h4>Name</h4>,
-    selector: row => row.fullname,
-    width: '300px',
+    name: <h4>Reviewee</h4>,
+    selector: row => row.revieweeFullname,
     sortable: true,
   },
   {
-    name: <h4>Division</h4>,
-    selector: row => row.division,
+    name: <h4>Reviewee Division</h4>,
+    selector: row => row.revieweeDivision,
     sortable: true,
   },
   {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
+    name: <h4>Reviewee Level</h4>,
+    selector: row => row.revieweeLevel,
     sortable: true,
   },
   {
     name: <h4>Reviewer</h4>,
-    selector: row => row.reviewer,
+    selector: row => row.reviewerFullname,
     sortable: true,
   },
   {
@@ -52,38 +52,44 @@ const columns = [
   },
 ];
 
-function Subordinates() {
+const handleUnnominatePeer = async ({
+  reviewer,
+  reviewee,
+  initNominations,
+}) => {
+  try {
+    await unnominatePeer({
+      revieweeId: reviewee.id,
+      reviewerId: reviewer.id,
+    });
+    fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
+  } catch (error) {
+    fireSwalError(error);
+  } finally {
+    await initNominations()
+  }
+}
+
+function ReviewNomination() {
   const history = useHistory()
 
-  const [subordinates, setSubordinates] = useState([])
+  const [nominations, setNominations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const unnominateUser = async (userId) => {
-    try {
-      await unnominatePeer({ reviewerId: userId });
-      fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
-      // await fetchNominationUser();
-    } catch (error) {
-      console.error("Error unnominating user:", error);
-      fireSwalError(error);
-    }
-  }
-
-
-
-  const Actions = (user) => {
+  const Actions = ({
+    reviewer,
+    reviewee,
+  }) => {
     return (
       <div>
-        <a href='#' className="badge badge-secondary mx-1"
-          onClick={() => {
-          }}
-        >
-          Details
-        </a>
         <a href='#' className="badge badge-danger mx-1"
           onClick={(e) => {
           e.preventDefault();
-          unnominateUser(user.id);
+          handleUnnominatePeer({
+            reviewer,
+            reviewee,
+            initNominations,
+          });
         }}
         >
           Un-nominate
@@ -92,9 +98,10 @@ function Subordinates() {
     )
   }
 
-  useEffect(async () => {
+  const initNominations = async () => {
     try {
-      const { data } = await fetchSubordinates()
+      const { data } = await fetchReviewNomination()
+
       if (data.message) {
         return Swal.fire({
           position: 'top',
@@ -104,31 +111,30 @@ function Subordinates() {
         })
       }
 
-      const multipliedData = []
-      data.slice(0, 2).forEach(user => {
-        multipliedData.push(user)
-        multipliedData.push(user)
-        multipliedData.push(user)
-      });
-
-      setSubordinates(multipliedData.map(user => {
+      setNominations(data.map(nomination => {
         return {
-          // id: user.id,
-          fullname: user.fullname,
-          division: user.Division.name,
-          level: user.level,
-          reviewer: faker.person.fullName(),
-          reviewerDivision: 'Sumber Daya Manusia',
-          reviewerLevel: 'Staff',
-          actions: Actions(user)
+          id: nomination.id,
+          revieweeFullname: nomination.Reviewee.fullname,
+          revieweeDivision: nomination.Reviewee.Division.name,
+          revieweeLevel: nomination.Reviewee.level,
+          reviewerFullname: nomination.Reviewer.fullname,
+          reviewerDivision: nomination.Reviewer.Division.name,
+          reviewerLevel: nomination.Reviewer.level,
+          actions: Actions({
+            reviewee: nomination.Reviewee,
+            reviewer: nomination.Reviewer,
+          })
         }
       }));
     } catch (error) {
-      console.log({ error })
       fireSwalError(error)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  useEffect(async () => {
+    await initNominations()
   }, [])
 
   const instructions = [
@@ -146,16 +152,23 @@ function Subordinates() {
       </div>
 
       <div className="d-flex justify-content-end m-2">
-        <ButtonWithModal buttonText={'Nominate Peers'} />
+      <NominatePeersModal
+          modalTitle={'Nominate Peers'}
+          buttonText={'Nominate Peers'}
+          isSuperadmin={true}
+          onFormSubmit={() => {
+            initNominations()
+          }}
+        />
       </div>
 
       <DataTable
         columns={columns}
-        data={subordinates}
+        data={nominations}
         highlightOnHover
       />
     </>
   );
 };
 
-export default Subordinates
+export default ReviewNomination
