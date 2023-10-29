@@ -154,7 +154,8 @@ function NominatePeers() {
   }, []);
 
   const instructions = [
-    'Anda diminta untuk memilih...',
+    `Anda dapat mengusulkan Raters untuk memberikan feedback 360'. Namun usulan tersebut tetap akan 
+    direview oleh SDM dan keputusan final akan bersifat confidential. `,
   ];
 
   if (isLoading) {
@@ -168,8 +169,8 @@ function NominatePeers() {
       </div>
       <div className="d-flex justify-content-end m-2">
         <NominatePeersModal
-          modalTitle={'Nominate Peers'}
-          buttonText={'Nominate Peers From Other Division'}
+          modalTitle={'Nominate Raters'}
+          buttonText={'Nominate Raters From Other Division'}
           onFormSubmit={() => {
             initListUser()
           }}

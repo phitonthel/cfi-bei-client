@@ -16,32 +16,32 @@ import NominatePeersModal from '../../components/Modal/NominatePeersModal';
 
 const columns = [
   {
-    name: <h4>Reviewee</h4>,
+    name: <h4>Ratee</h4>,
     selector: row => row.revieweeFullname,
     sortable: true,
   },
   {
-    name: <h4>Reviewee Division</h4>,
+    name: <h4>Ratee Division</h4>,
     selector: row => row.revieweeDivision,
     sortable: true,
   },
   {
-    name: <h4>Reviewee Level</h4>,
+    name: <h4>Ratee Level</h4>,
     selector: row => row.revieweeLevel,
     sortable: true,
   },
   {
-    name: <h4>Reviewer</h4>,
+    name: <h4>Rater</h4>,
     selector: row => row.reviewerFullname,
     sortable: true,
   },
   {
-    name: <h4>Reviewer Division</h4>,
+    name: <h4>Rater Division</h4>,
     selector: row => row.reviewerDivision,
     sortable: true,
   },
   {
-    name: <h4>Reviewer Level</h4>,
+    name: <h4>Rater Level</h4>,
     selector: row => row.reviewerLevel,
     sortable: true,
   },

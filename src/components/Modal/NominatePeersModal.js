@@ -1,91 +1,102 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Modal, Form, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { Button, Modal, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-
+import SearchableDropdown from './SearchableDropdown';
 import { fetchAllUsers } from '../../apis/user/fetchAllUsers';
-import SearchableDropdown from '../SearchableDropdown'
 import { nominatePeer } from '../../apis/assessment/nominatePeer';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 
-const NominatePeersModal = ({
-  modalTitle,
-  buttonText,
-  isSuperadmin,
-  onFormSubmit: notifyParent
-}) => {
+const NominatePeersModal = ({ modalTitle, buttonText, onFormSubmit }) => {
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState([]);
-  const [reviewee, setReviewee] = useState('');
-  const [reviewer, setReviewer] = useState('');
-
+  const [peers, setPeers] = useState([]);
+  const [supervisor, setSupervisor] = useState(null);
+  const [reviewer, setReviewer] = useState(null);
   const authUser = useSelector(state => state.auth.user);
 
-  const handleButtonClick = () => setShowModal(true);
+  const handleButtonClick = () => {
+    setShowModal(true);
+    fetchUsers();
+  };
+
   const handleCloseModal = () => setShowModal(false);
 
   const handleFormSubmit = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
-      await nominatePeer({
-        revieweeId: reviewee.id || authUser.id,
-        reviewerId: reviewer.id
-      })
-
-      fireSwalSuccess({ text: 'User Nominated Successfully!' });
+      if (reviewer) {
+        await nominatePeer({
+          revieweeId: authUser.id,
+          reviewerId: reviewer.id
+        });
+        fireSwalSuccess({ text: 'User Nominated Successfully!' });
+        if (onFormSubmit) onFormSubmit();
+      } else {
+        fireSwalError({ text: 'Please select a reviewer.' });
+      }
     } catch (error) {
-      fireSwalError(error)
+      fireSwalError({ text: error.message });
     } finally {
       setShowModal(false);
-      if (notifyParent) {
-        notifyParent();
-      }
     }
   };
 
-  useEffect(async () => {
-    const { data } = await fetchAllUsers();
-    setUsers(
-      data.sort((a, b) => {
-        if (a.fullname.toLowerCase() > b.fullname.toLowerCase()) return 1;
-        if (a.fullname.toLowerCase() < b.fullname.toLowerCase()) return -1;
-        return 0;
-      })
-    );
-  }, []);
+  const fetchUsers = async () => {
+    try {
+      const { data } = await fetchAllUsers();
+      const sortedUsers = data.sort((a, b) => a.fullname.toLowerCase().localeCompare(b.fullname.toLowerCase()));
+      setUsers(sortedUsers);
+  
+      const peerCandidates = sortedUsers.filter(user => user.level === authUser.level && user.id !== authUser.id);
+      console.log("Peer Candidates:", peerCandidates);  
+      setPeers(peerCandidates);
+  
+      const supervisorLevel = getSupervisorLevel(authUser.level);
+      const supervisorCandidate = sortedUsers.find(user => user.level === supervisorLevel);
+      if (supervisorCandidate) setSupervisor(supervisorCandidate);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const getSupervisorLevel = (userLevel) => {
+    switch (userLevel) {
+      case "Kepala Divisi": return "Direktur";
+      case "Kepala Unit": return "Kepala Divisi";
+      case "Kepala Kantor": return "Kepala Unit";
+      default: return "";
+    }
+  };
 
   return (
     <div>
       <Button onClick={handleButtonClick}>{buttonText}</Button>
-
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleFormSubmit}>
-
-            {
-              isSuperadmin &&
-              <Form.Group controlId="input1">
-                <Form.Label>Reviewee</Form.Label>
-                <SearchableDropdown
-                  users={users}
-                  onChange={(selectedValue) => setReviewee(selectedValue)}
-                  selected={reviewee}
-                />
+            
+              <Form.Group controlId="peers">
+                <Form.Label>Peers</Form.Label>
+                <SearchableDropdown options={peers} onChange={setReviewer} value={reviewer} />
               </Form.Group>
-            }
+           
 
-            <Form.Group controlId="input2">
-              <Form.Label>Reviewer</Form.Label>
-              <SearchableDropdown
-                users={users}
-                onChange={(selectedValue) => setReviewer(selectedValue)}
-                selected={reviewer}
-              />
+            <Form.Group controlId="supervisor">
+              <Form.Label>Supervisor</Form.Label>
+              <SearchableDropdown options={[supervisor]} onChange={setSupervisor} value={supervisor} isDisabled={true} />
             </Form.Group>
 
-            <Button variant="secondary" type="submit" className="float-right">Submit</Button>
+            
+              <Form.Group controlId="reviewer">
+                <Form.Label>Other Divison</Form.Label>
+                <SearchableDropdown options={users} onChange={setReviewer} value={reviewer} />
+              </Form.Group>
+           
+
+            <Button variant="secondary" type="submit">Submit</Button>
           </Form>
         </Modal.Body>
       </Modal>
