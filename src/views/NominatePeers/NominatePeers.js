@@ -1,85 +1,67 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import Swal from 'sweetalert2';
-import DataTable from 'react-data-table-component';
 import { useSelector } from 'react-redux';
+import DataTable from 'react-data-table-component';
+import Swal from 'sweetalert2';
 
 import { nominatePeer } from '../../apis/assessment/nominatePeer';
-
-import { unnominatePeer } from '../../apis/assessment/unnominatePeer'
-import { fetchNomination } from '../../apis/user/fetchNomination'
+import { unnominatePeer } from '../../apis/assessment/unnominatePeer';
+import { fetchNomination } from '../../apis/user/fetchNomination';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
-import { LoadingSpinner } from 'components/LoadingSpinner';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import NominatePeersModal from '../../components/Modal/NominatePeersModal';
 
-
-const columns = [
-  {
-    name: <h4>Name</h4>,
-    selector: row => row.fullname,
-    width: '300px',
-    sortable: true,
-  },
-  {
-    name: <h4>Division</h4>,
-    selector: row => row.division,
-    sortable: true,
-  },
-  {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
-    sortable: true,
-  },
-  {
-    name: <h4>Status</h4>,
-    selector: 'status',
-    cell: row => (
-      <span style={{ color: row.status === 'Nominated' ? 'navy' : 'darkred' }}>
-        {row.status}
-      </span>
-    ),
-    sortable: true,
-  },
-  {
-    name: <h4>Actions</h4>,
-    cell: row => row.actions,
-  },
-];
-
 function NominatePeers() {
-  const history = useHistory();
   const [listUser, setListUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const authUser = useSelector(state => state.auth.user);
 
-  const handleNominatePeer = async (userId) => {
+  const validateUser = (userId) => {
+    const selectedUser = listUser.find(user => user.id === userId);
+    if (!selectedUser) throw new Error("User not found");
+
+    const nominatedStaff = listUser.filter(user => user.status === 'Nominated' && user.level === 'Staf').length;
+    const nominatedKadiv = listUser.filter(user => user.status === 'Nominated' && user.level === 'Kepala Divisi').length;
+    const nominatedKanit = listUser.filter(user => user.status === 'Nominated' && user.level === 'Kepala Unit').length;
+
+    if (selectedUser.level === 'Staf' && nominatedStaff > 3) {
+      throw new Error("You can't nominate more than 3 staff members");
+    }
+    else if (selectedUser.level === 'Kepala Divisi' && nominatedKadiv > 3) {
+      throw new Error("You can't nominate more than 3 Kepala Divisi");
+    }
+    else if (selectedUser.level === 'Kepala Unit' && nominatedKanit > 2) {
+      throw new Error("You can't nominate more than 2 Kepala Unit");
+    }
+
+    return selectedUser;
+  }
+
+  const handleNominateUser = async (selectedUser) => {
     try {
-      // const selectedUser = listUser.find(user => user.id === userId);
-      // if (!selectedUser) throw new Error("User not found");
-
-      // console.log("Nominate User ID:", userId);
-      // console.log("Subordinates:", subordinates);
-      // const selectedUser = subordinates.find(user => user.id === userId);
-      // if (!selectedUser) throw new Error("User not found");
-
-      // const nominatedStaff = subordinates.filter(user => user.status === 'nominated' && user.level === 'staff').length;
-      // if (selectedUser.level === 'staff' && nominatedStaff >= 3) {
-      //   throw new Error("You can't nominate more than 3 staff");
-      // }
-
       await nominatePeer({
         revieweeId: authUser.id,
-        reviewerId: userId,
+        reviewerId: selectedUser.id,
       });
       fireSwalSuccess({ text: 'User Nominated Successfully!' });
       await initListUser();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       fireSwalError(error);
     }
   }
+
+  const handleNominatePeer = async (userId) => {
+    try {
+      const selectedUser = validateUser(userId);
+      await handleNominateUser(selectedUser);
+    } catch (error) {
+      console.error(error);
+      fireSwalError(error);
+    }
+  }
+
+
   const handleUnnominatePeer = async (userId) => {
     try {
       await unnominatePeer({
@@ -94,26 +76,26 @@ function NominatePeers() {
     }
   }
 
-
   const initListUser = async () => {
     try {
+      setIsLoading(true);
       const { data } = await fetchNomination();
       if (data.message) {
-        return Swal.fire({
+        Swal.fire({
           position: 'top',
           text: data.message,
           showConfirmButton: false,
           timer: 1000
         });
+      } else {
+        setListUser(data.map(user => ({
+          id: user.id,
+          fullname: user.fullname,
+          division: user.Division ? user.Division.name : 'N/A',
+          level: user.level,
+          status: user.status,
+        })));
       }
-      setListUser(data.map(user => ({
-        id: user.id,
-        fullname: user.fullname,
-        division: user.Division.name,
-        level: user.level,
-        status: user.status,
-        actions: Actions(user)
-      })));
     } catch (error) {
       fireSwalError(error);
     } finally {
@@ -121,49 +103,81 @@ function NominatePeers() {
     }
   };
 
-
-  const Actions = (user) => (
-    <div style={{ display: 'flex', gap: '10px' }}>
-      <button
-        className="btn btn-primary btn-sm"
-        style={{ padding: '0.25rem 0.5rem' }}
-        onClick={(e) => {
-          e.preventDefault();
-          handleNominatePeer(user.id);
-        }}
-      >
-        Nominate
-      </button>
-
-      <button
-        className="btn btn-danger btn-sm"
-        style={{ padding: '0.25rem 0.5rem' }}
-        onClick={(e) => {
-          e.preventDefault();
-          handleUnnominatePeer(user.id);
-        }}
-      >
-        Un-nominate
-      </button>
-    </div>
-  );
-
-
   useEffect(() => {
     initListUser();
   }, []);
+
+  const columns = [
+    {
+      name: <h4>Name</h4>,
+      selector: row => row.fullname,
+      width: '300px',
+      sortable: true,
+    },
+    {
+      name: <h4>Division</h4>,
+      selector: row => row.division,
+      sortable: true,
+    },
+    {
+      name: <h4>Level</h4>,
+      selector: row => row.level,
+      sortable: true,
+    },
+    {
+      name: <h4>Status</h4>,
+      selector: row => row.status,
+      cell: row => (
+        <span style={{ color: row.status === 'Nominated' ? 'navy' : 'darkred' }}>
+          {row.status}
+        </span>
+      ),
+      sortable: true,
+    },
+    {
+      name: <h4>Actions</h4>,
+      button: true,
+      cell: row => (
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            className="btn btn-primary btn-sm"
+            style={{
+              padding: '0.5rem 1rem',
+              fontSize: '1rem',
+              lineHeight: '1',
+              borderRadius: '0.2rem',
+              whiteSpace: 'nowrap',
+            }}
+            onClick={() => handleNominatePeer(row.id)}
+          >
+            Nominate
+          </button>
+          <button
+            className="btn btn-danger btn-sm"
+            style={{
+              padding: '0.5rem 1rem',
+              fontSize: '1rem',
+              lineHeight: '1',
+              borderRadius: '0.2rem',
+              whiteSpace: 'nowrap',
+            }}
+            onClick={() => handleUnnominatePeer(row.id)}
+          >
+            Un-nominate
+          </button>
+        </div>
+      ),
+    }
+  ];
 
   const instructions = [
     `Anda dapat mengusulkan Raters untuk memberikan feedback 360'. Namun usulan tersebut tetap akan 
     direview oleh SDM dan keputusan final akan bersifat confidential. `,
   ];
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <div className='m-4'>
         <ExpandableInstructions instructions={instructions} />
       </div>
