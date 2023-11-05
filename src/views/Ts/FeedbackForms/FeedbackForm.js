@@ -16,6 +16,7 @@ import { FloatingMessage } from '../../../components/FloatingMessage';
 import QuestionForm from '../../../components/QuestionForm/QuestionForm';
 import ScoringLegend from './ScoringLegend';
 import BaseInstructions from '../BaseInstructions';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 
 const calculateAssessmentPercentage = ({
   tsAssessments,
@@ -37,6 +38,8 @@ const calculateAssessmentPercentage = ({
 
 const FeedbackForm = () => {
   const authUser = useSelector(state => state.auth.user);
+
+  const [isLoading, setIsLoading] = useState(true)
 
   const [tsAssessments, setTsAssessments] = useState([])
   const [tsEssayAssessments, setTsEssayAssessments] = useState([])
@@ -123,6 +126,8 @@ const FeedbackForm = () => {
 
     } catch (error) {
       fireSwalError(error)
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
@@ -135,6 +140,10 @@ const FeedbackForm = () => {
   }
 
   const buttonText = `Submit ${assessmentPercentage} Assessments`
+
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <>

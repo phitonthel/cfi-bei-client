@@ -1,27 +1,31 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import html2canvas from 'html2canvas';
 import html2pdf from 'html2pdf.js';
 import jsPDF from 'jspdf';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import CardBreakdown from './components/CardBreakdown'
 
-// Dummy data for the graph
-const data = [
-  { category: 'Leadership', score: 4.5 },
-  { category: 'Communication', score: 4.0 },
-  { category: 'Teamwork', score: 3.8 },
-  { category: 'Problem Solving', score: 4.2 },
-  { category: 'Adaptability', score: 3.9 },
-  { category: 'Leadership', score: 4.5 },
-  { category: 'Communication', score: 4.0 },
-  { category: 'Teamwork', score: 3.8 },
-  { category: 'Problem Solving', score: 4.2 },
-  { category: 'Adaptability', score: 3.9 },
-];
+import CardBreakdown from './components/CardBreakdown'
+import { fetchTsIndividualReport } from '../../../apis/report/fetchTsIndividualReport';
+import OpenFeedback from './components/OpenFeedback';
+import Graph from './components/Graph';
+import { fireSwalError } from 'apis/fireSwal';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import Profile from './components/Profile';
 
 function IndividualReport() {
   const reportRef = useRef(null);
+  const [reviewee, setReviewee] = useState({
+    nik: '',
+    fullname: '',
+    email: ''
+  })
+  const [reports, setReports] = useState([])
+  const [essayReports, setEssayReports] = useState([])
+
+  const [isLoading, setIsLoading] = useState(true)
+  const authUser = useSelector(state => state.auth.user);
 
   const handleDownloadPDF = () => {
     if (reportRef.current) {
@@ -39,6 +43,28 @@ function IndividualReport() {
     }
   };
 
+  useEffect(async () => {
+    try {
+      console.log({ authUser });
+      const {
+        reviewee,
+        reports,
+        essayReports,
+      } = await fetchTsIndividualReport(authUser.id);
+  
+      setReviewee(reviewee)
+      setReports(reports)
+      setEssayReports(essayReports)
+    } catch (error) {
+      fireSwalError(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, []);
+
+  if (isLoading) {
+    return < LoadingSpinner />
+  }
 
   return (
     <>
@@ -50,36 +76,7 @@ function IndividualReport() {
           </div>
 
           <hr></hr>
-          {/* Profile Section */}
-          <div className="row mb-4 p-4">
-            <div className="col-md-8">
-              <h2 >Profile</h2>
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>NIK</td>
-                    <td>1282120528</td>
-                  </tr>
-                  <tr>
-                    <td>Name</td>
-                    <td>NI WAYAN YADNYA WATI</td>
-                  </tr>
-                  <tr>
-                    <td>Date</td>
-                    <td>August 2, 1990</td>
-                  </tr>
-                  <tr>
-                    <td>Email</td>
-                    <td>niwayan.yadnya@idx.co.id</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          < Profile user={reviewee}/>
 
           <hr></hr>
           {/* Description of 360 Feedback */}
@@ -97,92 +94,28 @@ function IndividualReport() {
           </div>
 
           <hr></hr>
-          {/* Table containing the Scores */}
-          <div className="row mb-4 p-4">
-            <div className="col-md-8">
-              <h2>Feedback Scores - Summary</h2>
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Category</th>
-                    <th>Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Building Trust</td>
-                    <td>4.5</td>
-                  </tr>
-                  <tr>
-                    <td>Customer Focus</td>
-                    <td>4.0</td>
-                  </tr>
-                  <tr>
-                    <td>Facilitating Change</td>
-                    <td>3.8</td>
-                  </tr>
-                  {/* Add more rows for other categories */}
-                </tbody>
-              </table>
+          <Graph reports={reports}/>
+
+          <hr></hr>
+          <div className="mb-4 p-4">
+            <h2>Feedback Scores</h2>
+            <div>
+              {
+                reports.map(report =>
+                  < CardBreakdown
+                    title={report.title}
+                    subAvgScore={report.subAvgScore}
+                    peerAvgScore={report.peerAvgScore}
+                    supAvgScore={report.supAvgScore}
+                    selfAvgScore={report.selfAvgScore}
+                    totalAvgScore={report.totalAvgScore}
+                  />)
+              }
             </div>
           </div>
 
           <hr></hr>
-          <div className="row mb-4 p-4">
-            <h2>Feedback Scores - Detailed</h2>
-            < CardBreakdown categoryName={'Building Trust'} />
-            < CardBreakdown categoryName={'Customer Focus'} />
-            < CardBreakdown categoryName={'Facilitating Change'} />
-          </div>
-
-          <hr></hr>
-          {/* Graphs containing the Scores */}
-          <div className="row mb-4 p-4">
-            <div className="col-md-6">
-              <h2>Feedback Scores - Graphs</h2>
-              <div style={{ height: '400px' }}>
-                <BarChart width={900} height={400} data={data}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="category" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="score" fill="navy" />
-                </BarChart>
-              </div>
-            </div>
-          </div>
-
-          <hr></hr>
-          {/* Feedback from Peers */}
-          <div className="row mb-4 p-4">
-            <div className="col-md-12">
-              <h2>Feedback from Peers</h2>
-              <h3>Strengths:</h3>
-              <p className="card p-2" style={{ "background-color": "#e6f9e6" }}>
-                Ni is an excellent communicator and has strong leadership skills.
-              </p>
-              <p className="card p-2" style={{ "background-color": "#e6f9e6" }}>
-                Ni is ...
-              </p>
-              <h3>Weaknesses:</h3>
-              <p className="card p-2" style={{ "background-color": "#ffdddc" }}>
-                Ni sometimes struggles with time management and could improve her
-                delegation skills.
-              </p>
-              <p className="card p-2" style={{ "background-color": "#ffdddc" }}>
-                Ni sometimes struggles with ...
-              </p>
-              <h3>Room for Improvement:</h3>
-              <p className="card p-2" style={{ "background-color": "#ffffe0" }}>
-                Ni should focus on improving her ability to handle conflict and
-                provide constructive feedback to team members.
-              </p>
-              <p className="card p-2" style={{ "background-color": "#ffffe0" }}>
-                Ni should focus on ...
-              </p>
-            </div>
-          </div>
+          <OpenFeedback essayReports={essayReports}/>
         </div>
       </div>
       {/* PDF Download Button */}

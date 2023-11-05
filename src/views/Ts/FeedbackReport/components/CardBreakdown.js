@@ -1,13 +1,18 @@
 import React from 'react';
 
 const CardBreakdown = ({
-  categoryName,
+  title,
+  subAvgScore,
+  peerAvgScore,
+  supAvgScore,
+  selfAvgScore,
+  totalAvgScore,
 }) => {
   return (
     <div className="col-8 my-3">
       <div className="">
         <div className="bg-secondary text-white p-1 px-2 rounded" style={{ fontSize: '18px' }}>
-          { categoryName }
+          {title}
         </div>
         <table className="table table-bordered">
           <thead>
@@ -19,20 +24,24 @@ const CardBreakdown = ({
 
           <tbody>
             <tr>
-              <td>Superior</td>
-              <td>4.5</td>
+              <td>Supervisor</td>
+              <td>{supAvgScore}</td>
             </tr>
             <tr>
               <td>Peers</td>
-              <td>4</td>
+              <td>{peerAvgScore}</td>
             </tr>
             <tr>
               <td>Subordinates</td>
-              <td>3</td>
+              <td>{subAvgScore}</td>
             </tr>
             <tr>
               <td>Self</td>
-              <td>5</td>
+              <td>{selfAvgScore}</td>
+            </tr>
+            <tr>
+              <td>Total Average</td>
+              <td>{totalAvgScore}</td>
             </tr>
           </tbody>
         </table>
