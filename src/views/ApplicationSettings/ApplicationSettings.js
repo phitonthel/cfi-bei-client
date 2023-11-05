@@ -22,7 +22,6 @@ function ApplicationSettings() {
 
       fireSwalSuccess({ text: 'Successfully updated!'})
     } catch (error) {
-      console.log(error);
       fireSwalError(error)
     }
   };

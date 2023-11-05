@@ -4,13 +4,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import DataTable from 'react-data-table-component';
-import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
-import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
-import { ExpandableInstructions } from '../../components/ExpandableInstructions';
+import { fetchSubordinates } from '../../../apis/user/fetchSubordinates';
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
-import { downloadTxtFile } from '../Reports/utils';
-import { DownloadButton } from '../../components/DownloadButton';
-import { convertISODateToDDMMYYYY } from '../../utils/date'
+import { downloadTxtFile } from '../../Reports/utils';
+import { DownloadButton } from '../../../components/DownloadButton';
+import { convertISODateToDDMMYYYY } from '../../../utils/date'
 
 const columns = [
   {
@@ -60,7 +60,7 @@ function Subordinates() {
   const Actions = (user) => {
     return (
       <div>
-        <a href='#' className="badge badge-primary mx-1"
+        <a href='#' className="badge badge-primary p-1"
           onClick={() => {
             localStorage.setItem('peer_id', user.id)
             history.push('/admin/peer-assessment-table')
@@ -115,7 +115,6 @@ function Subordinates() {
         }
       }));
     } catch (error) {
-      console.log({ error })
       fireSwalError(error)
     } finally {
       setIsLoading(false)

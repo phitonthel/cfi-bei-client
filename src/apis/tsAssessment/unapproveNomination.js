@@ -3,13 +3,13 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
-export const nominatePeer = async ({
+export const unapproveNomination = async ({
   revieweeId,
   reviewerId,
 }) => {
   const response = await axios({
     method: 'POST',
-    url: `${config.baseUrl}/ts-nomination/nominate`,
+    url: `${config.baseUrl}/ts-nomination/unapprove`,
     headers: {
       access_token: localStorage.getItem('access_token')
     },
@@ -18,5 +18,5 @@ export const nominatePeer = async ({
       revieweeId,
     }
   });
-  return response
-}
+  return response;
+};

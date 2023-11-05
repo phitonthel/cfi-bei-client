@@ -4,18 +4,18 @@ import Swal from 'sweetalert2';
 import { useSelector, useDispatch } from 'react-redux';
 
 
-import { fetchSelfAssessment, submitSelfAssessment } from '../../apis/assessment/fetchSelf'
-import { fetchFeedbackForm } from '../../apis/tsAssessment/fetchFeedbackForm';
+import { fetchFeedbackForm } from '../../../apis/tsAssessment/fetchFeedbackForm';
 
-import { AssessmentCard } from '../../components/Assessment360/Card'
 import { Instructions } from './Instructions'
-import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
-import { submitTsScore, submitTsEssay } from '../../apis/assessment/submitScore';
-import { SubmitButton } from '../../components/SubmitButton';
+import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
+import { submitTsScore, submitTsEssay } from '../../../apis/assessment/submitScore';
+import { SubmitButton } from '../../../components/SubmitButton';
 import OpenFeedbackForm from './OpenFeedbackForm';
-import { fetchById } from '../../apis/assessment/fetchById';
-import { FloatingMessage } from '../../components/FloatingMessage';
-import QuestionForm from '../../components/QuestionForm/QuestionForm';
+import { fetchById } from '../../../apis/assessment/fetchById';
+import { FloatingMessage } from '../../../components/FloatingMessage';
+import QuestionForm from '../../../components/QuestionForm/QuestionForm';
+import ScoringLegend from './ScoringLegend';
+import BaseInstructions from '../BaseInstructions';
 
 const calculateAssessmentPercentage = ({
   tsAssessments,
@@ -25,7 +25,7 @@ const calculateAssessmentPercentage = ({
   const numberOfTsEssayAssessmentCompleted = Object.values(tsEssayAssessments).filter((tsAF => tsAF.feedback !== '')).length
 
   const totalAssessmentCompleted = numberOfAssessmentCompleted + numberOfTsEssayAssessmentCompleted
-  const totalAssessment = tsAssessments.length + 9
+  const totalAssessment = tsAssessments.length + 3
 
   return {
     assessmentPercentage: `${totalAssessmentCompleted}/${totalAssessment}`,
@@ -33,6 +33,7 @@ const calculateAssessmentPercentage = ({
     totalAssessment,
   }
 }
+
 
 const FeedbackForm = () => {
   const authUser = useSelector(state => state.auth.user);
@@ -44,7 +45,11 @@ const FeedbackForm = () => {
   const [hasAgreed, setHasAgreed] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { assessmentPercentage } = calculateAssessmentPercentage({
+  const {
+    assessmentPercentage,
+    totalAssessmentCompleted,
+    totalAssessment,
+  } = calculateAssessmentPercentage({
     tsAssessments,
     tsEssayAssessments,
   })
@@ -66,6 +71,29 @@ const FeedbackForm = () => {
           feedback: tsEA.feedback,
         })
       })
+
+      if (totalAssessmentCompleted !== totalAssessment) {
+        const result = await Swal.fire({
+          title: `${totalAssessmentCompleted}/${totalAssessment} Assessment!`,
+          text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: `Yes, submit and continue later`,
+          cancelButtonText: `Cancel`,
+        })
+
+        if (result.isConfirmed) {
+          await Promise.all([
+            ...tsAssessmentPromises,
+            ...tsEssayAssessmentsPromises,
+          ])
+
+          fireSwalSuccess('Your work has been submitted!')
+        }
+        return
+      }
 
       await Promise.all([
         ...tsAssessmentPromises,
@@ -89,14 +117,11 @@ const FeedbackForm = () => {
 
       setTsAssessments(response.data.tsAssessments)
       setTsEssayAssessments(response.data.tsEssayAssessments)
-      console.log(response.data);
 
-      const revieweeId = localStorage.getItem('360_reviewee_id')
-      const { data } = await fetchById({ assignedId: revieweeId })
-      setPeerName(data[0].assigned.fullname)
+      const revieweeName = localStorage.getItem('360_reviewee_fullname')
+      setPeerName(revieweeName)
 
     } catch (error) {
-      console.log(error)
       fireSwalError(error)
     }
   }, [])
@@ -104,7 +129,7 @@ const FeedbackForm = () => {
   if (!hasAgreed) {
     return (
       <div className='mb-4'>
-        <Instructions setHasAgreed={setHasAgreed} />
+        {/* <Instructions setHasAgreed={setHasAgreed} /> */}
       </div>
     )
   }
@@ -118,6 +143,8 @@ const FeedbackForm = () => {
           <h2 style={{ margin: 0 }}>{peerName}</h2>
         </div><hr></hr>
 
+        < ScoringLegend />
+
         <FloatingMessage
           title={`Progress`}
           text={`${assessmentPercentage} Assessment`}
@@ -127,10 +154,6 @@ const FeedbackForm = () => {
           initialQuestions={tsAssessments}
           setTsAssessments={setTsAssessments}
         />
-
-        {/* {
-          assessments.map((assessment, idx) => AssessmentCard(idx, assessment, handlers, '360'))
-        } */}
 
         <OpenFeedbackForm
           initialTsEssayAssessments={tsEssayAssessments}

@@ -4,13 +4,16 @@ import { useSelector } from 'react-redux';
 
 import { fetchAllUsers } from '../../apis/user/fetchAllUsers';
 import SearchableDropdown from '../SearchableDropdown'
-import { nominatePeer } from '../../apis/assessment/nominatePeer';
+import { nominateUser } from '../../apis/tsAssessment/nominateUser';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
+import { approveUser } from '../../apis/tsAssessment/approveNomination';
+import { nominateUserBySuperadmin } from '../../apis/tsAssessment/nominateUserBySuperadmin';
 
-const NominatePeersModal = ({
+const NominateUserModal = ({
   modalTitle,
   buttonText,
-  isSuperadmin,
+  isSuperadmin, // have the options for 2 input
+  fetchUserOptions,
   onFormSubmit: notifyParent
 }) => {
   const [showModal, setShowModal] = useState(false);
@@ -26,10 +29,18 @@ const NominatePeersModal = ({
   const handleFormSubmit = async (event) => {
     try {
       event.preventDefault();
-      await nominatePeer({
-        revieweeId: reviewee.id || authUser.id,
-        reviewerId: reviewer.id
-      })
+
+      if (isSuperadmin) {
+        await nominateUserBySuperadmin({
+          revieweeId: reviewee.id || authUser.id,
+          reviewerId: reviewer.id
+        })
+      } else {
+        await nominateUser({
+          revieweeId: reviewee.id || authUser.id,
+          reviewerId: reviewer.id
+        })
+      }
 
       fireSwalSuccess({ text: 'User Nominated Successfully!' });
     } catch (error) {
@@ -43,7 +54,7 @@ const NominatePeersModal = ({
   };
 
   useEffect(async () => {
-    const { data } = await fetchAllUsers();
+    const { data } = await fetchUserOptions();
     setUsers(
       data.sort((a, b) => {
         if (a.fullname.toLowerCase() > b.fullname.toLowerCase()) return 1;
@@ -67,7 +78,7 @@ const NominatePeersModal = ({
             {
               isSuperadmin &&
               <Form.Group controlId="input1">
-                <Form.Label>Reviewee</Form.Label>
+                <Form.Label>Ratee</Form.Label>
                 <SearchableDropdown
                   users={users}
                   onChange={(selectedValue) => setReviewee(selectedValue)}
@@ -77,7 +88,7 @@ const NominatePeersModal = ({
             }
 
             <Form.Group controlId="input2">
-              <Form.Label>Reviewer</Form.Label>
+              <Form.Label>Rater</Form.Label>
               <SearchableDropdown
                 users={users}
                 onChange={(selectedValue) => setReviewer(selectedValue)}
@@ -93,4 +104,4 @@ const NominatePeersModal = ({
   );
 };
 
-export default NominatePeersModal;
+export default NominateUserModal;

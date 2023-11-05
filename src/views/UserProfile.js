@@ -61,7 +61,6 @@ function User() {
         text: 'Your profile has been updated!'
       })
     } catch (error) {
-      console.log(error);
       fireSwalError(error)
     }
   };

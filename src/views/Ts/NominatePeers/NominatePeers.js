@@ -4,14 +4,14 @@ import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
 import { useSelector } from 'react-redux';
 
-import { nominatePeer } from '../../apis/assessment/nominatePeer';
-
-import { unnominatePeer } from '../../apis/assessment/unnominatePeer'
-import { fetchNomination } from '../../apis/user/fetchNomination'
-import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
-import { ExpandableInstructions } from '../../components/ExpandableInstructions';
-import { LoadingSpinner } from 'components/LoadingSpinner';
-import NominatePeersModal from '../../components/Modal/NominatePeersModal';
+import { nominateUser } from '../../../apis/tsAssessment/nominateUser';
+import { unnominateUser } from '../../../apis/tsAssessment/unnominateUser'
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import NominatePeersModal from '../../../components/Modal/NominateUserModal';
+import { fetchTsPeerTable } from '../../../apis/user/fetchTsPeerTable';
+import { fetchAllTsPeers } from '../../../apis/user/ts/fetchAllTsPeers';
+import Instructions from './Instructions';
 
 
 const columns = [
@@ -35,8 +35,8 @@ const columns = [
     name: <h4>Status</h4>,
     selector: 'status',
     cell: row => (
-      <span style={{ color: row.status === 'Nominated' ? 'navy' : 'darkred' }}>
-        {row.status}
+      <span style={{ color: row.status ? 'navy' : 'darkred' }}>
+        {row.status ? 'Nominated' : 'Unnominated'}
       </span>
     ),
     sortable: true,
@@ -54,35 +54,21 @@ function NominatePeers() {
 
   const authUser = useSelector(state => state.auth.user);
 
-  const handleNominatePeer = async (userId) => {
+  const handleNominateUser = async (userId) => {
     try {
-      // const selectedUser = listUser.find(user => user.id === userId);
-      // if (!selectedUser) throw new Error("User not found");
-
-      // console.log("Nominate User ID:", userId);
-      // console.log("Subordinates:", subordinates);
-      // const selectedUser = subordinates.find(user => user.id === userId);
-      // if (!selectedUser) throw new Error("User not found");
-
-      // const nominatedStaff = subordinates.filter(user => user.status === 'nominated' && user.level === 'staff').length;
-      // if (selectedUser.level === 'staff' && nominatedStaff >= 3) {
-      //   throw new Error("You can't nominate more than 3 staff");
-      // }
-
-      await nominatePeer({
+      await nominateUser({
         revieweeId: authUser.id,
         reviewerId: userId,
       });
       fireSwalSuccess({ text: 'User Nominated Successfully!' });
       await initListUser();
     } catch (error) {
-      console.log(error);
       fireSwalError(error);
     }
   }
-  const handleUnnominatePeer = async (userId) => {
+  const handleUnnominateUser = async (userId) => {
     try {
-      await unnominatePeer({
+      await unnominateUser({
         revieweeId: authUser.id,
         reviewerId: userId,
       });
@@ -97,7 +83,7 @@ function NominatePeers() {
 
   const initListUser = async () => {
     try {
-      const { data } = await fetchNomination();
+      const { data } = await fetchTsPeerTable();
       if (data.message) {
         return Swal.fire({
           position: 'top',
@@ -111,7 +97,7 @@ function NominatePeers() {
         fullname: user.fullname,
         division: user.Division.name,
         level: user.level,
-        status: user.status,
+        status: user.isNominatedByReviewee,
         actions: Actions(user)
       })));
     } catch (error) {
@@ -124,27 +110,27 @@ function NominatePeers() {
 
   const Actions = (user) => (
     <div style={{ display: 'flex', gap: '10px' }}>
-      <button
-        className="btn btn-primary btn-sm"
-        style={{ padding: '0.25rem 0.5rem' }}
+      <a
+        href='#'
+        className="badge badge-primary p-1"
         onClick={(e) => {
           e.preventDefault();
-          handleNominatePeer(user.id);
+          handleNominateUser(user.id);
         }}
       >
         Nominate
-      </button>
+      </a>
 
-      <button
-        className="btn btn-danger btn-sm"
-        style={{ padding: '0.25rem 0.5rem' }}
+      <a
+        href='#'
+        className="badge badge-danger p-1"
         onClick={(e) => {
           e.preventDefault();
-          handleUnnominatePeer(user.id);
+          handleUnnominateUser(user.id);
         }}
       >
         Un-nominate
-      </button>
+      </a>
     </div>
   );
 
@@ -164,12 +150,13 @@ function NominatePeers() {
   return (
     <>
       <div className='m-4'>
-        <ExpandableInstructions instructions={instructions} />
+        < Instructions />
       </div>
       <div className="d-flex justify-content-end m-2">
         <NominatePeersModal
           modalTitle={'Nominate Peers'}
           buttonText={'Nominate Peers From Other Division'}
+          fetchUserOptions={fetchAllTsPeers}
           onFormSubmit={() => {
             initListUser()
           }}

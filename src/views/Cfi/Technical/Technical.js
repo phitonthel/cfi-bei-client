@@ -1,4 +1,4 @@
-import SelfAssessment from '../../views/SelfAssessment';
+import SelfAssessment from '../SelfAssessment/SelfAssessment';
 
 const Technical = () => {
   return SelfAssessment('TECHNICAL')

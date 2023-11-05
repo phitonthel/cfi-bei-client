@@ -88,7 +88,6 @@ function UserManagement() {
         }
       }));
     } catch (error) {
-      console.log({ error })
       fireSwalError(error)
     } finally {
       setIsLoading(false)

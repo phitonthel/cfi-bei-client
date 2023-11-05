@@ -3,15 +3,15 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
 
-import { submitScore } from '../../apis/assessment/submitScore';
-import { fetchById } from '../../apis/assessment/fetchById';
-import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
-import { renderScore } from '../../components/AssessmentCard'
+import { submitScore } from '../../../apis/assessment/submitScore';
+import { fetchById } from '../../../apis/assessment/fetchById';
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { renderScore } from '../../../components/AssessmentCard'
 import { renderDropdown } from './renderDropdown'
-import { Criteria } from '../../components/Criteria'
-import { ExpandableInstructions } from '../../components/ExpandableInstructions'
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { SubmitButton } from '../../components/SubmitButton';
+import { Criteria } from '../../../components/Criteria'
+import { ExpandableInstructions } from '../../../components/ExpandableInstructions'
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { SubmitButton } from '../../../components/SubmitButton';
 
 function PeerAssessment() {
   const [assessments, setAssessments] = useState([])

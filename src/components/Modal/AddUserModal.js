@@ -42,7 +42,6 @@ const AddUserModal = ({ buttonText }) => {
     const handleFormSubmit = (event) => {
         event.preventDefault();
         // Handle form submission logic here
-        console.log('Form submitted:', formData);
         handleCloseModal();
     };
 

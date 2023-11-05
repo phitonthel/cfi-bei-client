@@ -4,12 +4,11 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import DataTable from 'react-data-table-component';
-import { fetchFeedbackFormUsers } from '../../apis/user/fetchFeedbackFormUsers';
-import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
-import { ExpandableInstructions } from '../../components/ExpandableInstructions';
-import { LoadingSpinner } from 'components/LoadingSpinner';
-import { downloadTxtFile } from '../Reports/utils';
-import { DownloadButton } from '../../components/DownloadButton';
+import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import BaseInstructions from '../BaseInstructions';
 
 const columns = [
   {
@@ -51,6 +50,7 @@ function FeedbackForms() {
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
             localStorage.setItem('360_reviewee_id', user.id)
+            localStorage.setItem('360_reviewee_fullname', user.fullname)
             history.push('/admin/feedback-form')
           }}
         >
@@ -87,7 +87,6 @@ function FeedbackForms() {
       setReviewees(users)
 
     } catch (error) {
-      console.log({ error })
       fireSwalError(error)
     } finally {
       setIsLoading(false)
@@ -106,7 +105,13 @@ function FeedbackForms() {
   return (
     <>
       <div className='m-4'>
-        <ExpandableInstructions instructions={instructions} />
+        {/* <ExpandableInstructions instructions={instructions} /> */}
+        < BaseInstructions 
+          instructions={[
+            "Your team members are in the spotlight and it's review time! Please proceed by clicking the 'Review' button.",
+            "Psst.., they will not know that you are reviewing them (unless you tell them of course)"
+          ]}
+        />
       </div>
       <DataTable
         columns={columns}

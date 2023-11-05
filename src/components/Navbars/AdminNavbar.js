@@ -19,7 +19,7 @@ import React, { Component } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
-import { baseRoutes } from '../../routes'
+import { baseRoutes } from '../../routes/routes'
 import { logout } from "../../apis/user/auth";
 import { flattenRoutes } from "layouts/Admin";
 

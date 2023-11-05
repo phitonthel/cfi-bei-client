@@ -25,12 +25,12 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin.js";
 import Login from "views/Login";
 
-import { guestRoutes, baseRoutes } from '../routes.js'
+import { guestRoutes, baseRoutes } from '../routes/routes.js'
 
 import sidebarImage from "assets/img/sidebar-7.jpg";
 import { fetchAppSettings } from "apis/applicationSetting/fetchAppSettings";
 
-import { APP_SETTINGS } from "../routes.js";
+import { APP_SETTINGS } from "../routes/routes.js";
 
 export const flattenRoutes = (routes) => {
   return routes.flatMap(route => {

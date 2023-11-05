@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Badge, Button, Card, Form, Navbar, Nav, Container, Row, Col } from "react-bootstrap";
-import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
+
+const LABELS = {
+  STRENGTH: "Continue Doing",
+  START: "Start To Do",
+  WEAKNESS: "Stop To Do",
+}
+
+const PLACEHOLDERS = {
+  STRENGTH: "Behavior that is expected to continue.",
+  START: "Behavior that needs to start/initiate.",
+  WEAKNESS: "Behavior that needs to stop",
+}
 
 function OpenFeedbackForm({ initialTsEssayAssessments, setTsEssayAssessments }) {
   const [inputs, setInputs] = useState([]);
@@ -34,11 +45,11 @@ function OpenFeedbackForm({ initialTsEssayAssessments, setTsEssayAssessments }) 
         <Col md="12">
           <Form.Group>
             {
-              !renderedLabels[item.type] && <Form.Label>{item.type}</Form.Label>
+              !renderedLabels[item.type] && <Form.Label>{LABELS[item.type]}</Form.Label>
             }
             <Form.Control
               onChange={(e) => handleChange(item.id, e)}
-              placeholder={`Good behaviour to ${item.type.toLowerCase()}`}
+              placeholder={PLACEHOLDERS[item.type]}
               type="text"
               value={item.feedback}
               as="textarea"

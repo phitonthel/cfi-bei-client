@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-import { fetchSelfAssessment, submitSelfAssessment } from '../../apis/assessment/fetchSelf'
+import { fetchSelfAssessment, submitSelfAssessment } from '../../../apis/assessment/fetchSelf'
 
 
-import { AssessmentCard } from '../../components/AssessmentCard'
+import { AssessmentCard } from '../../../components/AssessmentCard'
 import { InstructionsTech } from './InstructionsTech'
 import { InstructionsBehav } from './InstructionsBehav'
-import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
-import { submitScore } from '../../apis/assessment/submitScore';
-import { SubmitButton } from '../../components/SubmitButton';
-import { FloatingMessage } from '../../components/FloatingMessage'
+import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
+import { submitScore } from '../../../apis/assessment/submitScore';
+import { SubmitButton } from '../../../components/SubmitButton';
+import { FloatingMessage } from '../../../components/FloatingMessage'
 
 const SelfAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
@@ -89,7 +89,6 @@ const SelfAssessment = (type) => {
       const data = await fetchSelfAssessment(type)
       setAssessments(data)
     } catch (error) {
-      console.log(error)
       fireSwalError(error)
     }
   }, [])
@@ -121,12 +120,6 @@ const SelfAssessment = (type) => {
           title={`Progress`}
           text={`${assessmentsPercentage} Assessment`}
         />
-
-        {/* { FloatingMessage({
-          title: "Progress",
-          text: `${assessmentsPercentage} Assessment`
-        }) } */}
-
         {
           assessments.map(assessment => AssessmentCard(assessment, handlers, type))
         }
