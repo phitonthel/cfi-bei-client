@@ -77,7 +77,7 @@ function FeedbackForms() {
         return {
           id: user.id,
           fullname: user.fullname,
-          division: user.Division.name,
+          division: user.Division?.name,
           level: user.level,
           feedbackCompleted: user.feedbackCompleted,
           actions: Actions(user)
@@ -108,7 +108,7 @@ function FeedbackForms() {
         {/* <ExpandableInstructions instructions={instructions} /> */}
         < BaseInstructions 
           instructions={[
-            "Your team members are in the spotlight and it's review time! Please proceed by clicking the 'Review' button.",
+            "Your ratees are in the spotlight and it's review time! Please proceed by clicking the 'Review' button.",
             "Psst.., they will not know that you are reviewing them (unless you tell them of course)"
           ]}
         />

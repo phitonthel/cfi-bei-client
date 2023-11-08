@@ -69,7 +69,6 @@ export const tsRoutes = {
       component: IndividualReport,
       layout: "/admin",
       access: [
-        ACCESS_LEVEL.STAF,
         ACCESS_LEVEL.KEPALA_UNIT,
         ACCESS_LEVEL.KEPALA_KANTOR,
         ACCESS_LEVEL.KEPALA_DIVISI,

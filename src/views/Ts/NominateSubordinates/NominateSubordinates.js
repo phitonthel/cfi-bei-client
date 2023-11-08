@@ -97,7 +97,7 @@ function NominateSubordinates() {
       setListUser(data.map(user => ({
         id: user.id,
         fullname: user.fullname,
-        division: user.Division.name,
+        division: user.Division?.name,
         level: user.level,
         status: user.isNominatedByReviewee,
         actions: Actions(user)

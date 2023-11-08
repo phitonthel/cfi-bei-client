@@ -72,7 +72,7 @@ function IndividualReport() {
         <div className="container mt-4">
           <div className="text-center mb-4">
             <h1>360 Degree Feedback Report</h1>
-            <p className="lead">Feedback for: NI WAYAN YADNYA WATI</p>
+            <p className="lead">Feedback for: {reviewee.fullname}</p>
           </div>
 
           <hr></hr>

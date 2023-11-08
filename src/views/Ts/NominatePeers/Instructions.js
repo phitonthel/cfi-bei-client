@@ -26,7 +26,7 @@ const Instructions = () => {
         </div>
         <div className="card-body bg-light"> {/* Light background for the body */}
           <p className="card-text p-0 m-0">1: {text}</p>
-          <p className="card-text p-0 m-0">2: Prioritise picking members from your division first before others.</p>
+          <p className="card-text p-0 m-0">2: Prioritise picking members from your division/directorate first before others.</p>
         </div>
       </div>
     </div>

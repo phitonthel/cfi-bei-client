@@ -106,7 +106,7 @@ function Subordinates() {
         return {
           id: user.id,
           fullname: user.fullname,
-          division: user.Division.name,
+          division: user.Division?.name,
           role: user.positionName,
           updatedAt: convertISODateToDDMMYYYY(user.updatedAt),
           assigned: user.assignedStatus,

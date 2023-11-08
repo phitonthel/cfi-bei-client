@@ -108,6 +108,7 @@ const hideRoutesByAccessLevel = ({
 }
 
 function Admin() {
+  console.log('Running in:', process.env.NODE_ENV)
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);

@@ -80,7 +80,7 @@ function UserManagement() {
         return {
           id: user.id,
           fullname: user.fullname,
-          division: user.Division.name,
+          division: user.Division?.name,
           level: user.level,
           password: user.password,
           isNominated: 'Un-nominated',

@@ -28,7 +28,7 @@ const Profile = ({
               </tr>
               <tr>
                 <td>Division</td>
-                <td>{user.Division.name}</td>
+                <td>{user.Division?.name}</td>
               </tr>
               <tr>
                 <td>Level</td>
