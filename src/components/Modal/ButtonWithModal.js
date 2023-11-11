@@ -19,7 +19,6 @@ const ButtonWithModal = ({
   const handleFormSubmit = (event) => {
     event.preventDefault();
     // Handle form submission logic here, e.g., send data to a server, etc.
-    console.log('Form submitted:', input1Value, input2Value);
     handleCloseModal();
   };
 

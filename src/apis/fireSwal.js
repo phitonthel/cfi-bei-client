@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 export const fireSwalError = (
   error,
 ) => {
+  console.log(error);
   Swal.fire({
     position: 'top',
     icon: 'error',

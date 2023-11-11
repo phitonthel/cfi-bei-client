@@ -4,12 +4,11 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import DataTable from 'react-data-table-component';
-import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
-import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
-import { ExpandableInstructions } from '../../components/ExpandableInstructions';
-import { LoadingSpinner } from 'components/LoadingSpinner';
-import { downloadTxtFile } from '../Reports/utils';
-import AddUserModal from '../../components/Modal/AddUserModal'
+import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import BaseInstructions from '../BaseInstructions';
 
 const columns = [
   {
@@ -29,8 +28,8 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Password</h4>,
-    selector: row => row.password,
+    name: <h4>Feedback Given</h4>,
+    selector: row => row.feedbackCompleted,
     sortable: true,
   },
   {
@@ -39,10 +38,10 @@ const columns = [
   },
 ];
 
-function UserManagement() {
+function FeedbackForms() {
   const history = useHistory()
 
-  const [subordinates, setSubordinates] = useState([])
+  const [reviewees, setReviewees] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const Actions = (user) => {
@@ -50,15 +49,12 @@ function UserManagement() {
       <div>
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
+            localStorage.setItem('360_reviewee_id', user.id)
+            localStorage.setItem('360_reviewee_fullname', user.fullname)
+            history.push('/admin/feedback-form')
           }}
         >
-          Update
-        </a>
-        <a href='#' className="badge badge-danger mx-1"
-          onClick={() => {
-          }}
-        >
-         Delete
+          Review
         </a>
       </div>
     )
@@ -66,7 +62,8 @@ function UserManagement() {
 
   useEffect(async () => {
     try {
-      const { data } = await fetchSubordinates()
+      let { data } = await fetchFeedbackFormUsers()
+
       if (data.message) {
         return Swal.fire({
           position: 'top',
@@ -76,17 +73,19 @@ function UserManagement() {
         })
       }
 
-      setSubordinates(data.map(user => {
+      const users = data.map((user, idx) => {
         return {
           id: user.id,
           fullname: user.fullname,
           division: user.Division?.name,
           level: user.level,
-          password: user.password,
-          isNominated: 'Un-nominated',
+          feedbackCompleted: user.feedbackCompleted,
           actions: Actions(user)
         }
-      }));
+      })
+
+      setReviewees(users)
+
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -95,7 +94,8 @@ function UserManagement() {
   }, [])
 
   const instructions = [
-    'Anda diminta untuk memilih...',
+    `Anda diminta untuk melakukan penilaian terhadap kompetensi kolega Anda`,
+    `Pilih menu 'Review' untuk mulai menilai masing-masing anggota tim Anda.`
   ]
 
   if (isLoading) {
@@ -104,21 +104,22 @@ function UserManagement() {
 
   return (
     <>
-      {/* <div className='m-4'>
-        <ExpandableInstructions instructions={instructions} />
-      </div> */}
-
-      <div className="d-flex justify-content-end m-2">
-        < AddUserModal buttonText={'ADD NEW USER'} />
+      <div className='m-4'>
+        {/* <ExpandableInstructions instructions={instructions} /> */}
+        < BaseInstructions 
+          instructions={[
+            "Your ratees are in the spotlight and it's review time! Please proceed by clicking the 'Review' button.",
+            "Psst.., they will not know that you are reviewing them (unless you tell them of course)"
+          ]}
+        />
       </div>
-
       <DataTable
         columns={columns}
-        data={subordinates}
+        data={reviewees}
         highlightOnHover
       />
     </>
   );
 };
 
-export default UserManagement
+export default FeedbackForms

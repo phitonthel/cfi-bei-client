@@ -39,7 +39,7 @@ const SearchableDropdown = ({ users, onChange, selected }) => {
             .slice(0, 15)
             .map((user, index) => (
               <Dropdown.Item key={index} onClick={() => handleSelect(user)}>
-                {user.fullname}
+                {`${user.fullname}`}
               </Dropdown.Item>
             ))
         }
