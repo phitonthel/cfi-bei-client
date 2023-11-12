@@ -1,9 +1,12 @@
+import IndividualReports from "../views/Ts/IndividualReport/IndividualReports.js";
 import FeedbackForms from "../views/Ts/FeedbackForms/FeedbackForms.js";
-import IndividualReport from "../views/Ts/FeedbackReport/IndividualReport.js";
+import IndividualReport from "../views/Ts/IndividualReport/IndividualReport.js";
 import NominatePeers from "../views/Ts/NominatePeers/index.js";
 import NominateSubordinates from "../views/Ts/NominateSubordinates/index.js";
 
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
+import GroupReport from "../views/Ts/GroupReport/GroupReport.js";
+import ReviewNomination from "../views/Ts/ReviewNominations/ReviewNominations.js";
 
 export const tsRoutes = {
   path: "/360",
@@ -15,9 +18,10 @@ export const tsRoutes = {
     ACCESS_LEVEL.KEPALA_UNIT,
     ACCESS_LEVEL.KEPALA_KANTOR,
     ACCESS_LEVEL.KEPALA_DIVISI,
+    ACCESS_LEVEL.SUPERADMIN,
   ],
   hidden: false,
-  visibilityByAppSetting: APP_SETTINGS["Tab for 360"],
+  visibilityByAppSetting: APP_SETTINGS["360"],
   children: [
     {
       path: "/nominate-peers",
@@ -31,7 +35,7 @@ export const tsRoutes = {
         ACCESS_LEVEL.KEPALA_DIVISI,
       ],
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["Nominate 360 Peers"],
+      visibilityByAppSetting: APP_SETTINGS["360 - Nominate Peers"],
     },
     {
       path: "/nominate-subordinates",
@@ -45,7 +49,18 @@ export const tsRoutes = {
         ACCESS_LEVEL.KEPALA_DIVISI,
       ],
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["Nominate 360 Peers"],
+      visibilityByAppSetting: APP_SETTINGS["360 - Nominate Peers"],
+    },
+    {
+      path: "/review-nominations",
+      name: "Review Nominations",
+      icon: "nc-icon nc-fav-remove",
+      component: ReviewNomination,
+      layout: "/admin",
+      access: [
+        ACCESS_LEVEL.SUPERADMIN,
+      ],
+      hidden: false,
     },
     {
       path: "/feedback-forms",
@@ -60,21 +75,37 @@ export const tsRoutes = {
         ACCESS_LEVEL.KEPALA_DIVISI,
       ],
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["Give Feedback for 360"],
+      visibilityByAppSetting: APP_SETTINGS["360 - Feedback Form"],
     },
     {
-      path: "/individual-report",
-      name: "Individual Report",
+      path: "/individual-reports",
+      name: "Individual Reports",
       icon: "nc-icon nc-chart-bar-32",
-      component: IndividualReport,
+      component: IndividualReports,
       layout: "/admin",
       access: [
         ACCESS_LEVEL.KEPALA_UNIT,
         ACCESS_LEVEL.KEPALA_KANTOR,
         ACCESS_LEVEL.KEPALA_DIVISI,
+        ACCESS_LEVEL.SUPERADMIN,
       ],
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["Individual Report for 360"],
+      visibilityByAppSetting: APP_SETTINGS["360 - Individual Report"],
+    },
+    {
+      path: "/group-report",
+      name: "Group Report",
+      icon: "nc-icon nc-chart-bar-32",
+      component: GroupReport,
+      layout: "/admin",
+      access: [
+        ACCESS_LEVEL.KEPALA_UNIT,
+        ACCESS_LEVEL.KEPALA_KANTOR,
+        ACCESS_LEVEL.KEPALA_DIVISI,
+        ACCESS_LEVEL.SUPERADMIN,
+      ],
+      hidden: false,
+      visibilityByAppSetting: APP_SETTINGS["360 - Group Report"],
     },
   ]
 }

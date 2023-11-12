@@ -1,21 +1,5 @@
-/*!
-
-=========================================================
-* Light Bootstrap Dashboard React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React, { Component } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
@@ -24,9 +8,10 @@ import { logout } from "../../apis/user/auth";
 import { flattenRoutes } from "layouts/Admin";
 
 function Header() {
-
   const history = useHistory()
   const location = useLocation();
+
+  // const appRedux = useSelector(state => state.app);
 
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
@@ -44,7 +29,7 @@ function Header() {
     const flatRoutes = flattenRoutes(baseRoutes)
     for (let i = 0; i < flatRoutes.length; i++) {
       if (location.pathname == (flatRoutes[i].layout + flatRoutes[i].path)) {
-        return flatRoutes[i].name;
+        return flatRoutes[i].name
       }
     }
     return "";

@@ -45,7 +45,7 @@ function OpenFeedbackForm({ initialTsEssayAssessments, setTsEssayAssessments }) 
         <Col md="12">
           <Form.Group>
             {
-              !renderedLabels[item.type] && <Form.Label>{LABELS[item.type]}</Form.Label>
+              !renderedLabels[item.type] && <Form.Label><b>{LABELS[item.type]}</b></Form.Label>
             }
             <Form.Control
               onChange={(e) => handleChange(item.id, e)}

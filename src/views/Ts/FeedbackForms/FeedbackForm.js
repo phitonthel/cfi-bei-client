@@ -38,6 +38,7 @@ const calculateAssessmentPercentage = ({
 
 const FeedbackForm = () => {
   const authUser = useSelector(state => state.auth.user);
+  const appReports = useSelector(state => state.app.reports);
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -115,13 +116,14 @@ const FeedbackForm = () => {
     try {
       const response = await fetchFeedbackForm({
         reviewerId: authUser.id,
-        revieweeId: localStorage.getItem('360_reviewee_id'),
+        revieweeId: appReports.feedbackFormUser.id,
       })
 
       setTsAssessments(response.data.tsAssessments)
       setTsEssayAssessments(response.data.tsEssayAssessments)
 
-      const revieweeName = localStorage.getItem('360_reviewee_fullname')
+      const revieweeName = appReports.feedbackFormUser.fullname
+
       setPeerName(revieweeName)
 
     } catch (error) {

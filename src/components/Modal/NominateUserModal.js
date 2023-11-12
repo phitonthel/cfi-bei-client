@@ -44,7 +44,7 @@ const NominateUserModal = ({
 
       fireSwalSuccess({ text: 'User Nominated Successfully!' });
     } catch (error) {
-      fireSwalError(error)
+      fireSwalError(error, 2000)
     } finally {
       setShowModal(false);
       if (notifyParent) {
@@ -66,7 +66,7 @@ const NominateUserModal = ({
 
   return (
     <div>
-      <Button onClick={handleButtonClick}>{buttonText}</Button>
+      <Button className='btn btn-sm  mx-1' onClick={handleButtonClick}>{buttonText}</Button>
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>

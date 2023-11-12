@@ -13,9 +13,13 @@ import Graph from './components/Graph';
 import { fireSwalError } from 'apis/fireSwal';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import Profile from './components/Profile';
+import FeedbackScores from './components/FeedbackScores';
 
 function IndividualReport() {
   const reportRef = useRef(null);
+  const authUser = useSelector(state => state.auth.user);
+  const appReports = useSelector(state => state.app.reports);
+
   const [reviewee, setReviewee] = useState({
     nik: '',
     fullname: '',
@@ -25,7 +29,6 @@ function IndividualReport() {
   const [essayReports, setEssayReports] = useState([])
 
   const [isLoading, setIsLoading] = useState(true)
-  const authUser = useSelector(state => state.auth.user);
 
   const handleDownloadPDF = () => {
     if (reportRef.current) {
@@ -45,12 +48,11 @@ function IndividualReport() {
 
   useEffect(async () => {
     try {
-      console.log({ authUser });
       const {
         reviewee,
         reports,
         essayReports,
-      } = await fetchTsIndividualReport(authUser.id);
+      } = await fetchTsIndividualReport(appReports.individualReportUser.id);
   
       setReviewee(reviewee)
       setReports(reports)
@@ -100,7 +102,8 @@ function IndividualReport() {
           <div className="mb-4 p-4">
             <h2>Feedback Scores</h2>
             <div>
-              {
+              < FeedbackScores reports={reports}/>
+              {/* {
                 reports.map(report =>
                   < CardBreakdown
                     title={report.title}
@@ -110,7 +113,7 @@ function IndividualReport() {
                     selfAvgScore={report.selfAvgScore}
                     totalAvgScore={report.totalAvgScore}
                   />)
-              }
+              } */}
             </div>
           </div>
 

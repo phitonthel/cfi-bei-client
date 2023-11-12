@@ -124,10 +124,8 @@ function Table({ reports, setIsLoading }) {
   return (
     <>
       <DownloadButton
-        onClick={() => downloadTxtFile(
-          createCsv(),
-          `reports_users_${new Date().getTime()}.csv`
-        )}
+        data={createCsv()}
+        filename={`reports_users_${new Date().getTime()}.csv`}
       />
       <table id="user-report" className="display nowrap" style={{ width: '1000%' }}>
         {renderHeaders()}

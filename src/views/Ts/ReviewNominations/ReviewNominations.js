@@ -4,19 +4,19 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import { faker } from '@faker-js/faker'
 import DataTable from 'react-data-table-component';
-import CustomDataTable from './FilteredDataTable';
 
 import { unnominateUser } from '../../../apis/tsAssessment/unnominateUser';
 import { fetchReviewNomination } from '../../../apis/user/fetchReviewNomination';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
-import { LoadingSpinner } from 'components/LoadingSpinner';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import NominateUserModal from '../../../components/Modal/NominateUserModal';
 import ApproveUserModal from '../../../components/Modal/ApproveUserModal'
 import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
 import { handleApprovalUser, handleUnapprovalUser } from './utils';
 import ApproveAllNominationButton from './ApproveAllNominationButton';
 import { columns } from './vars';
+import FilteredDataTable from '../../../components/FilteredDataTable';
 
 function ReviewNomination() {
   const history = useHistory()
@@ -80,6 +80,7 @@ function ReviewNomination() {
           reviewerFullname: nomination.Reviewer.fullname,
           reviewerDivision: nomination.Reviewer.Division.name,
           reviewerLevel: nomination.Reviewer.level,
+          feedbackCompleted: nomination.feedbackCompleted,
           isNominatedByReviewee: nomination.isNominatedByReviewee,
           isApproved: nomination.isApproved,
           actions: Actions({
@@ -131,10 +132,10 @@ function ReviewNomination() {
         />
       </div>
 
-      <CustomDataTable
+      <FilteredDataTable
         columns={columns}
         data={nominations}
-      // highlightOnHover
+        filterKeys={['revieweeFullname', 'revieweeDivision', 'revieweeLevel', 'reviewerFullname', 'reviewerDivision', 'reviewerLevel']}
       />
     </>
   );

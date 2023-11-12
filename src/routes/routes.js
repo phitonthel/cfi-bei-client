@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Light Bootstrap Dashboard React - v2.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import Dashboard from "../views/Dashboard.js";
 import UserProfile from "../views/UserProfile.js";
 import Typography from "../views/Typography.js";
@@ -39,6 +22,54 @@ import { tsRoutes } from "./tsRoutes.js";
 import { cfiRoutes } from "./cfiRoutes.js";
 
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
+import IndividualReport from "../views/Ts/IndividualReport/IndividualReport.js";
+
+const hiddenRoutes = [
+  {
+    path: "/peer-assessment-table",
+    name: "Peer Assessment Table",
+    icon: "nc-icon nc-paper-2",
+    component: PeerAssessmentTable,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
+    hidden: true,
+  },
+  {
+    path: "/feedback-form",
+    name: "Feedback Form",
+    icon: "nc-icon nc-paper-2",
+    component: FeedbackForm,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.STAF,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
+    hidden: true,
+  },
+  {
+    path: "/individual-report",
+    name: "Individual Report",
+    icon: "nc-icon nc-chart-bar-32",
+    component: IndividualReport,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
+    hidden: true,
+    visibilityByAppSetting: APP_SETTINGS["360 - Individual Report"],
+  },
+]
 
 export const guestRoutes = [
   {
@@ -157,57 +188,7 @@ export const baseRoutes = [
     ],
     hidden: false,
   },
-  {
-    path: "/review-nominations",
-    name: "Review Nominations",
-    icon: "nc-icon nc-fav-remove",
-    component: ReviewNominations,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.SUPERADMIN,
-    ],
-    hidden: false,
-  },
-  {
-    path: "/reports",
-    name: "Reports",
-    icon: "nc-icon nc-notes",
-    component: Reports,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.SUPERADMIN
-    ],
-    hidden: false,
-  },
-  {
-    path: "/peer-assessment-table",
-    name: "Peer Assessment Table",
-    icon: "nc-icon nc-paper-2",
-    component: PeerAssessmentTable,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.KEPALA_UNIT,
-      ACCESS_LEVEL.KEPALA_KANTOR,
-      ACCESS_LEVEL.KEPALA_DIVISI,
-      ACCESS_LEVEL.SUPERADMIN,
-    ],
-    hidden: true,
-  },
-  {
-    path: "/feedback-form",
-    name: "Feedback Form",
-    icon: "nc-icon nc-paper-2",
-    component: FeedbackForm,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.STAF,
-      ACCESS_LEVEL.KEPALA_UNIT,
-      ACCESS_LEVEL.KEPALA_KANTOR,
-      ACCESS_LEVEL.KEPALA_DIVISI,
-      ACCESS_LEVEL.SUPERADMIN,
-    ],
-    hidden: true,
-  },
+  ...hiddenRoutes,
   tsRoutes,
   cfiRoutes,
 ];
