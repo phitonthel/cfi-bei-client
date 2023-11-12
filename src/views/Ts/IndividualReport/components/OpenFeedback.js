@@ -15,7 +15,7 @@ const OpenFeedback = ({
             <>
               <h4>Continue Doing:</h4>
               {strengths.map((report, index) => (
-                <p key={index} className="card p-2" style={{ backgroundColor: "#e6f9e6" }}>
+                <p key={index} className="card p-2" style={{ backgroundColor: "#e6f9e6", whiteSpace: 'pre-wrap' }}>
                   {report.feedback}
                 </p>
               ))}

@@ -7,13 +7,14 @@ export const ACCESS_LEVEL = {
 }
 
 export const APP_SETTINGS = {
-  "Tab for 360": "Tab for 360",
-  "Nominate 360 Peers": "Nominate 360 Peers",
-  "Give Feedback for 360": "Give Feedback for 360",
-  "Individual Report for 360": "Individual Report for 360",
-  "Tab for CFI": "Tab for CFI",
-  "Subordinates for CFI": "Subordinates for CFI",
-  "Behavioural Assessment for CFI": "Behavioural Assessment for CFI",
-  "Technical Assessment for CFI": "Technical Assessment for CFI",
-  "Announcement": "Announcement"
+  "360": "360",
+  "360 - Nominate Peers": "360 - Nominate Peers",
+  "360 - Feedback Form": "360 - Feedback Form",
+  "360 - Individual Report": "360 - Individual Report",
+  "360 - Group Report": "360 - Group Report",
+  "CFI": "CFI",
+  "CFI - Subordinates": "CFI - Subordinates",
+  "CFI - Behavioural": "CFI - Behavioural",
+  "CFI - Technical": "CFI - Technical",
+  "Announcement": "Announcement",
 }

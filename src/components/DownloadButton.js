@@ -1,13 +1,18 @@
+import { downloadTxtFile } from "../views/Reports/utils"
 
 export const DownloadButton = ({
   text,
-  onClick,
+  data,
+  filename,
 }) => {
   return (
     <div className="d-flex flex-row-reverse my-1">
       <button
         className='btn btn-primary btn-sm m-1'
-        onClick={onClick}>
+        onClick={() => {
+          downloadTxtFile(data, filename)
+        }}
+      >
         {text ?? 'Download CSV'}
       </button>
     </div>

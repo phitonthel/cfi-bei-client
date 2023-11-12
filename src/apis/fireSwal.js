@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 
 export const fireSwalError = (
   error,
+  timer,
 ) => {
   console.log(error);
   Swal.fire({
@@ -10,7 +11,7 @@ export const fireSwalError = (
     icon: 'error',
     text: error?.response?.data?.message || error?.message || 'Oops...',
     showConfirmButton: false,
-    timer: 1000
+    timer: timer || 1000
   })
 }
 

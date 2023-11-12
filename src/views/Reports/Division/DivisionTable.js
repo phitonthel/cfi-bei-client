@@ -144,10 +144,8 @@ const Table = ({
   return (
     <>
       <DownloadButton
-        onClick={() => downloadTxtFile(
-          createCsv(data),
-          `reports_division_all_${new Date().getTime()}.csv`
-        )}
+        data={createCsv()}
+        filename={`reports_division_all_${new Date().getTime()}.csv`}
       />
       <table id="division-all-report" className="display nowrap" style={{ width: '200%' }}>
         {renderHeaders(data)}

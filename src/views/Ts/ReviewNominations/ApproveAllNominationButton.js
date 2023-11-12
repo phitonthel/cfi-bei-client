@@ -22,7 +22,7 @@ const ApproveAllNominationButton = ({
   };
 
   return (
-    <Button onClick={handleButtonClick}>{buttonText}</Button>
+    <Button className='btn btn-sm mx-1' onClick={handleButtonClick}>{buttonText}</Button>
   )
 }
 

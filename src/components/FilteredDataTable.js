@@ -15,7 +15,11 @@ const FilterComponent = ({ filterText, onFilter }) => (
   </div>
 );
 
-const FilteredDataTable = ({ data, columns }) => {
+const FilteredDataTable = ({
+  data,
+  columns,
+  filterKeys, // array of string
+}) => {
   const [filterText, setFilterText] = useState('');
   
   // Function to handle the input change and filter the data
@@ -27,13 +31,8 @@ const FilteredDataTable = ({ data, columns }) => {
   // Filtered data based on the filterText
   const filteredData = filterText === '' ? data : data.filter(item => {
     const searchText = filterText.toLowerCase();
-    return (
-      (item.revieweeFullname && item.revieweeFullname.toLowerCase().includes(searchText)) ||
-      (item.revieweeDivision && item.revieweeDivision.toLowerCase().includes(searchText)) ||
-      (item.revieweeLevel && item.revieweeLevel.toLowerCase().includes(searchText)) ||
-      (item.reviewerFullname && item.reviewerFullname.toLowerCase().includes(searchText)) ||
-      (item.reviewerDivision && item.reviewerDivision.toLowerCase().includes(searchText)) ||
-      (item.reviewerLevel && item.reviewerLevel.toLowerCase().includes(searchText))
+    return filterKeys.some(key => 
+      item[key] && item[key].toLowerCase().includes(searchText)
     );
   });
 

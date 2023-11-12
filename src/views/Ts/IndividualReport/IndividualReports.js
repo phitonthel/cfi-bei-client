@@ -11,6 +11,8 @@ import { ExpandableInstructions } from '../../../components/ExpandableInstructio
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import BaseInstructions from '../BaseInstructions';
 import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
+import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
+import FilteredDataTable from '../../../components/FilteredDataTable';
 
 const columns = [
   {
@@ -30,21 +32,16 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Feedback Given</h4>,
-    selector: row => row.feedbackCompleted,
-    sortable: true,
-  },
-  {
     name: <h4>Actions</h4>,
     cell: row => row.actions,
   },
 ];
 
-function FeedbackForms() {
+function IndividualReports() {
   const history = useHistory()
   const dispatch = useDispatch();
 
-  const [reviewees, setReviewees] = useState([])
+  const [users, setUsers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const Actions = (user) => {
@@ -53,16 +50,15 @@ function FeedbackForms() {
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
             dispatch(setAppReport({
-              feedbackFormUser: {
+              individualReportUser: {
                 id: user.id,
                 fullname: user.fullname,
               }
             }));
-            
-            history.push('/admin/feedback-form')
+            history.push('/admin/individual-report')
           }}
         >
-          Review
+          See Report
         </a>
       </div>
     )
@@ -70,16 +66,7 @@ function FeedbackForms() {
 
   useEffect(async () => {
     try {
-      let { data } = await fetchFeedbackFormUsers()
-
-      if (data.message) {
-        return Swal.fire({
-          position: 'top',
-          text: data.message,
-          showConfirmButton: false,
-          timer: 1000
-        })
-      }
+      let data = await fetchTsIndividualReportTable()
 
       const users = data.map((user, idx) => {
         return {
@@ -87,13 +74,11 @@ function FeedbackForms() {
           fullname: user.fullname,
           division: user.Division?.name,
           level: user.level,
-          feedbackCompleted: user.feedbackCompleted,
           actions: Actions(user)
         }
       })
 
-      setReviewees(users)
-
+      setUsers(users)
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -101,10 +86,6 @@ function FeedbackForms() {
     }
   }, [])
 
-  const instructions = [
-    `Anda diminta untuk melakukan penilaian terhadap kompetensi kolega Anda`,
-    `Pilih menu 'Review' untuk mulai menilai masing-masing anggota tim Anda.`
-  ]
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -113,21 +94,14 @@ function FeedbackForms() {
   return (
     <>
       <div className='m-4'>
-        {/* <ExpandableInstructions instructions={instructions} /> */}
-        < BaseInstructions 
-          instructions={[
-            "Your ratees are in the spotlight and it's review time! Please proceed by clicking the 'Review' button.",
-            "Psst.., they will not know that you are reviewing them (unless you tell them of course)"
-          ]}
-        />
       </div>
-      <DataTable
+      <FilteredDataTable
         columns={columns}
-        data={reviewees}
-        highlightOnHover
+        data={users}
+        filterKeys={['fullname', 'division', 'level']}
       />
     </>
   );
 };
 
-export default FeedbackForms
+export default IndividualReports

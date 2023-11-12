@@ -3,6 +3,7 @@ import Technical from "../views/Cfi/Technical/Technical.js";
 import Behavioural from "../views/Cfi/Behavioural/index.js";
 
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
+import Reports from "../views/Reports/index.js";
 
 export const cfiRoutes = {
   path: "/cfi",
@@ -14,9 +15,10 @@ export const cfiRoutes = {
     ACCESS_LEVEL.KEPALA_UNIT,
     ACCESS_LEVEL.KEPALA_KANTOR,
     ACCESS_LEVEL.KEPALA_DIVISI,
+    ACCESS_LEVEL.SUPERADMIN,
   ],
   hidden: false,
-  visibilityByAppSetting: APP_SETTINGS["Tab for CFI"],
+  visibilityByAppSetting: APP_SETTINGS["CFI"],
   children: [
     {
       path: "/subordinates",
@@ -26,7 +28,7 @@ export const cfiRoutes = {
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["Subordinates for CFI"]
+      visibilityByAppSetting: APP_SETTINGS["CFI - Subordinates"]
     },
     {
       path: "/self-assessment-behavioural",
@@ -41,7 +43,7 @@ export const cfiRoutes = {
         ACCESS_LEVEL.KEPALA_DIVISI,
       ],
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["Behavioural Assessment for CFI"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - Behavioural"],
     },
     {
       path: "/self-assessment-technical",
@@ -56,7 +58,18 @@ export const cfiRoutes = {
         ACCESS_LEVEL.KEPALA_DIVISI,
       ],
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["Technical Assessment for CFI"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - Technical"],
+    },
+    {
+      path: "/reports",
+      name: "Reports",
+      icon: "nc-icon nc-notes",
+      component: Reports,
+      layout: "/admin",
+      access: [
+        ACCESS_LEVEL.SUPERADMIN
+      ],
+      hidden: false,
     },
   ]
 }

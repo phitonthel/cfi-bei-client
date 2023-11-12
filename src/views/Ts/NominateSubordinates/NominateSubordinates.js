@@ -65,7 +65,7 @@ function NominateSubordinates() {
       fireSwalSuccess({ text: 'User Nominated Successfully!' });
       await initListUser();
     } catch (error) {
-      fireSwalError(error);
+      fireSwalError(error, 2000);
     }
   }
   const handleUnnominateUser = async (userId) => {
@@ -78,7 +78,7 @@ function NominateSubordinates() {
       await initListUser();
     } catch (error) {
       console.error("Error unnominating user:", error);
-      fireSwalError(error);
+      fireSwalError(error, 2000);
     }
   }
 

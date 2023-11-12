@@ -130,10 +130,8 @@ function Table({
   return (
     <>
       <DownloadButton
-        onClick={() => downloadTxtFile(
-          createCsv(),
-          `reports_${divisionType}_${new Date().getTime()}.csv`
-        )}
+        data={createCsv()}
+        filename={`reports_${divisionType}_${new Date().getTime()}.csv`}
       />
       <table id="division-single-report" className="display nowrap" style={{ width: '1000%' }}>
         {renderHeaders()}

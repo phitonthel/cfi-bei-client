@@ -136,10 +136,8 @@ function Subordinates() {
         <ExpandableInstructions instructions={instructions} />
       </div>
       <DownloadButton
-        onClick={() => downloadTxtFile(
-          createCsv(),
-          `subordinates_${new Date().getTime()}.csv`
-        )}
+        data={createCsv()}
+        filename={`subordinates_${new Date().getTime()}.csv`}
       />
       <DataTable
         columns={columns}
