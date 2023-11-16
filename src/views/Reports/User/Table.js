@@ -123,10 +123,12 @@ function Table({ reports, setIsLoading }) {
 
   return (
     <>
-      <DownloadButton
-        data={createCsv()}
-        filename={`reports_users_${new Date().getTime()}.csv`}
-      />
+      <div className="d-flex justify-content-end m-2">
+        <DownloadButton
+          data={createCsv()}
+          filename={`reports_users_${new Date().getTime()}.csv`}
+        />
+      </div>
       <table id="user-report" className="display nowrap" style={{ width: '1000%' }}>
         {renderHeaders()}
         {renderBody()}

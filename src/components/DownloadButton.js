@@ -6,9 +6,9 @@ export const DownloadButton = ({
   filename,
 }) => {
   return (
-    <div className="d-flex flex-row-reverse my-1">
+    <div className="">
       <button
-        className='btn btn-primary btn-sm m-1'
+        className='btn btn-primary btn-sm mx-1'
         onClick={() => {
           downloadTxtFile(data, filename)
         }}

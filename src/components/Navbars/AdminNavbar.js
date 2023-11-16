@@ -10,6 +10,7 @@ import { flattenRoutes } from "layouts/Admin";
 function Header() {
   const history = useHistory()
   const location = useLocation();
+  const dispatch = useDispatch();
 
   // const appRedux = useSelector(state => state.app);
 
@@ -196,7 +197,7 @@ function Header() {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault()
-                  logout()
+                  logout(dispatch)
                   history.push('/admin/home');
                 }}
               >
