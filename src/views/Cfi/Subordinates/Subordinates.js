@@ -135,10 +135,14 @@ function Subordinates() {
       <div className='m-4'>
         <ExpandableInstructions instructions={instructions} />
       </div>
-      <DownloadButton
-        data={createCsv()}
-        filename={`subordinates_${new Date().getTime()}.csv`}
-      />
+      
+      <div className="d-flex justify-content-end m-2">
+        <DownloadButton
+          data={createCsv()}
+          filename={`subordinates_${new Date().getTime()}.csv`}
+        />
+      </div>
+
       <DataTable
         columns={columns}
         data={subordinates}

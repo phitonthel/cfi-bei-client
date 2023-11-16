@@ -17,13 +17,39 @@ import { handleApprovalUser, handleUnapprovalUser } from './utils';
 import ApproveAllNominationButton from './ApproveAllNominationButton';
 import { columns } from './vars';
 import FilteredDataTable from '../../../components/FilteredDataTable';
+import { DownloadButton } from '../../../components/DownloadButton';
+
+const createCsv = (data) => {
+  if (data.length === 0) return ''
+
+  const headers = `Ratee,Ratee Division,Ratee Level,Rater,Rater Division,Rater Level,Feedback Completed, Nomination,Approval\n`
+  let csvs = headers
+
+  let rowBuilder = []
+  data.forEach(row => {
+    rowBuilder = [] // reset
+    rowBuilder.push(row.revieweeFullname)
+    rowBuilder.push(row.revieweeDivision)
+    rowBuilder.push(row.revieweeLevel)
+    rowBuilder.push(row.reviewerFullname)
+    rowBuilder.push(row.reviewerDivision)
+    rowBuilder.push(row.reviewerLevel)
+    rowBuilder.push(row.feedbackCompleted)
+    rowBuilder.push(row.isNominatedByReviewee)
+    rowBuilder.push(row.isApproved)
+
+    csvs += rowBuilder.join(',') + '\n'
+  });
+
+  return csvs
+}
 
 function ReviewNomination() {
   const history = useHistory()
 
   const [nominations, setNominations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-
+  
   const Actions = ({
     reviewer,
     reviewee,
@@ -115,12 +141,18 @@ function ReviewNomination() {
       </div>
 
       <div className="d-flex justify-content-end m-2">
+        <DownloadButton 
+          data={createCsv(nominations)}
+          filename={`reviewnominations_${new Date().getTime()}.csv`}
+        />
+
         <ApproveAllNominationButton 
           buttonText={'Approve All'}
           onFormSubmit={() => {
             initNominations()
           }}
         />
+
         <NominateUserModal
           modalTitle={'Create Nomination'}
           buttonText={'Create Nomination'}

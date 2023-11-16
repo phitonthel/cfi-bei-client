@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { useState, Component } from "react";
 import { useSelector } from 'react-redux';
 import { useLocation, Route, Switch } from "react-router-dom";
@@ -97,13 +98,18 @@ function Admin() {
   const [hasImage, setHasImage] = React.useState(true);
   const [appSettings, setAppSettings] = useState([])
 
+  // need to clode to avoid mutating base routes
+  // without cloning, it introduces bug when login to diff user
+  const clonedBaseRoutes = _.cloneDeep(baseRoutes);
+
   const authUser = useSelector(state => state.auth.user);
+  console.log({ authUser })
 
   const location = useLocation();
   const mainPanel = React.useRef(null);
 
   const routesByAppSettings = hideRoutesByAppSettings({
-    routes: baseRoutes,
+    routes: clonedBaseRoutes,
     appSettings,
   })
 
@@ -111,6 +117,9 @@ function Admin() {
     routes: routesByAppSettings,
     authUser,
   })
+  console.log({ clonedBaseRoutes })
+  console.log({ routesByAppSettings })
+  console.log({ filteredRoutes })
 
   const getRoutes = (routes, level) => {
     const flatRoutes = flattenRoutes(routes)

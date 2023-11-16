@@ -1,14 +1,31 @@
-const ScoringLegend = () => (
+const ScoringLegend = ({
+  title,
+  arrText,
+  subArrText,
+  isReversed,
+}) => (
   <div className="card mb-4 border-secondary"> {/* Custom border color */}
     <div className="card-header text-white bg-secondary"> {/* Custom background color */}
-      <h5 className="mb-2">Skala Penilaian:</h5>
+      <h5 className="mb-2">{title}</h5>
     </div>
     <div className="card-body bg-light"> {/* Light background for the body */}
-      <p className="card-text p-0 m-0"><strong>5:</strong> Secara konsisten melebihi standar perilaku yang diharapkan.</p>
-      <p className="card-text p-0 m-0"><strong>4:</strong> Menampilkan perilaku yang cenderung melebihi standar yang diharapkan.</p>
-      <p className="card-text p-0 m-0"><strong>3:</strong> Menampilkan perilaku sesuai dengan standar yang diharapkan.</p>
-      <p className="card-text p-0 m-0"><strong>2:</strong> Tidak konsisten dalam menampilkan perilaku yang diharapkan atau hanya menampilkan sebagian dari standar perilaku yang diharapkan.</p>
-      <p className="card-text p-0 m-0"><strong>1:</strong> Hampir tidak pernah atau tidak menampilkan perilaku yang diharapkan sama sekali.</p>
+      {
+        arrText.map((text, idx) => {
+          const numbering = isReversed ? `${arrText.length - idx}:` : `${idx + 1}:`
+          return (
+            <>
+              <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                <p style={{ marginRight: '8px', marginBottom: '0' }}>{numbering}</p>
+                <p className="p-0 m-0">{text}</p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                <p style={{ marginRight: '20px', marginBottom: '0' }}></p>
+                <p className="p-0 m-0">{subArrText[idx]}</p>
+              </div>
+            </>
+          )
+        })
+      }
     </div>
   </div>
 );

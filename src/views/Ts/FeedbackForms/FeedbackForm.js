@@ -18,6 +18,33 @@ import ScoringLegend from './ScoringLegend';
 import BaseInstructions from '../BaseInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 
+// const arrText = [
+//   'Hampir tidak pernah atau tidak menampilkan perilaku yang diharapkan sama sekali. (Menampilkan > 100% dari indikator perilaku)',
+//   'Tidak konsisten dalam menampilkan perilaku yang diharapkan atau hanya menampilkan sebagian dari standar perilaku yang diharapkan. (Menampilkan 76%-100% dari indikator perilaku)',
+//   'Menampilkan perilaku sesuai dengan standar yang diharapkan. (Menampilkan 51%-75% dari indikator perilaku)',
+//   'Menampilkan perilaku yang cenderung melebihi standar yang diharapkan. (Menampilkan  26%-50% dari indikator perilaku)',
+//   'Secara konsisten melebihi standar perilaku yang diharapkan. (Menampilkan 0%-25% dari indikator perilaku)',
+// ]
+
+const arrText = [
+  'Hampir tidak pernah atau tidak menampilkan perilaku yang diharapkan sama sekali.',
+  'Tidak konsisten dalam menampilkan perilaku yang diharapkan atau hanya menampilkan sebagian dari standar perilaku yang diharapkan.',
+  'Menampilkan perilaku sesuai dengan standar yang diharapkan.',
+  'Menampilkan perilaku yang cenderung melebihi standar yang diharapkan.',
+  'Secara konsisten melebihi standar perilaku yang diharapkan.',
+]
+
+const subArrText = [
+  <>{'(Menampilkan '}<b>{'> 100%'}</b>{' dari indikator perilaku)'}</>,
+  <>{'(Menampilkan '}<b>{'76%-100%'}</b>{' dari indikator perilaku)'}</>,
+  <>{'(Menampilkan '}<b>{'51%-75%'}</b>{' dari indikator perilaku)'}</>,
+  <>{'(Menampilkan '}<b>{'26%-50%'}</b>{' dari indikator perilaku)'}</>,
+  <>{'(Menampilkan '}<b>{'0%-25%'}</b>{' dari indikator perilaku)'}</>
+];
+
+
+const title = 'Skala Penilaian:'
+
 const calculateAssessmentPercentage = ({
   tsAssessments,
   tsEssayAssessments,
@@ -154,7 +181,12 @@ const FeedbackForm = () => {
           <h2 style={{ margin: 0 }}>{peerName}</h2>
         </div><hr></hr>
 
-        < ScoringLegend />
+        < ScoringLegend
+          title={title}
+          arrText={arrText}
+          subArrText={subArrText}
+          isReversed={true}
+        />
 
         <FloatingMessage
           title={`Progress`}

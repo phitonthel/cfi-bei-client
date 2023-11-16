@@ -143,10 +143,12 @@ const Table = ({
 
   return (
     <>
-      <DownloadButton
-        data={createCsv()}
-        filename={`reports_division_all_${new Date().getTime()}.csv`}
-      />
+      <div className="d-flex justify-content-end m-2">
+        <DownloadButton
+          data={createCsv()}
+          filename={`reports_division_all_${new Date().getTime()}.csv`}
+        />
+      </div>
       <table id="division-all-report" className="display nowrap" style={{ width: '200%' }}>
         {renderHeaders(data)}
         {renderRows(data)}

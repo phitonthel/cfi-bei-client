@@ -4,6 +4,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import { config } from '../../env';
+import { initAppRedux } from "redux/appSlice";
+import { initAuthRedux } from "redux/authSlice";
 
 export const login = async ({ nik, password }) => {
   const response = await axios.post(`${config.baseUrl}/user/login`, {
@@ -32,7 +34,11 @@ export const login = async ({ nik, password }) => {
   return response.data
 }
 
-export const logout = async () => {
+export const logout = async (dispatch) => {
+  // const dispatch = useDispatch();
+
+  // dispatch(initAppRedux());
+  // dispatch(initAuthRedux());
   localStorage.removeItem("access_token");
   localStorage.removeItem("fullname");
   localStorage.removeItem("level");
