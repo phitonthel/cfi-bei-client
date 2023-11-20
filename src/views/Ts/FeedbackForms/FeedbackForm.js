@@ -15,7 +15,7 @@ import { fetchById } from '../../../apis/assessment/fetchById';
 import { FloatingMessage } from '../../../components/FloatingMessage';
 import QuestionForm from '../../../components/QuestionForm/QuestionForm';
 import ScoringLegend from './ScoringLegend';
-import BaseInstructions from '../BaseInstructions';
+// import BaseInstructions from '../BaseInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 
 // const arrText = [

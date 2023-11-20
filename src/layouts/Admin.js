@@ -92,7 +92,8 @@ const hideRoutesByAccessLevel = ({
 }
 
 function Admin() {
-  console.log('Running in:', process.env.NODE_ENV)
+  // console.log('Running in:', process.env.NODE_ENV)
+  
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
@@ -103,7 +104,6 @@ function Admin() {
   const clonedBaseRoutes = _.cloneDeep(baseRoutes);
 
   const authUser = useSelector(state => state.auth.user);
-  console.log({ authUser })
 
   const location = useLocation();
   const mainPanel = React.useRef(null);
@@ -117,9 +117,6 @@ function Admin() {
     routes: routesByAppSettings,
     authUser,
   })
-  console.log({ clonedBaseRoutes })
-  console.log({ routesByAppSettings })
-  console.log({ filteredRoutes })
 
   const getRoutes = (routes, level) => {
     const flatRoutes = flattenRoutes(routes)
