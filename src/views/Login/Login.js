@@ -100,7 +100,11 @@ function Login() {
                           <Modal.Title>Forgot Password</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                          Please ask Superadmin for password.
+                        If you have never changed your password before, please use 
+                        this <a href="https://bit.ly/ReqPassword360" target="_blank">link</a> to request a new password.<br></br> 
+                        If you have already changed the password, please contact the
+                         Person In Charge at SDM (Amalia Maulida/ Carinna Andiva) for 
+                         assistance with the password.
                         </Modal.Body>
                         <Modal.Footer>
                           <Button variant="secondary" onClick={handleCloseModal}>
