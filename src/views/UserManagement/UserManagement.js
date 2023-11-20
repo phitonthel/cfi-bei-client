@@ -3,6 +3,11 @@ import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import Tippy from '@tippy.js/react';
+import 'tippy.js/dist/tippy.css';
+
 import DataTable from 'react-data-table-component';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
@@ -10,8 +15,15 @@ import { ExpandableInstructions } from '../../components/ExpandableInstructions'
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { downloadTxtFile } from '../Reports/utils';
 import AddUserModal from '../../components/Modal/AddUserModal'
+import FilteredDataTable from '../../components/FilteredDataTable';
 
 const columns = [
+  {
+    name: <h4>NIK</h4>,
+    selector: row => row.nik,
+    width: '150px',
+    sortable: true,
+  },
   {
     name: <h4>Name</h4>,
     selector: row => row.fullname,
@@ -30,7 +42,14 @@ const columns = [
   },
   {
     name: <h4>Password</h4>,
-    selector: row => row.password,
+    cell: row => (
+      <Tippy content={row.password} placement="bottom">
+        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+          <FontAwesomeIcon icon={faEye} />
+          <span style={{ marginLeft: '5px' }}>Hover to view</span>
+        </div>
+      </Tippy>
+    ),
     sortable: true,
   },
   {
@@ -58,7 +77,7 @@ function UserManagement() {
           onClick={() => {
           }}
         >
-         Delete
+          Delete
         </a>
       </div>
     )
@@ -79,11 +98,11 @@ function UserManagement() {
       setSubordinates(data.map(user => {
         return {
           id: user.id,
+          nik: user.nik,
           fullname: user.fullname,
           division: user.Division?.name,
           level: user.level,
           password: user.password,
-          isNominated: 'Un-nominated',
           actions: Actions(user)
         }
       }));
@@ -94,28 +113,21 @@ function UserManagement() {
     }
   }, [])
 
-  const instructions = [
-    'Anda diminta untuk memilih...',
-  ]
-
   if (isLoading) {
     return <LoadingSpinner />
   }
 
   return (
     <>
-      {/* <div className='m-4'>
-        <ExpandableInstructions instructions={instructions} />
-      </div> */}
 
       <div className="d-flex justify-content-end m-2">
         < AddUserModal buttonText={'ADD NEW USER'} />
       </div>
 
-      <DataTable
+      < FilteredDataTable
         columns={columns}
         data={subordinates}
-        highlightOnHover
+        filterKeys={['nik', 'fullname', 'division', 'level']}
       />
     </>
   );
