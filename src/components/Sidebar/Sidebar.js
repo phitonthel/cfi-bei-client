@@ -75,7 +75,7 @@ function Sidebar({ color, image, routes }) {
             </div>
           </a>
           <a className="simple-text" href="">
-            IDX CFI
+            IDX Competency Feedback
           </a>
         </div>
         <Nav>

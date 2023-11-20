@@ -121,10 +121,12 @@ function GroupReport() {
     <>
       <div className='m-4'>
       </div>
-      <DownloadButton
-        data={createCsv(reports)}
-        filename={`group_report_${new Date().getTime()}.csv`}
-      />
+      <div className="d-flex justify-content-end m-2">
+        <DownloadButton
+          data={createCsv(reports)}
+          filename={`group_report_${new Date().getTime()}.csv`}
+        />
+      </div>
       <FilteredDataTable
         columns={createColumns(reports)}
         data={reports}

@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 
 const BaseInstructions = ({
   instructions,
+  title,
 }) => {
   const authUser = useSelector(state => state.auth.user);
 
@@ -9,7 +10,7 @@ const BaseInstructions = ({
     <div>
       <div className="card mb-4 border-secondary">
         <div className="card-header text-white bg-secondary">
-          <h5 className="mb-2">Instructions:</h5>
+          <h5 className="mb-2">{title ? title : 'Instructions:'}</h5>
         </div>
         <div className="card-body bg-light">
         {

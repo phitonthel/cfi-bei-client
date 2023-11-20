@@ -8,10 +8,8 @@ function Announcement() {
         <div className="col-md-8">
           {/* <h3>Announcement:</h3> */}
           <p className="card p-2">
-            (08/08/2023)  : Carinna has completed Behavioural Assessment
-          </p>
-          <p className="card p-2">
-            (07/08/2023)  : Your Technical Assessment has been reviewed by Amalia
+            You have no announcements. Check back later.
+            {/* (08/08/2023)  : Carinna has completed Behavioural Assessment */}
           </p>
         </div>
       </div>
