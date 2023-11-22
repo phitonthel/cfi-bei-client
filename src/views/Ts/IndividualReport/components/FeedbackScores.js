@@ -28,30 +28,21 @@ const columns = [
   },
 ];
 
-// Define any custom styles for your DataTable here
 const customStyles = {
   headers: {
     style: {
-      fontSize: '6px', // Adjust the font size as needed
+      fontSize: '6px',
     },
   },
-  // Add any other custom styles you want for different parts of the table
 };
 
-const FeedbackScores = ({ reports, aggregatedAverage }) => {
-  const dataWithAverage = [
-    ...reports,
-    {
-      ...aggregatedAverage,
-      title: 'Average' 
-    }
-  ];
+const FeedbackScores = ({ reports }) => {
 
   return (
     <>
       <DataTable
         columns={columns}
-        data={dataWithAverage}
+        data={reports}
         highlightOnHover
         customStyles={customStyles}
       />
