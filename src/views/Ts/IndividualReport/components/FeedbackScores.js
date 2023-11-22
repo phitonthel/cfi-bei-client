@@ -1,3 +1,4 @@
+import React from 'react';
 import DataTable from 'react-data-table-component';
 
 const columns = [
@@ -30,24 +31,23 @@ const columns = [
 const customStyles = {
   headers: {
     style: {
-      fontSize: '6px', // Specify your desired font size here
+      fontSize: '6px',
     },
   },
-  // Add any other custom styles you want for different parts of the table
 };
 
-const FeedbackScores = ({reports}) => {
-  console.log(reports);
+const FeedbackScores = ({ reports }) => {
+
   return (
     <>
       <DataTable
-        // customStyles={customStyles}
         columns={columns}
         data={reports}
         highlightOnHover
+        customStyles={customStyles}
       />
     </>
-  )
+  );
 }
 
-export default FeedbackScores
+export default FeedbackScores;
