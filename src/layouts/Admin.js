@@ -177,11 +177,6 @@ function Admin() {
     )
   }
 
-  const wrapperStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-  };
-
   return (
     <>
       <div className="wrapper" style={{}}>
