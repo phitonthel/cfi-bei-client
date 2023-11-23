@@ -27,11 +27,11 @@ import { LoadingSpinner } from 'components/LoadingSpinner';
 // ]
 
 const arrText = [
-  'Hampir tidak pernah atau tidak menampilkan perilaku yang diharapkan sama sekali.',
-  'Tidak konsisten dalam menampilkan perilaku yang diharapkan atau hanya menampilkan sebagian dari standar perilaku yang diharapkan.',
-  'Menampilkan perilaku sesuai dengan standar yang diharapkan.',
-  'Menampilkan perilaku yang cenderung melebihi standar yang diharapkan.',
   'Secara konsisten melebihi standar perilaku yang diharapkan.',
+  'Menampilkan perilaku yang cenderung melebihi standar yang diharapkan.',
+  'Menampilkan perilaku sesuai dengan standar yang diharapkan.',
+  'Tidak konsisten dalam menampilkan perilaku yang diharapkan atau hanya menampilkan sebagian dari standar perilaku yang diharapkan.',
+  'Hampir tidak pernah atau tidak menampilkan perilaku yang diharapkan sama sekali.'
 ]
 
 const subArrText = [
