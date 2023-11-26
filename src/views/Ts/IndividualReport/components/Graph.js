@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Text } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Text, ReferenceLine } from 'recharts';
 
 const CustomAxisTick = (props) => {
   const { x, y, stroke, payload } = props;
@@ -10,6 +10,8 @@ const CustomAxisTick = (props) => {
     </Text>
   );
 };
+
+const yTicks = [0, 3, 5];
 
 const Graph = ({ reports }) => {
   // Define a custom payload for the Legend with the desired text
@@ -32,10 +34,12 @@ const Graph = ({ reports }) => {
               <CartesianGrid strokeDasharray="3 3" />
               {/* <XAxis dataKey="title" /> */}
               <XAxis dataKey="title" height={120} interval={0} tick={<CustomAxisTick />} />
-              <YAxis domain={[0, 5]} />
+              {/* <YAxis domain={[0, 6]} /> */}
+              <YAxis domain={[0, 'dataMax']} ticks={yTicks} allowDecimals={false} />
               <Tooltip />
               <Legend payload={legendPayload} />
               <Bar dataKey="totalAvgScore" fill="navy" name="Score" />
+              {/* <ReferenceLine y={5} strokeWidth={1} label="max" /> */}
             </BarChart>
           </div>
         </div>

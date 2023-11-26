@@ -10,14 +10,14 @@ const createText = (authUser) => {
 
   if (authUser.level === 'Kepala Unit') {
     return [
-      'Nominate max 3 peers (Kepala Unit/Expert).',
-      'Prioritise picking members from your unit first before others.'
+      'Nominate 2-3 peers (Kepala Unit/Expert).',
+      'Prioritise picking members from your division first before others.'
     ]
   }
 
   if (authUser.level === 'Kepala Kantor') {
     return [
-      'Nominate max 3 peers (Kepala Kantor).',
+      'Nominate 2-3 peers (Kepala Kantor).',
       'Prioritise picking members from your unit first before others.'
     ]
   }

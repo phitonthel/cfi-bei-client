@@ -6,25 +6,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchFeedbackForm } from '../../../apis/tsAssessment/fetchFeedbackForm';
 
-import { Instructions } from './Instructions'
 import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
 import { submitTsScore, submitTsEssay } from '../../../apis/assessment/submitScore';
 import { SubmitButton } from '../../../components/SubmitButton';
 import OpenFeedbackForm from './OpenFeedbackForm';
-import { fetchById } from '../../../apis/assessment/fetchById';
 import { FloatingMessage } from '../../../components/FloatingMessage';
 import QuestionForm from '../../../components/QuestionForm/QuestionForm';
 import ScoringLegend from './ScoringLegend';
-// import BaseInstructions from '../BaseInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
-
-// const arrText = [
-//   'Hampir tidak pernah atau tidak menampilkan perilaku yang diharapkan sama sekali. (Menampilkan > 100% dari indikator perilaku)',
-//   'Tidak konsisten dalam menampilkan perilaku yang diharapkan atau hanya menampilkan sebagian dari standar perilaku yang diharapkan. (Menampilkan 76%-100% dari indikator perilaku)',
-//   'Menampilkan perilaku sesuai dengan standar yang diharapkan. (Menampilkan 51%-75% dari indikator perilaku)',
-//   'Menampilkan perilaku yang cenderung melebihi standar yang diharapkan. (Menampilkan  26%-50% dari indikator perilaku)',
-//   'Secara konsisten melebihi standar perilaku yang diharapkan. (Menampilkan 0%-25% dari indikator perilaku)',
-// ]
 
 const arrText = [
   'Secara konsisten melebihi standar perilaku yang diharapkan.',

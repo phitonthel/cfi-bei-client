@@ -3,35 +3,35 @@ import DataTable from 'react-data-table-component';
 
 const columns = [
   {
-    name: <h4>Competency</h4>,
+    name: <b>Competency</b>,
     cell: row => row.title,
   },
   {
-    name: <h4>Supervisor</h4>,
+    name: <b>Supervisor</b>,
     cell: row => row.supAvgScore,
   },
   {
-    name: <h4>Peers</h4>,
+    name: <b>Peers</b>,
     cell: row => row.peerAvgScore,
   },
   {
-    name: <h4>Subordinates</h4>,
+    name: <b>Subordinates</b>,
     cell: row => row.subAvgScore,
   },
   {
-    name: <h4>Self</h4>,
+    name: <b>Self</b>,
     cell: row => row.selfAvgScore,
   },
   {
-    name: <h4>Total Average</h4>,
+    name: <b>Total Average</b>,
     cell: row => row.totalAvgScore,
   },
 ];
 
 const customStyles = {
-  headers: {
+  headCells: {
     style: {
-      fontSize: '6px',
+      fontSize: '16px',
     },
   },
 };
