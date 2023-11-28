@@ -22,10 +22,10 @@ const AddUserModal = ({ buttonText }) => {
         password: '',
         level: '',
         directorate: '',
-        divisionName: '',  // Updated from 'division' to 'divisionName'
-        unitName: '',      // Assuming you also have 'unitName'
+        divisionName: '',  
+        unitName: '',      
         location: '',
-        roleName: '',      // Updated from 'role' to 'roleName'
+        roleName: '',      
         positionName: '',
     });
 
@@ -74,11 +74,11 @@ const AddUserModal = ({ buttonText }) => {
                             const selectOptions = {
                                 directorate: directorateOptions,
                                 level: levelOptions,
-                                divisionName: divisionOptions, // Updated key
-                                unitName: unitOptions,         // Assuming you have this
+                                divisionName: divisionOptions, 
+                                unitName: unitOptions,         
                                 location: locationOptions,
-                                roleName: roleOptions,         // Updated key
-                                positionName: positionOptions, // Assuming you have this
+                                roleName: roleOptions,         
+                                positionName: positionOptions, 
                             }[key];
 
                             if (selectOptions) {
