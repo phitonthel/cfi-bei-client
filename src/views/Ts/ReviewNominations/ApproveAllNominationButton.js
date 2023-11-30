@@ -13,7 +13,7 @@ const ApproveAllNominationButton = ({
       event.preventDefault();
       const result = await Swal.fire({
         title: `This action can not be undone!`,
-        text: `This will approve all unnominated nominations. All unapproved nominations will not be affected. Continue?`,
+        text: `This will approve all nominated nominations. Continue?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

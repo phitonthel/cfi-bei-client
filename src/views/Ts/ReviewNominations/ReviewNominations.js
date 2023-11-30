@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
 import Swal from 'sweetalert2'
-import { faker } from '@faker-js/faker'
-import DataTable from 'react-data-table-component';
 
-import { unnominateUser } from '../../../apis/tsAssessment/unnominateUser';
 import { fetchReviewNomination } from '../../../apis/user/fetchReviewNomination';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
-import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import NominateUserModal from '../../../components/Modal/NominateUserModal';
-import ApproveUserModal from '../../../components/Modal/ApproveUserModal'
 import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
 import { handleApprovalUser, handleUnapprovalUser } from './utils';
 import ApproveAllNominationButton from './ApproveAllNominationButton';

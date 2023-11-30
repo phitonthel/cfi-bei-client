@@ -46,14 +46,8 @@ const hiddenRoutes = [
     icon: "nc-icon nc-paper-2",
     component: FeedbackForm,
     layout: "/admin",
-    access: [
-      ACCESS_LEVEL.STAF,
-      ACCESS_LEVEL.KEPALA_UNIT,
-      ACCESS_LEVEL.KEPALA_KANTOR,
-      ACCESS_LEVEL.KEPALA_DIVISI,
-      ACCESS_LEVEL.DIREKTUR,
-      ACCESS_LEVEL.SUPERADMIN,
-    ],
+    access: Object.values(ACCESS_LEVEL)
+    .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
     hidden: true,
   },
   {

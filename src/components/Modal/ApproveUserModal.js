@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import { fetchAllUsers } from '../../apis/user/fetchAllUsers';
 import SearchableDropdown from '../SearchableDropdown'
-import { nominateUser } from '../../apis/tsAssessment/nominateUser';
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { approveNomination } from '../../apis/tsAssessment/approveNomination';
 
