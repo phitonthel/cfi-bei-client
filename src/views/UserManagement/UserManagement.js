@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
@@ -10,11 +9,12 @@ import 'tippy.js/dist/tippy.css';
 
 import DataTable from 'react-data-table-component';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
+import { deleteUser } from '../../apis/user/user-management/deleteUser'
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { downloadTxtFile } from '../Reports/utils';
-import AddUserModal from '../../components/Modal/AddUserModal'
+import AddUserModal from '../../components/Modal/AddUserModal';
 import EditUserModal from '../../components/Modal/EditUserModal';
 import FilteredDataTable from '../../components/FilteredDataTable';
 
@@ -60,11 +60,10 @@ const columns = [
 ];
 
 function UserManagement() {
-  const history = useHistory()
+  const history = useHistory();
 
-  const [subordinates, setSubordinates] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-
+  const [subordinates, setSubordinates] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
 
@@ -80,7 +79,26 @@ function UserManagement() {
           Update
         </a>
         <a href='#' className="badge badge-danger mx-1"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                deleteUser(user.id).then(() => { // Pass the user ID here
+                  fireSwalSuccess('Deleted!', 'User has been deleted.');
+                  fetchAndUpdateSubordinates(); // Refresh the list
+                }).catch(error => {
+                  fireSwalError(error);
+                });
+              }
+            });
           }}
         >
           Delete
@@ -118,7 +136,7 @@ function UserManagement() {
       setIsLoading(false)
     }
   }, [])
-  
+
   const fetchAndUpdateSubordinates = async () => {
     try {
       const { data } = await fetchSubordinates();

@@ -7,12 +7,12 @@ export const updateUser = async (userId, userData) => {
   try {
     const response = await axios({
       method: 'PUT',
-      url: `${config.baseUrl}/user/edit`, 
+      url: `${config.baseUrl}/user/edit`,
       headers: {
         access_token: localStorage.getItem('access_token')
       },
       data: {
-        userId, // Include userId in the request body
+        userId, 
         nik: userData.nik,
         fullname: userData.fullname,
         level: userData.level,
