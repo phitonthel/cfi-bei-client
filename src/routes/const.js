@@ -2,6 +2,7 @@ export const ACCESS_LEVEL = {
   STAF: 'Staf',
   EXPERT: 'Expert',
   SPESIALIS: 'Spesialis',
+  ADVISOR: 'Advisor',
   TRAINER_KANTOR_PERWAKILAN: 'Trainer Kantor Perwakilan',
   STAF_ADMINISTRASI_KANTOR_PERWAKILAN: 'Staf Administrasi Kantor Perwakilan',
   KEPALA_INKUBAOTR: 'Kepala Inkubator',
