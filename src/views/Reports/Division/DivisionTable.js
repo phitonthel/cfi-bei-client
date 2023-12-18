@@ -145,7 +145,7 @@ const Table = ({
     <>
       <div className="d-flex justify-content-end m-2">
         <DownloadButton
-          data={createCsv()}
+          data={createCsv(data)}
           filename={`reports_division_all_${new Date().getTime()}.csv`}
         />
       </div>

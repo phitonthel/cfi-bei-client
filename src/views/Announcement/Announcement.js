@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 function Announcement() {
-
   return (
     <>
       <div className="row mb-4 p-4">

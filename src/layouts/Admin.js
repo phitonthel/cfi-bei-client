@@ -11,8 +11,8 @@ import Login from "views/Login";
 
 import { guestRoutes, baseRoutes } from '../routes/routes.js'
 
-import sidebarImage from "assets/img/sidebar-7.jpg";
-import { fetchAppSettings } from "apis/applicationSetting/fetchAppSettings";
+import sidebarImage from '../assets/img/sidebar-7.jpg';
+import { fetchAppSettings } from "../apis/applicationSetting/fetchAppSettings";
 
 import { APP_SETTINGS } from "../routes/routes.js";
 
@@ -97,9 +97,9 @@ function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
-  const [appSettings, setAppSettings] = useState([])
+  const [appSettings, setAppSettings] = React.useState([])
 
-  // need to clode to avoid mutating base routes
+  // need to clone to avoid mutating base routes
   // without cloning, it introduces bug when login to diff user
   const clonedBaseRoutes = _.cloneDeep(baseRoutes);
 
@@ -130,9 +130,11 @@ function Admin() {
         isLayoutValid
         // isAccessValid
       ) {
+        const path = prop.layout + prop.path
         return (
           <Route
-            path={prop.layout + prop.path}
+            exact
+            path={path}
             render={(props) => <prop.component {...props} />}
             key={key}
           />
