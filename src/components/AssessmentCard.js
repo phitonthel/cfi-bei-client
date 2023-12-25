@@ -28,7 +28,7 @@ export const AssessmentCard = (assessment, handlers, type) => {
             {/* <span className="badge badge-dark">{'Expected Score: ' + renderScore(assessment.expectedScore)}</span> */}
           </h4>
           <h4 className='p-0 m-0'>
-            <span className="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore, type)}</span>
+            {/* <span className="badge badge-dark">{'Score by Reviewer: ' + renderScore(assessment.reviewerScore, type)}</span> */}
           </h4>
         </div>
         <div className="card-header">

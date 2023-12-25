@@ -13,13 +13,7 @@ export const cfiRoutes = {
   name: "C. Fit Index",
   icon: "nc-icon nc-bullet-list-67",
   layout: "/admin",
-  access: [
-    ACCESS_LEVEL.STAF,
-    ACCESS_LEVEL.KEPALA_UNIT,
-    ACCESS_LEVEL.KEPALA_KANTOR,
-    ACCESS_LEVEL.KEPALA_DIVISI,
-    ACCESS_LEVEL.SUPERADMIN,
-  ],
+  access: Object.values(ACCESS_LEVEL),
   hidden: false,
   visibilityByAppSetting: APP_SETTINGS["CFI"],
   children: [
@@ -39,12 +33,8 @@ export const cfiRoutes = {
       icon: "nc-icon nc-paper-2",
       component: Behavioural,
       layout: "/admin",
-      access: [
-        ACCESS_LEVEL.STAF,
-        ACCESS_LEVEL.KEPALA_UNIT,
-        ACCESS_LEVEL.KEPALA_KANTOR,
-        ACCESS_LEVEL.KEPALA_DIVISI,
-      ],
+      access: Object.values(ACCESS_LEVEL)
+        .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
       hidden: false,
       visibilityByAppSetting: APP_SETTINGS["CFI - Behavioural"],
     },
@@ -54,12 +44,8 @@ export const cfiRoutes = {
       icon: "nc-icon nc-paper-2",
       component: Technical,
       layout: "/admin",
-      access: [
-        ACCESS_LEVEL.STAF,
-        ACCESS_LEVEL.KEPALA_UNIT,
-        ACCESS_LEVEL.KEPALA_KANTOR,
-        ACCESS_LEVEL.KEPALA_DIVISI,
-      ],
+      access: Object.values(ACCESS_LEVEL)
+        .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
       hidden: false,
       visibilityByAppSetting: APP_SETTINGS["CFI - Technical"],
     },
@@ -74,6 +60,16 @@ export const cfiRoutes = {
       hidden: false,
     },
     {
+      path: "/cfi/graph-report",
+      name: "Graph Reports",
+      icon: "nc-icon nc-notes",
+      component: GraphReport,
+      layout: "/admin",
+      access: Object.values(ACCESS_LEVEL),
+      hidden: false,
+      visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
+    },
+    {
       path: "/cfi/reports",
       name: "Reports",
       icon: "nc-icon nc-notes",
@@ -83,15 +79,7 @@ export const cfiRoutes = {
         ACCESS_LEVEL.SUPERADMIN
       ],
       hidden: false,
-    },
-    {
-      path: "/cfi/graph-report",
-      name: "Graph Reports",
-      icon: "nc-icon nc-notes",
-      component: GraphReport,
-      layout: "/admin",
-      access: Object.values(ACCESS_LEVEL),
-      hidden: false,
+      visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
     },
   ]
 }

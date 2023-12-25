@@ -28,7 +28,7 @@ import CfiIndividualReport from "../views/Cfi/IndividualReports/IndividualReport
 const hiddenRoutes = [
   {
     path: "/peer-assessment-table",
-    name: "Peer Assessment Table",
+    name: "CFI Assessment Review",
     icon: "nc-icon nc-paper-2",
     component: PeerAssessmentTable,
     layout: "/admin",

@@ -7,10 +7,11 @@ import DataTable from 'react-data-table-component';
 import { fetchSubordinates } from '../../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
-import { LoadingSpinner } from 'components/LoadingSpinner';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { downloadTxtFile } from '../../Reports/utils';
 import { DownloadButton } from '../../../components/DownloadButton';
 import { convertISODateToDDMMYYYY } from '../../../utils/date'
+import Instructions from '../../../components/Instructions';
 
 const columns = [
   {
@@ -27,7 +28,7 @@ const columns = [
   {
     name: <h4>Role</h4>,
     selector: row => row.role,
-    width: '450px',
+    width: '300px',
     sortable: true,
   },
   {
@@ -36,12 +37,12 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Assigned</h4>,
+    name: <h4>Self Review</h4>,
     selector: row => row.assigned,
     sortable: true,
   },
   {
-    name: <h4>Reviewed</h4>,
+    name: <h4>Supervisor Review</h4>,
     selector: row => row.reviewed,
     sortable: true,
   },
@@ -76,7 +77,7 @@ function Subordinates() {
   }
 
   const createCsv = () => {
-    let headers = `Name,Division,Role,Assigned,Reviewed,Total Assessment\n`
+    let headers = `Name,Division,Role,Self Review,Supervisor Review,Total Assessment\n`
 
     subordinates.forEach(subordinate => {
       headers += subordinate.fullname + ','
@@ -121,11 +122,6 @@ function Subordinates() {
     }
   }, [])
 
-  const instructions = [
-    'Anda diminta untuk melakukan penilaian terhadap kompetensi technical/behavioural bawahan langsung Anda (staf/kepala kantor/kepala unit).',
-    'Pilih menu assess untuk mulai menilai masing-masing anggota tim Anda.'
-  ]
-
   if (isLoading) {
     return <LoadingSpinner />
   }
@@ -133,9 +129,12 @@ function Subordinates() {
   return (
     <>
       <div className='m-4'>
-        <ExpandableInstructions instructions={instructions} />
+        <Instructions texts={[
+          'Click the "Assess" button to assess the subordinate.',
+        ]}
+        />
       </div>
-      
+
       <div className="d-flex justify-content-end m-2">
         <DownloadButton
           data={createCsv()}
