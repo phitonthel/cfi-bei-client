@@ -58,6 +58,7 @@ export const cfiRoutes = {
       access: Object.values(ACCESS_LEVEL)
         .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
       hidden: false,
+      visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
     },
     {
       path: "/cfi/graph-report",
@@ -79,7 +80,6 @@ export const cfiRoutes = {
         ACCESS_LEVEL.SUPERADMIN
       ],
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
     },
   ]
 }
