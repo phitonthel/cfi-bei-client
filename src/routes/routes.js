@@ -23,11 +23,12 @@ import { cfiRoutes } from "./cfiRoutes.js";
 
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
 import IndividualReport from "../views/Ts/IndividualReport/IndividualReport.js";
+import CfiIndividualReport from "../views/Cfi/IndividualReports/IndividualReport.js"
 
 const hiddenRoutes = [
   {
     path: "/peer-assessment-table",
-    name: "Peer Assessment Table",
+    name: "CFI Assessment Review",
     icon: "nc-icon nc-paper-2",
     component: PeerAssessmentTable,
     layout: "/admin",
@@ -65,6 +66,16 @@ const hiddenRoutes = [
     ],
     hidden: true,
     visibilityByAppSetting: APP_SETTINGS["360 - Individual Report"],
+  },
+  {
+    path: "/cfi/individual-report",
+    name: "Individual Report",
+    icon: "nc-icon nc-notes",
+    component: CfiIndividualReport,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL)
+      .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
+    hidden: true,
   },
 ]
 

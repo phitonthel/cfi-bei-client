@@ -16,14 +16,14 @@ import AdminLayout from "./layouts/Admin";
 
 ReactDOM.render(
   <BrowserRouter>
-    <GoogleOAuthProvider clientId="805926266475-sf1hpcf8kc2jbpdqcb934tribupg7nug.apps.googleusercontent.com">
-      <Provider store={store}>
-        <Switch>
-          <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-          <Redirect from="/" to="/admin/home" />
-        </Switch>
-      </Provider>
-    </GoogleOAuthProvider>
+    {/* <GoogleOAuthProvider clientId="805926266475-sf1hpcf8kc2jbpdqcb934tribupg7nug.apps.googleusercontent.com"> */}
+    <Provider store={store}>
+      <Switch>
+        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <Redirect from="/" to="/admin/home" />
+      </Switch>
+    </Provider>
+    {/* </GoogleOAuthProvider> */}
 
   </BrowserRouter>,
   document.getElementById("root")

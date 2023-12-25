@@ -138,10 +138,6 @@ function NominatePeers() {
     initListUser();
   }, []);
 
-  const instructions = [
-    'Anda diminta untuk memilih...',
-  ];
-
   if (isLoading) {
     return <LoadingSpinner />;
   }

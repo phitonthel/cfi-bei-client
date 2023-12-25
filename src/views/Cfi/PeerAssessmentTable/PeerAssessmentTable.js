@@ -12,6 +12,7 @@ import { Criteria } from '../../../components/Criteria'
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions'
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SubmitButton } from '../../../components/SubmitButton';
+import Instructions from 'components/Instructions';
 
 function PeerAssessment() {
   const [assessments, setAssessments] = useState([])
@@ -103,11 +104,11 @@ function PeerAssessment() {
       sortable: true,
     },
     {
-      name: <h4>Assigned Score</h4>,
+      name: <h4>Subordinates Score</h4>,
       cell: row => <div style={{ fontSize: 16 }}>{row.assignedScore}</div>,
     },
     {
-      name: <h4>Reviewer Score</h4>,
+      name: <h4>Supervisor Score</h4>,
       cell: row => renderDropdown(row, setAssessments)
     },
   ];
@@ -123,16 +124,24 @@ function PeerAssessment() {
     </>
   }
 
-  const instructions = [
-    'Expected score adalah level kompetensi yang dipersyaratkan BEI untuk posisi tim Anda.',
-    'Assigned score adalah penilaian mandiri/self assessment yang sudah dilakukan oleh karyawan terkait/ tim Anda.',
-    'Reviewer score adalah penilaian/score/level yang akan anda berikan terhadap tim Anda.',
-    'Anda perlu melakukan penilaian dengan cara memilih salah satu level yang Anda rasa sesuai dengan diri tim Anda / sudah tim Anda miliki saat ini.',
-    'Isilah dengan jujur. Nilai yang Anda berikan bisa sama/lebih rendah/lebih tinggi dari assigned score/ self assessment tim Anda terhadap dirinya.',
-    'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
-    ' Setelah Anda memberikan penilaian terhadap seluruh kompetensi, klik tombol save.',
-    'Anda dapat melihat kembali penilaian anda terhadap tim anda melalui menu subordinates, lalu click assess.'
+  // const instructions = [
+  //   'Expected score adalah level kompetensi yang dipersyaratkan BEI untuk posisi tim Anda.',
+  //   'Assigned score adalah penilaian mandiri/self assessment yang sudah dilakukan oleh karyawan terkait/ tim Anda.',
+  //   'Reviewer score adalah penilaian/score/level yang akan anda berikan terhadap tim Anda.',
+  //   'Anda perlu melakukan penilaian dengan cara memilih salah satu level yang Anda rasa sesuai dengan diri tim Anda / sudah tim Anda miliki saat ini.',
+  //   'Isilah dengan jujur. Nilai yang Anda berikan bisa sama/lebih rendah/lebih tinggi dari assigned score/ self assessment tim Anda terhadap dirinya.',
+  //   'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
+  //   ' Setelah Anda memberikan penilaian terhadap seluruh kompetensi, klik tombol save.',
+  //   'Anda dapat melihat kembali penilaian anda terhadap tim anda melalui menu subordinates, lalu click assess.'
+  // ]
+
+  const texts = [
+    `Click each column's arrow for criteria details.`,
+    `Default 'Supervisor Score' is the 'Subordinate Score'. No changes? Click 'submit' right away.`,
+    'Pro tip: Sort columns easily by clicking their headers.',
   ]
+  
+  
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -145,8 +154,9 @@ function PeerAssessment() {
           <h2 style={{ margin: 0 }}>{peerName}</h2>
         </div>
 
-        <div className='mb-4 mx-2'>
-          <ExpandableInstructions instructions={instructions} />
+        <div className='mb-4 mx-2 my-2'>
+          {/* <ExpandableInstructions instructions={instructions} /> */}
+          <Instructions texts={texts} />
         </div>
 
         <DataTable
