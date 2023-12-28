@@ -124,21 +124,14 @@ function PeerAssessment() {
     </>
   }
 
-  // const instructions = [
-  //   'Expected score adalah level kompetensi yang dipersyaratkan BEI untuk posisi tim Anda.',
-  //   'Assigned score adalah penilaian mandiri/self assessment yang sudah dilakukan oleh karyawan terkait/ tim Anda.',
-  //   'Reviewer score adalah penilaian/score/level yang akan anda berikan terhadap tim Anda.',
-  //   'Anda perlu melakukan penilaian dengan cara memilih salah satu level yang Anda rasa sesuai dengan diri tim Anda / sudah tim Anda miliki saat ini.',
-  //   'Isilah dengan jujur. Nilai yang Anda berikan bisa sama/lebih rendah/lebih tinggi dari assigned score/ self assessment tim Anda terhadap dirinya.',
-  //   'Anda harus memberikan penilaian terhadap seluruh kompetensi. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) atau yang Anda berikan.',
-  //   ' Setelah Anda memberikan penilaian terhadap seluruh kompetensi, klik tombol save.',
-  //   'Anda dapat melihat kembali penilaian anda terhadap tim anda melalui menu subordinates, lalu click assess.'
-  // ]
-
   const texts = [
-    `Click each column's arrow for criteria details.`,
-    `Default 'Supervisor Score' is the 'Subordinate Score'. No changes? Click 'submit' right away.`,
-    'Pro tip: Sort columns easily by clicking their headers.',
+    `Anda diminta untuk melakukan Penilaian terhadap kompetensi technical/behaviour bawahan langsung Anda (staf/kepala kantor/kepala unit) melalui supervisor score.`,
+    `Supervisor score: Untuk dapat menilai anggota tim Anda, Pilih salah satu level yang dirasa sesuai dengan kondisi Anggota Tim terkait saat ini.`,
+    `Default dari Supervisor score adalah penilaian yang diisi oleh subordinate. Anda dapat mengubahnya sesuai penilaian Anda. Jika tidak ada yang ingin diubah, click "submit".`,
+    `Expected Score: Level kompetensi yang dipersyaratkan untuk karyawan terkait sesuai profil kompetensinya.`,
+    `Subordinate Score: Penilaian / Self assessment yang dilakukan oleh Anggota Tim Anda. Jika N/A menandakan tim Anda belum mengisi.`,
+    `Klik tanda panah pada setiap arrow untuk melihat definisi kompetensi dan indikator perilakunya. `,
+    `Skor final adalah adalah skor terakhir yang sudah diberikan validasi penilaian oleh atasan (supervisor score)`,
   ]
   
   

@@ -26,8 +26,8 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Role</h4>,
-    selector: row => row.role,
+    name: <h4>Position</h4>,
+    selector: row => row.positionName,
     width: '300px',
     sortable: true,
   },
@@ -77,12 +77,12 @@ function Subordinates() {
   }
 
   const createCsv = () => {
-    let headers = `Name,Division,Role,Self Review,Supervisor Review,Total Assessment\n`
+    let headers = `Name,Division,Position,Self Review,Supervisor Review,Total Assessment\n`
 
     subordinates.forEach(subordinate => {
       headers += subordinate.fullname + ','
       headers += subordinate.division + ','
-      headers += subordinate.role + ','
+      headers += subordinate.positionName + ','
       headers += subordinate.assigned.split(' / ')[0] + ','
       headers += subordinate.reviewed.split(' / ')[0] + ','
       headers += subordinate.reviewed.split(' / ')[1].split(' ')[0] + '\n'
@@ -108,7 +108,7 @@ function Subordinates() {
           id: user.id,
           fullname: user.fullname,
           division: user.Division?.name,
-          role: user.positionName,
+          positionName: user.positionName,
           updatedAt: convertISODateToDDMMYYYY(user.updatedAt),
           assigned: user.assignedStatus,
           reviewed: user.reviewerStatus,
@@ -130,7 +130,8 @@ function Subordinates() {
     <>
       <div className='m-4'>
         <Instructions texts={[
-          'Click the "Assess" button to assess the subordinate.',
+          'Anda diminta untuk melakukan Penilaian terhadap kompetensi technical/behaviour bawahan langsung Anda (staf/kepala kantor/kepala unit)',
+          'Pilih tombol "assess" pada salah satu Anggota untuk mulai menilai masing-masing Anggota tim Anda'
         ]}
         />
       </div>

@@ -27,13 +27,10 @@ export const InstructionsTech = (props) => {
               Anda harus memberikan penilaian terhadap seluruh kompetensi.
             </li>
             <li className="m-1">
-              Anda dapat melihat progress pengerjaan self-assessment pada <b>tombol submit</b>.
-            </li>
-            <li className="m-1">
               Setelah Anda mengisi Penilaian terhadap seluruh kompetensi, klik tombol submit.
             </li>
             <li className="m-1">
-              Anda dapat melihat kembali penilaian self-assessment melalui <b>tab assessment</b>.
+            Anda dapat melihat kembali penilaian self-assessment melalui tab <b>Behavioural Asm. / Technical Asm</b>.
             </li>
             <li className="m-1">
               Setelah anda melakukan self-assessment, atasan  langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) akan mereview/ menilai / memverifikasi nilai Anda. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi).

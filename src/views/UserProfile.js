@@ -41,7 +41,7 @@ function User() {
       setUser({
         nik: data?.nik,
         division: data?.Division?.name,
-        role: data?.positionName,
+        positionName: data?.positionName,
         email: data?.email
       })
     } catch (error) {
@@ -104,11 +104,11 @@ function User() {
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
-                        <label>Role (disabled)</label>
+                        <label>Position (disabled)</label>
                         <Form.Control
-                          defaultValue={user.role}
+                          defaultValue={user.positionName}
                           disabled
-                          placeholder="Role"
+                          placeholder="Position"
                           type="text"
                         ></Form.Control>
                       </Form.Group>
