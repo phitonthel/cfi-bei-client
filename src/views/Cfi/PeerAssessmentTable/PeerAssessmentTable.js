@@ -104,7 +104,7 @@ function PeerAssessment() {
       sortable: true,
     },
     {
-      name: <h4>Subordinates Score</h4>,
+      name: <h4>Self Score</h4>,
       cell: row => <div style={{ fontSize: 16 }}>{row.assignedScore}</div>,
     },
     {
