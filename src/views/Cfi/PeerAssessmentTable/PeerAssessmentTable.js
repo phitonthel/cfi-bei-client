@@ -72,43 +72,43 @@ function PeerAssessment() {
   const columns = [
     {
       id: 'category',
-      name: <h4>Category</h4>,
+      name: <b style={{ fontSize: 16 }}>Category</b>,
       selector: row => row.category,
       cell: row =>
-        <div style={{ fontSize: 16 }}>
+        <div style={{ fontSize: 14 }}>
           {row.category}
         </div>,
       sortable: true,
       width: '300px'
     },
     {
-      name: <h4>Title</h4>,
+      name: <b style={{ fontSize: 16 }}>Title</b>,
       selector: row => row.title,
       cell: row =>
-        <div style={{ fontSize: 16 }}>
+        <div style={{ fontSize: 14 }}>
           {row.title}
         </div>,
       sortable: true,
       width: '400px'
     },
     {
-      name: <h4>Type</h4>,
+      name: <b style={{ fontSize: 16 }}>Type</b>,
       selector: row => row.type,
-      cell: row => <div style={{ fontSize: 16 }}>{row.type}</div>,
+      cell: row => <div style={{ fontSize: 14 }}>{row.type}</div>,
       sortable: true,
     },
     {
-      name: <h4>Expected Score</h4>,
+      name: <b style={{ fontSize: 16 }}>Expected Score</b>,
       selector: row => row.expectedScore,
-      cell: row => <div style={{ fontSize: 16 }}>{row.expectedScore}</div>,
+      cell: row => <div style={{ fontSize: 14 }}>{row.expectedScore}</div>,
       sortable: true,
     },
     {
-      name: <h4>Self Score</h4>,
-      cell: row => <div style={{ fontSize: 16 }}>{row.assignedScore}</div>,
+      name: <b style={{ fontSize: 16 }}>Self Score</b>,
+      cell: row => <div style={{ fontSize: 14 }}>{row.assignedScore}</div>,
     },
     {
-      name: <h4>Supervisor Score</h4>,
+      name: <b style={{ fontSize: 16 }}>Supervisor Score</b>,
       cell: row => renderDropdown(row, setAssessments)
     },
   ];
