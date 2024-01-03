@@ -101,7 +101,7 @@ function Login() {
                         </Modal.Header>
                         <Modal.Body>
                         If you have never changed your password before, please use 
-                        this <a href="https://bit.ly/ReqPassword360" target="_blank">link</a> to request a new password.<br></br> 
+                        this <a href="https://bit.ly/ReqPassword-CFI" target="_blank">link</a> to request a new password.<br></br> 
                         If you have already changed the password, please contact the
                          Person In Charge at SDM (Amalia Maulida/ Carinna Andiva) for 
                          assistance with the password.
