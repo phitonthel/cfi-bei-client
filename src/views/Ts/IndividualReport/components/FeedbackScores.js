@@ -37,7 +37,6 @@ const customStyles = {
 };
 
 const FeedbackScores = ({ reports }) => {
-
   return (
     <>
       <DataTable

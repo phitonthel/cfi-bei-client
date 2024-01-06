@@ -1,5 +1,6 @@
 const OpenFeedback = ({
-  essayReports
+  essayReports,
+  title
 }) => {
   const strengths = essayReports.filter(report => report.type === 'STRENGTH' && report.feedback.trim() !== '');
   const weaknesses = essayReports.filter(report => report.type === 'WEAKNESS' && report.feedback.trim() !== '');
@@ -9,7 +10,7 @@ const OpenFeedback = ({
     <>
       <div className="row mb-4 p-4">
         <div className="col-md-12">
-          <h2>Feedback from Members</h2>
+          <h2>{title}</h2>
           
           {strengths.length > 0 && (
             <>

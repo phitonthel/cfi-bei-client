@@ -8,7 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 
 import CardBreakdown from './components/CardBreakdown'
 import { fetchTsIndividualReport } from '../../../apis/report/fetchTsIndividualReport';
-import OpenFeedback from './components/OpenFeedback';
+import OpenFeedbacks from './components/OpenFeedbacks';
 import Graph from './components/Graph';
 import { fireSwalError } from 'apis/fireSwal';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -118,7 +118,7 @@ function IndividualReport() {
           </div>
 
           <hr></hr>
-          <OpenFeedback essayReports={essayReports}/>
+          <OpenFeedbacks essayReports={essayReports}/>
         </div>
       </div>
       {/* PDF Download Button */}
