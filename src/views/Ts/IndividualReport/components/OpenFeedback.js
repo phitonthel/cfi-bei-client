@@ -16,18 +16,7 @@ const OpenFeedback = ({
             <>
               <h4>Continue Doing:</h4>
               {strengths.map((report, index) => (
-                <p key={index} className="card p-2" style={{ backgroundColor: "#e6f9e6", whiteSpace: 'pre-wrap' }}>
-                  {report.feedback}
-                </p>
-              ))}
-            </>
-          )}
-
-          {weaknesses.length > 0 && (
-            <>
-              <h4>Start To Do:</h4>
-              {weaknesses.map((report, index) => (
-                <p key={index} className="card p-2" style={{ backgroundColor: "#ffdddc" }}>
+                <p key={index} className="card p-2" style={{ backgroundColor: "#e6f9e6", whiteSpace: 'pre-wrap' }}>  {/* GREEN */}
                   {report.feedback}
                 </p>
               ))}
@@ -36,9 +25,20 @@ const OpenFeedback = ({
 
           {start.length > 0 && (
             <>
-              <h4>Stop To Do:</h4>
+              <h4>Start To Do:</h4>
               {start.map((report, index) => (
-                <p key={index} className="card p-2" style={{ backgroundColor: "#ffffe0" }}>
+                <p key={index} className="card p-2" style={{ backgroundColor: "#ffffe0" }}> {/* YELLOW */}
+                  {report.feedback}
+                </p>
+              ))}
+            </>
+          )}
+
+          {weaknesses.length > 0 && (
+            <>
+              <h4>Stop To Do:</h4>
+              {weaknesses.map((report, index) => (
+                <p key={index} className="card p-2" style={{ backgroundColor: "#ffdddc" }}> {/* RED */}
                   {report.feedback}
                 </p>
               ))}

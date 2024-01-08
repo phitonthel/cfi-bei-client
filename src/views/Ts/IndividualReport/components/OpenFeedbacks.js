@@ -10,7 +10,7 @@ const OpenFeedbacks = ({
 
   return (
     <>
-      <OpenFeedback essayReports={supervisorFeedbacks} title={`Feedback from Supervisors`}/>
+      <OpenFeedback essayReports={supervisorFeedbacks} title={`Feedback from Supervisor`}/>
       <hr></hr>
 
       <OpenFeedback essayReports={peerFeedbacks} title={`Feedback from Peers`}/>
