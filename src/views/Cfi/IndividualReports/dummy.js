@@ -42,7 +42,7 @@ const data = [
     selfScore: 4,
     actualScore: 4,
     gap: 0,
-    status: "Exceeds Expectations"
+    status: "Meets Expectations"
   },
   {
     competency: "Innovation",
@@ -51,7 +51,7 @@ const data = [
     selfScore: 3,
     actualScore: 3.5,
     gap: 0.5,
-    status: "Exceeds Expectations"
+    status: "Meets Expectations"
   },
   {
     competency: "Strategic Planning",

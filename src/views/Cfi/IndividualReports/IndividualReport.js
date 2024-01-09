@@ -12,6 +12,7 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import Profile from './components/Profile';
 import FeedbackScores from './components/FeedbackScores';
 import { data } from './dummy'
+import { fetchCfiIndividualReport } from '../../../apis/report/fetchCfiIndividualReport';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -26,16 +27,25 @@ function IndividualReport() {
   const [reports, setReports] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
+
   const handleDownloadPDF = () => {
     if (reportRef.current) {
       const input = reportRef.current;
+
+      // Measure the content height
+      const contentHeight = input.scrollHeight + 200;
+      const contentWidth = input.scrollWidth + 200;
+
+      // Convert height to mm at 96 DPI (1 inch = 25.4 mm, 1 inch = 96 pixels)
+      const heightInMM = (contentHeight * 25.4) / 96;
+      const widthInMM = (contentWidth * 25.4) / 96;
 
       const opt = {
         margin: 10,
         filename: 'individual_report.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 3 },
-        jsPDF: { unit: 'mm', format: 'a3', orientation: 'portrait' },
+        jsPDF: { unit: 'mm', format: [widthInMM, heightInMM], orientation: 'portrait' },
       };
 
       html2pdf().from(input).set(opt).save();
@@ -45,11 +55,12 @@ function IndividualReport() {
   useEffect(async () => {
     try {
       const {
-        reviewee,
-      } = await fetchTsIndividualReport(appReports.individualReportUser.id);
+        user,
+        reports,
+      } = await fetchCfiIndividualReport(appReports.individualReportUser.id);
 
-      setReviewee(reviewee)
-      setReports(data)
+      setReviewee(user)
+      setReports(reports)
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -84,7 +95,7 @@ function IndividualReport() {
           </div>
 
           <hr></hr>
-          < FeedbackScores reports={data} />
+          < FeedbackScores reports={reports} />
         </div>
       </div>
       {/* PDF Download Button */}

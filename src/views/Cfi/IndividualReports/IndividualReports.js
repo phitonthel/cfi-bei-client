@@ -11,6 +11,7 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
 import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
 import FilteredDataTable from '../../../components/FilteredDataTable';
+import { fetchCfiIndividualReportTable } from '../../../apis/report/fetchCfiIndividualReportTable';
 
 const columns = [
   {
@@ -64,7 +65,7 @@ function IndividualReports() {
 
   useEffect(async () => {
     try {
-      let data = await fetchTsIndividualReportTable()
+      let data = await fetchCfiIndividualReportTable()
 
       const users = data.map((user, idx) => {
         return {

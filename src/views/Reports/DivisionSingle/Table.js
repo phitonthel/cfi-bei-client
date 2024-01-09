@@ -129,10 +129,12 @@ function Table({
 
   return (
     <>
-      <DownloadButton
-        data={createCsv()}
-        filename={`reports_${divisionType}_${new Date().getTime()}.csv`}
-      />
+      <div className="d-flex justify-content-end m-2">
+        <DownloadButton
+          data={createCsv()}
+          filename={`reports_${divisionType}_${new Date().getTime()}.csv`}
+        />
+      </div>
       <table id="division-single-report" className="display nowrap" style={{ width: '1000%' }}>
         {renderHeaders()}
         {renderBody()}

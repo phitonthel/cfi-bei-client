@@ -1,15 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
 
-import { createGraphProperty } from './Graph'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const data = [
-  { name: 'Budgeting', value: 5 },
-  { name: 'Financial Analysis', value: 19 },
-  { name: 'Performance Management', value: 5 },
-  { name: 'GCG Principles and Management', value: 5 },
-  { name: 'Internal Control & Compliance', value: 5 },
+  { name: 'Budgeting', percentage: 100 },
+  { name: 'Financial Analysis', percentage: 95 },
+  { name: 'Performance Management', percentage: 90 },
+  { name: 'GCG Principles and Management', percentage: 88 },
+  { name: 'Internal Control & Compliance', percentage: 87 },
 ];
+
+const renderCustomizedLabel = (props) => {
+  const { x, y, width, height, value } = props;
+  const offset = width / 2;
+  return (
+    <text x={x + offset} y={y + height / 2} fill="#fff" textAnchor="middle" dominantBaseline="middle">
+      {value + '%'}
+    </text>
+  );
+};
 
 const CustomBarChart = () => (
   <ResponsiveContainer width="100%" height={400}>
@@ -23,9 +32,10 @@ const CustomBarChart = () => (
       <XAxis type="number" />
       <YAxis type="category" dataKey="name" width={150} />
       <Tooltip />
-      <Bar dataKey="value" fill="#8884d8" barSize={20}>
+      <Bar dataKey="percentage" fill="#8884d8" barSize={50}>
+      <LabelList dataKey="percentage" content={renderCustomizedLabel} />
         {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#82ca9d' : '#8884d8'} />
+          <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#4F6F52' : '#739072'} />
         ))}
       </Bar>
     </BarChart>
@@ -44,11 +54,11 @@ const GraphReport = () => {
             <h3>Competency Fit Index Report</h3>
           </div>
 
+          <hr></hr>
+          < CustomBarChart />
+
         </div>
       </div>
-
-      <hr></hr>
-      < CustomBarChart />
       {/* PDF Download Button */}
       <div className="text-center mt-4">
       </div>

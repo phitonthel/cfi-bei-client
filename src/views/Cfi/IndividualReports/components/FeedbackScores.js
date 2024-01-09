@@ -4,31 +4,45 @@ import DataTable from 'react-data-table-component';
 const columns = [
   {
     name: <b>Competency</b>,
-    cell: row => row.competency,
+    selector: row => row.competency,
+    width: '300px',
+    sortable: true,
   },
   {
     name: <b>Type</b>,
-    cell: row => row.type,
+    selector: row => row.type,
+    width: '150px',
+    sortable: true,
   },
   {
     name: <b>Expected Score</b>,
-    cell: row => row.expectedScore,
+    selector: row => row.expectedScore,
+    width: '100px',
+    sortable: true,
   },
   {
     name: <b>Self Score</b>,
-    cell: row => row.selfScore,
+    selector: row => row.selfScore,
+    width: '100px',
+    sortable: true,
   },
   {
     name: <b>Actual Score</b>,
-    cell: row => row.actualScore,
+    selector: row => row.actualScore,
+    width: '100px',
+    sortable: true,
   },
   {
     name: <b>Gap</b>,
-    cell: row => row.gap,
+    selector: row => row.gap,
+    width: '100px',
+    sortable: true,
   },
   {
     name: <b>Status</b>,
-    cell: row => row.status,
+    selector: row => row.status,
+    width: '100px',
+    sortable: true,
   },
 ];
 
@@ -43,13 +57,16 @@ const customStyles = {
 const FeedbackScores = ({ reports }) => {
 
   return (
-    <>
-      <DataTable
-        columns={columns}
-        data={reports}
-        highlightOnHover
-      />
-    </>
+    <div className="row mb-4 p-4">
+      <div className="col-md-12">
+        <h2>Feedback Scores</h2>
+        <DataTable
+          columns={columns}
+          data={reports}
+          highlightOnHover
+        />
+      </div>
+    </div>
   );
 }
 
