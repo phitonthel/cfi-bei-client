@@ -1,6 +1,6 @@
 
 
-const Profile = ({
+const UserProfile = ({
   user
 }) => {
   return (
@@ -31,8 +31,8 @@ const Profile = ({
                 <td>{user.Division?.name}</td>
               </tr>
               <tr>
-                <td>Level</td>
-                <td>{user.level}</td>
+                <td>Position</td>
+                <td>{user.positionName}</td>
               </tr>
               <tr>
                 <td>Email</td>
@@ -46,4 +46,4 @@ const Profile = ({
   )
 }
 
-export default Profile
+export default UserProfile

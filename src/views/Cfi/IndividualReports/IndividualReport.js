@@ -7,12 +7,13 @@ import jsPDF from 'jspdf';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 import { fetchTsIndividualReport } from '../../../apis/report/fetchTsIndividualReport';
-import { fireSwalError } from 'apis/fireSwal';
+import { fireSwalError } from '../../../apis/fireSwal';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import Profile from './components/Profile';
+import Profile from '../../../components/Reports/UserProfile';
 import FeedbackScores from './components/FeedbackScores';
 import { data } from './dummy'
 import { fetchCfiIndividualReport } from '../../../apis/report/fetchCfiIndividualReport';
+import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -26,31 +27,6 @@ function IndividualReport() {
   })
   const [reports, setReports] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-
-
-  const handleDownloadPDF = () => {
-    if (reportRef.current) {
-      const input = reportRef.current;
-
-      // Measure the content height
-      const contentHeight = input.scrollHeight + 200;
-      const contentWidth = input.scrollWidth + 200;
-
-      // Convert height to mm at 96 DPI (1 inch = 25.4 mm, 1 inch = 96 pixels)
-      const heightInMM = (contentHeight * 25.4) / 96;
-      const widthInMM = (contentWidth * 25.4) / 96;
-
-      const opt = {
-        margin: 10,
-        filename: 'individual_report.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 3 },
-        jsPDF: { unit: 'mm', format: [widthInMM, heightInMM], orientation: 'portrait' },
-      };
-
-      html2pdf().from(input).set(opt).save();
-    }
-  };
 
   useEffect(async () => {
     try {
@@ -82,7 +58,7 @@ function IndividualReport() {
           </div>
 
           <hr></hr>
-          < Profile user={reviewee} />
+          <Profile user={reviewee} />
 
           <hr></hr>
           <div className="row mb-4 p-4">
@@ -100,7 +76,10 @@ function IndividualReport() {
       </div>
       {/* PDF Download Button */}
       <div className="text-center mt-4">
-        <button className="btn btn-secondary" onClick={handleDownloadPDF}>
+        <button
+          className="btn btn-secondary"
+          onClick={() => handleDownloadPDF(reportRef, `cfi_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`)}
+        >
           Download PDF
         </button>
       </div>

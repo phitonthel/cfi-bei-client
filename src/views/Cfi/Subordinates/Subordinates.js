@@ -82,7 +82,7 @@ function Subordinates() {
     subordinates.forEach(subordinate => {
       headers += subordinate.fullname + ','
       headers += subordinate.division + ','
-      headers += subordinate.positionName + ','
+      headers += `"${subordinate.positionName}"` + ','
       headers += subordinate.assigned.split(' / ')[0] + ','
       headers += subordinate.reviewed.split(' / ')[0] + ','
       headers += subordinate.reviewed.split(' / ')[1].split(' ')[0] + '\n'

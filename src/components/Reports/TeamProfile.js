@@ -1,27 +1,19 @@
 
 
-const Profile = ({
+const TeamProfile = ({
   user
 }) => {
   return (
     <>
       <div className="row mb-4 p-4">
         <div className="col-md-8">
-          <h2 >Profile</h2>
+          <h4 >Team Profile</h4>
           <table className="table table-bordered">
             <thead>
               <tr>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>NIK</td>
-                <td>{user.nik}</td>
-              </tr>
-              <tr>
-                <td>Name</td>
-                <td>{user.fullname}</td>
-              </tr>
               <tr>
                 <td>Directorate</td>
                 <td>{user.directorate}</td>
@@ -31,12 +23,8 @@ const Profile = ({
                 <td>{user.Division?.name}</td>
               </tr>
               <tr>
-                <td>Level</td>
-                <td>{user.level}</td>
-              </tr>
-              <tr>
-                <td>Email</td>
-                <td>{user.email}</td>
+                <td>Unit</td>
+                <td>{user.unit || '-'}</td>
               </tr>
             </tbody>
           </table>
@@ -46,4 +34,4 @@ const Profile = ({
   )
 }
 
-export default Profile
+export default TeamProfile

@@ -26,8 +26,8 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
+    name: <h4>Position</h4>,
+    selector: row => row.positionName,
     sortable: true,
   },
   {
@@ -72,7 +72,7 @@ function IndividualReports() {
           id: user.id,
           fullname: user.fullname,
           division: user.Division?.name,
-          level: user.level,
+          positionName: user.positionName,
           actions: Actions(user)
         }
       })

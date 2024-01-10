@@ -1,3 +1,4 @@
+import PageBreakPrint from "../../../../components/Reports/PageBreakPrint";
 import OpenFeedback from "./OpenFeedback";
 
 const OpenFeedbacks = ({
@@ -12,12 +13,14 @@ const OpenFeedbacks = ({
     <>
       <OpenFeedback essayReports={supervisorFeedbacks} title={`Feedback from Supervisor`}/>
       <hr></hr>
-
+      <PageBreakPrint />
       <OpenFeedback essayReports={peerFeedbacks} title={`Feedback from Peers`}/>
       <hr></hr>
+      <PageBreakPrint />
 
       <OpenFeedback essayReports={selfFeedbacks} title={`Feedback from Self`}/>
       <hr></hr>
+      <PageBreakPrint />
 
       <OpenFeedback essayReports={subordinateFeedbacks} title={`Feedback from Subordinates`}/>
     </>

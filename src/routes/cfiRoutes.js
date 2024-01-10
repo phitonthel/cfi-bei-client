@@ -7,6 +7,7 @@ import Reports from "../views/Reports/index.js";
 import IndividualReport from "../views/Cfi/IndividualReports/IndividualReport.js";
 import IndividualReports from "../views/Cfi/IndividualReports/IndividualReports.js";
 import GraphReport from "../views/Cfi/GraphReports/GraphReport.js";
+import GroupReport from "../views/Cfi/GroupReports/GroupReports.js";
 
 export const cfiRoutes = {
   path: "/cfi",
@@ -58,7 +59,7 @@ export const cfiRoutes = {
       access: Object.values(ACCESS_LEVEL)
         .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
+      // visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
     },
     {
       path: "/cfi/graph-report",
@@ -68,7 +69,17 @@ export const cfiRoutes = {
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
+      // visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
+    },
+    {
+      path: "/cfi/group-report",
+      name: "Group Reports",
+      icon: "nc-icon nc-notes",
+      component: GroupReport,
+      layout: "/admin",
+      access: Object.values(ACCESS_LEVEL),
+      hidden: false,
+      // visibilityByAppSetting: APP_SETTINGS["CFI - Group Reports"],
     },
     {
       path: "/cfi/reports",

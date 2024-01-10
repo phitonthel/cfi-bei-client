@@ -4,7 +4,7 @@ import DataTable from 'react-data-table-component';
 const columns = [
   {
     name: <b>Competency</b>,
-    selector: row => row.competency,
+    selector: row => row.title,
     width: '300px',
     sortable: true,
   },
