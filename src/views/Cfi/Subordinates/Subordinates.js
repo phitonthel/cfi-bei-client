@@ -8,8 +8,7 @@ import { fetchSubordinates } from '../../../apis/user/fetchSubordinates';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { downloadTxtFile } from '../../Reports/utils';
-import { DownloadButton } from '../../../components/DownloadButton';
+import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 import { convertISODateToDDMMYYYY } from '../../../utils/date'
 import Instructions from '../../../components/Instructions';
 
@@ -137,7 +136,7 @@ function Subordinates() {
       </div>
 
       <div className="d-flex justify-content-end m-2">
-        <DownloadButton
+        <DownloadCsvButton
           data={createCsv()}
           filename={`subordinates_${new Date().getTime()}.csv`}
         />

@@ -14,7 +14,7 @@ import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
 import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
 import { fetchTsGroupReport } from '../../../apis/report/fetchTsGroupReport';
 import { downloadTxtFile } from '../../../views/Reports/utils';
-import { DownloadButton } from '../../../components/DownloadButton';
+import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 import FilteredDataTable from '../../../components/FilteredDataTable';
 
 const getCompetenciesTitle = (reports) => {
@@ -122,7 +122,7 @@ function GroupReport() {
       <div className='m-4'>
       </div>
       <div className="d-flex justify-content-end m-2">
-        <DownloadButton
+        <DownloadCsvButton
           data={createCsv(reports)}
           filename={`group_report_${new Date().getTime()}.csv`}
         />

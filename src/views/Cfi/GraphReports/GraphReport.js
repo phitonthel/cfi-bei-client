@@ -6,6 +6,8 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { CustomBarChart } from './BarChart';
 import TeamProfile from '../../../components/Reports/TeamProfile';
 import UserProfile from 'components/Reports/UserProfile';
+import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
+import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 
 const GraphReport = () => {
   const reportRef = useRef(null);
@@ -64,11 +66,11 @@ const GraphReport = () => {
               </div>
             </div>
           </div>
+          <PageBreakPrint />
 
 
           <hr></hr>
           <div className="row mb-4 p-4">
-
             <div className="col-md-12">
               <h4>Top 5 Technical</h4>
               < CustomBarChart reports={topFiveTech} colors={['#4F6F52', '#739072']} />
@@ -82,6 +84,7 @@ const GraphReport = () => {
               < CustomBarChart reports={topFiveBeha} colors={['#4F6F52', '#739072']} />
             </div>
           </div>
+          <PageBreakPrint />
 
           <hr></hr>
           <div className="row mb-4 p-4">
@@ -102,8 +105,10 @@ const GraphReport = () => {
         </div>
       </div>
       {/* PDF Download Button */}
-      <div className="text-center mt-4">
-      </div>
+      <DownloadPdfButton
+        reportRef={reportRef}
+        filename={`cfi_graph_report_${user.Division?.name.toLowerCase().replace(' ', '_')}`}
+      />
     </>
   );
 };

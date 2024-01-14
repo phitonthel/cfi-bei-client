@@ -13,7 +13,7 @@ export const CustomBarChart = ({
           top: 20, right: 30, left: 20, bottom: 5,
         }}
       >
-        <XAxis type="number" />
+        <XAxis type="number" domain={[0, 100]}/>
         <YAxis type="category" dataKey="title" width={150} />
         <Tooltip />
         <Bar dataKey="percentage" fill="#8884d8" barSize={50}>

@@ -1,8 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { DownloadButton } from '../../../components/DownloadButton';
+import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 import { downloadTxtFile } from '../utils';
 
 // import { data } from './data'
+
+const usersHeaders = [
+  'NIK',
+  'Name',
+  'Unit',
+  'Position',
+  'Division',
+  'Directorate',
+]
+
+const summaryHeaders = [
+  'Number of Technical Meet',
+  'Number of Technical Need Development',
+  'Percentage of Technical Meet',
+  'Percentage of Technical Need Development',
+  'Number of Behavioural Meet',
+  'Number of Behavioural Need Development',
+  'Percentage of Behavioural Meet',
+  'Percentage of Behavioural Need Development',
+]
+
+const subCompetencyHeaders = [
+  'Expected Score',
+  'Actual Score',
+  'Gap',
+  'Status'
+]
 
 function Table({ reports, setIsLoading }) {
   if (!reports) return null
@@ -17,16 +44,18 @@ function Table({ reports, setIsLoading }) {
   } = reports
 
   const renderHeaders = () => {
-    const COL_PER_COMPETENCY = 4
+    const COL_PER_COMPETENCY = subCompetencyHeaders.length
     return (
       <thead>
         <tr>
-          <th rowSpan={4}>NIK</th>
-          <th rowSpan={4}>Name</th>
-          <th rowSpan={4}>Unit</th>
-          <th rowSpan={4}>Position</th>
-          <th rowSpan={4}>Division</th>
-          <th rowSpan={4}>Directorate</th>
+          {
+            usersHeaders.map(e => <th rowSpan={4}>{e}</th>)
+          }
+
+          {
+            summaryHeaders.map(e => <th rowSpan={4}>{e}</th>)
+          }
+
           <th colSpan={behaHeadersCsv.length * COL_PER_COMPETENCY}>Behavioural</th>
           <th colSpan={techHeadersCsv.length * COL_PER_COMPETENCY}>Technical</th>
         </tr>
@@ -39,10 +68,9 @@ function Table({ reports, setIsLoading }) {
         </tr>
         <tr>
           {competencies.map(e => <>
-            <th>Expected Score</th>
-            <th>Actual Score</th>
-            <th>Gap</th>
-            <th>Status</th>
+            {
+              subCompetencyHeaders.map(e => <th>{e}</th>)
+            }
           </>)}
         </tr>
       </thead>
@@ -68,7 +96,7 @@ function Table({ reports, setIsLoading }) {
 
   const createCsvHeaders = () => {
     const COL_PER_COMPETENCY = 4
-    const MAIN_COL = 6
+    const MAIN_COL = usersHeaders.length + summaryHeaders.length
 
     const firstHeaders = `,`.repeat(MAIN_COL)
       + `Behavioural` + `,`.repeat(behaHeadersCsv.length * COL_PER_COMPETENCY)
@@ -85,10 +113,13 @@ function Table({ reports, setIsLoading }) {
         return c.title + `,`.repeat(COL_PER_COMPETENCY)
       }).join('')
 
-    const fourthHeader = `NIK,Name,Unit,Position,Division,Directorate,`
-      + competencies.map(c => {
-        return `Expected Score,Actual Score,Gap,Status,`
-      }).join('')
+    const fourthHeader = [
+      ...usersHeaders,
+      ...summaryHeaders,
+      ...competencies.map(c => {
+        return subCompetencyHeaders
+      })
+    ].join(',') + ','
 
     return [
       firstHeaders,
@@ -124,7 +155,7 @@ function Table({ reports, setIsLoading }) {
   return (
     <>
       <div className="d-flex justify-content-end m-2">
-        <DownloadButton
+        <DownloadCsvButton
           data={createCsv()}
           filename={`reports_users_${new Date().getTime()}.csv`}
         />

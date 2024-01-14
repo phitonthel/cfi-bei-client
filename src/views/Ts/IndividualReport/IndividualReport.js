@@ -13,6 +13,7 @@ import Profile from '../../../components/Reports/UserProfile';
 import FeedbackScores from './components/FeedbackScores';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
+import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
 
 
 function IndividualReport() {
@@ -96,15 +97,10 @@ function IndividualReport() {
           <OpenFeedbacks essayReports={essayReports} />
         </div>
       </div>
-      {/* PDF Download Button */}
-      <div className="text-center mt-4">
-        <button
-          className="btn btn-secondary"
-          onClick={() => handleDownloadPDF(reportRef, `360_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`)}
-        >
-          Download PDF
-        </button>
-      </div>
+      <DownloadPdfButton
+        reportRef={reportRef}
+        filename={`360_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
+      />
     </>
   );
 }

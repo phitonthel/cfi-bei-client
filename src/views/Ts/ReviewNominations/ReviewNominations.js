@@ -11,7 +11,7 @@ import { handleApprovalUser, handleUnapprovalUser } from './utils';
 import ApproveAllNominationButton from './ApproveAllNominationButton';
 import { columns } from './vars';
 import FilteredDataTable from '../../../components/FilteredDataTable';
-import { DownloadButton } from '../../../components/DownloadButton';
+import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 
 const createCsv = (data) => {
   if (data.length === 0) return ''
@@ -135,7 +135,7 @@ function ReviewNomination() {
       </div>
 
       <div className="d-flex justify-content-end m-2">
-        <DownloadButton 
+        <DownloadCsvButton 
           data={createCsv(nominations)}
           filename={`reviewnominations_${new Date().getTime()}.csv`}
         />

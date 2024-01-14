@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import DataTable from 'react-data-table-component';
@@ -20,6 +21,8 @@ function PeerAssessment() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const authUser = useSelector(state => state.auth.user);
+
   const handlers = {
     submit: async () => {
       try {
@@ -27,7 +30,8 @@ function PeerAssessment() {
         const promises = assessments.map(e => {
           return submitScore({
             assessmentId: e.id,
-            reviewerScore: e.reviewerScore
+            reviewerScore: e.reviewerScore,
+            reviewerId: authUser.id,
           })
         })
 

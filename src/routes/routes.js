@@ -73,8 +73,7 @@ const hiddenRoutes = [
     icon: "nc-icon nc-notes",
     component: CfiIndividualReport,
     layout: "/admin",
-    access: Object.values(ACCESS_LEVEL)
-      .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
+    access: Object.values(ACCESS_LEVEL),
     hidden: true,
   },
 ]

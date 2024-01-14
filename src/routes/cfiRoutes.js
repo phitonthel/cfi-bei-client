@@ -56,10 +56,9 @@ export const cfiRoutes = {
       icon: "nc-icon nc-notes",
       component: IndividualReports,
       layout: "/admin",
-      access: Object.values(ACCESS_LEVEL)
-        .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
+      access: Object.values(ACCESS_LEVEL),
       hidden: false,
-      // visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
     },
     {
       path: "/cfi/graph-report",
@@ -69,7 +68,7 @@ export const cfiRoutes = {
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: false,
-      // visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
     },
     {
       path: "/cfi/group-report",
@@ -79,7 +78,7 @@ export const cfiRoutes = {
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: false,
-      // visibilityByAppSetting: APP_SETTINGS["CFI - Group Reports"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - Group Reports"],
     },
     {
       path: "/cfi/reports",

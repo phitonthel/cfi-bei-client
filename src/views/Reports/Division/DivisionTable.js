@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DownloadButton } from '../../../components/DownloadButton';
+import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 import { downloadTxtFile } from '../utils';
 
 import { dataFactory } from './dataFactory'
@@ -144,7 +144,7 @@ const Table = ({
   return (
     <>
       <div className="d-flex justify-content-end m-2">
-        <DownloadButton
+        <DownloadCsvButton
           data={createCsv(data)}
           filename={`reports_division_all_${new Date().getTime()}.csv`}
         />

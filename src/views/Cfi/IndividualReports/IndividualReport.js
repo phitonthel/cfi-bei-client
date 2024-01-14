@@ -11,9 +11,8 @@ import { fireSwalError } from '../../../apis/fireSwal';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import Profile from '../../../components/Reports/UserProfile';
 import FeedbackScores from './components/FeedbackScores';
-import { data } from './dummy'
 import { fetchCfiIndividualReport } from '../../../apis/report/fetchCfiIndividualReport';
-import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
+import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -75,14 +74,10 @@ function IndividualReport() {
         </div>
       </div>
       {/* PDF Download Button */}
-      <div className="text-center mt-4">
-        <button
-          className="btn btn-secondary"
-          onClick={() => handleDownloadPDF(reportRef, `cfi_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`)}
-        >
-          Download PDF
-        </button>
-      </div>
+      <DownloadPdfButton
+        reportRef={reportRef}
+        filename={`cfi_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
+      />
     </>
   );
 }
