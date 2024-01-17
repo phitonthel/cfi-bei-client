@@ -1,7 +1,8 @@
 
 
 const TeamProfile = ({
-  user
+  user,
+  nUsers,
 }) => {
   return (
     <>
@@ -16,7 +17,7 @@ const TeamProfile = ({
             <tbody>
               <tr>
                 <td>Directorate</td>
-                <td>{user.directorate}</td>
+                <td>{user.directorate}</td>i
               </tr>
               <tr>
                 <td>Division</td>
@@ -25,6 +26,10 @@ const TeamProfile = ({
               <tr>
                 <td>Unit</td>
                 <td>{user.unit || '-'}</td>
+              </tr>
+              <tr>
+                <td>Number of People</td>
+                <td>{nUsers || '-'}</td>
               </tr>
             </tbody>
           </table>

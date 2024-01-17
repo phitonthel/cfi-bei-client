@@ -41,7 +41,7 @@ const columns = [
   {
     name: <b>Status</b>,
     selector: row => row.status,
-    width: '100px',
+    width: '200px',
     sortable: true,
   },
 ];
@@ -57,7 +57,7 @@ const customStyles = {
 const FeedbackScores = ({ reports }) => {
 
   return (
-    <div className="row mb-4 p-4">
+    <div className="row mb-4 p-1">
       <div className="col-md-12">
         <h2>Feedback Scores</h2>
         <DataTable

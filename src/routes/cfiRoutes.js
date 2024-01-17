@@ -66,7 +66,13 @@ export const cfiRoutes = {
       icon: "nc-icon nc-notes",
       component: GraphReport,
       layout: "/admin",
-      access: Object.values(ACCESS_LEVEL),
+      // access: Object.values(ACCESS_LEVEL),
+      access: [
+        ACCESS_LEVEL.SUPERADMIN,
+        ACCESS_LEVEL.KEPALA_DIVISI,
+        ACCESS_LEVEL.KEPALA_UNIT,
+        ACCESS_LEVEL.KEPALA_KANTOR
+      ],
       hidden: false,
       visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
     },

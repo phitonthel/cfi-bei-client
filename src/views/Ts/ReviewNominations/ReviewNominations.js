@@ -94,18 +94,18 @@ function ReviewNomination() {
       setNominations(data.map(nomination => {
         return {
           id: nomination.id,
-          revieweeFullname: nomination.Reviewee.fullname,
-          revieweeDivision: nomination.Reviewee.Division.name,
-          revieweeLevel: nomination.Reviewee.level,
-          reviewerFullname: nomination.Reviewer.fullname,
-          reviewerDivision: nomination.Reviewer.Division.name,
-          reviewerLevel: nomination.Reviewer.level,
+          revieweeFullname: nomination.Reviewee?.fullname,
+          revieweeDivision: nomination.Reviewee?.Division.name,
+          revieweeLevel: nomination.Reviewee?.level,
+          reviewerFullname: nomination.Reviewer?.fullname,
+          reviewerDivision: nomination.Reviewer?.Division.name,
+          reviewerLevel: nomination.Reviewer?.level,
           feedbackCompleted: nomination.feedbackCompleted,
           isNominatedByReviewee: nomination.isNominatedByReviewee,
           isApproved: nomination.isApproved,
           actions: Actions({
-            reviewee: nomination.Reviewee,
-            reviewer: nomination.Reviewer,
+            reviewee: nomination?.Reviewee,
+            reviewer: nomination?.Reviewer,
           })
         }
       }));

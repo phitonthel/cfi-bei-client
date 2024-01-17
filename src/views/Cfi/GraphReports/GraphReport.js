@@ -14,6 +14,7 @@ const GraphReport = () => {
 
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState([])
+  const [users, setUsers] = useState([])
   const [topFiveTech, setTopFiveTech] = useState([])
   const [bottomFiveTech, setBottomFiveTech] = useState([])
   const [topFiveBeha, setTopFiveBeha] = useState([])
@@ -23,6 +24,7 @@ const GraphReport = () => {
     try {
       const {
         user,
+        users,
         topFiveTech,
         bottomFiveTech,
         topFiveBeha,
@@ -30,6 +32,7 @@ const GraphReport = () => {
       } = await fetchCfiSummaryReport()
 
       setUser(user)
+      setUsers(users)
       setTopFiveTech(topFiveTech)
       setBottomFiveTech(bottomFiveTech)
       setTopFiveBeha(topFiveBeha)
@@ -54,15 +57,14 @@ const GraphReport = () => {
           </div>
 
           <hr></hr>
-          <TeamProfile user={user} />
-          {/* <UserProfile user={user} /> */}
+          <TeamProfile user={user} nUsers={users.length} />
 
           <hr></hr>
           <div className="row mb-4 p-4">
             <div className="col-md-12">
               <h4>What is this report?</h4>
               <div>
-                This report outlines the top 5 strengths and areas to develop in your team, based on skills and behaviors that at least 75% of team members have in common. Less common skills aren't shown to keep the focus on what most of the team is working with.
+                This report outlines the top 5 strengths and areas to develop in your team, based on competencies that are at least 75% of team members have in common. Less common competencies aren't shown to keep the focus on what most of the team is working with.
               </div>
             </div>
           </div>
