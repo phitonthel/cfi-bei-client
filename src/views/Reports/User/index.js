@@ -7,19 +7,28 @@ import { useFetch } from '../../../apis/useFetch'
 import Table from './Table'
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
-const UserReport = () => {
-  const { data: reports } = useFetch(`/report/user`)
-  const [isLoading, setIsLoading] = useState(true)
+const UserReport = ({
+  type,
+  name
+}) => {
+  // const query = `?type=${type}&name=${name}`
 
-  if (!reports) return (
-    <LoadingSpinner text={'This may take few minutes'} />
-  )
+  const { 
+    isLoading,
+    data: reports,
+   } = useFetch(`/report/user`)
+
+  if (isLoading) {
+    return (
+      <LoadingSpinner text={'This may take few minutes'} />
+    )
+  }
+
   return (
     <>
       <div>
         <Table
           reports={reports}
-          setIsLoading={setIsLoading}
         />
       </div>
     </>

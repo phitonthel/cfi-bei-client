@@ -24,6 +24,7 @@ import { cfiRoutes } from "./cfiRoutes.js";
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
 import IndividualReport from "../views/Ts/IndividualReport/IndividualReport.js";
 import CfiIndividualReport from "../views/Cfi/IndividualReports/IndividualReport.js"
+import GraphReport from "../views/Cfi/GraphReports/GraphReport.js";
 
 const hiddenRoutes = [
   {
@@ -75,6 +76,21 @@ const hiddenRoutes = [
     layout: "/admin",
     access: Object.values(ACCESS_LEVEL),
     hidden: true,
+  },
+  {
+    path: "/cfi/graph-report",
+    name: "Graph Reports",
+    icon: "nc-icon nc-notes",
+    component: GraphReport,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN,
+      ACCESS_LEVEL.KEPALA_DIVISI,
+      ACCESS_LEVEL.KEPALA_UNIT,
+      ACCESS_LEVEL.KEPALA_KANTOR,
+    ],
+    hidden: true,
+    visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
   },
 ]
 

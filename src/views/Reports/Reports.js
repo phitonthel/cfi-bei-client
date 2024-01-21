@@ -7,56 +7,125 @@ import DivisionSingleReport from './DivisionSingle/index'
 import UserReport from './User/index'
 
 import { useFetch } from '../../apis/useFetch'
+import { fetchCfiOptionsReport } from '../../apis/report/fetchCfiOptionsReport';
+import { LoadingSpinner } from 'components/LoadingSpinner';
+
+const REPORT_TYPE = {
+  DIVISION_SUMMARY: "Division Summary",
+  DIVISION_SINGLE: "Division Single",
+  INDIVIDUAL: "Individual",
+  UNIT: "Unit",
+  LEVEL: "Level",
+  DIRECTORATE: "Directorate",
+  AREA: "Area",
+}
 
 function SelfAssessment() {
-  const [reportType, setReportType] = useState(0)
-  const [divisionType, setDivisionType] = useState('')
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [renderOption, setRenderOption] = useState({
-    reportType: 0,
-    divisionType: '',
+  const [options, setOptions] = useState({
+    directorates: [],
+    divisions: [],
+    units: [],
+    area: [],
   })
 
-  const { data: divisions } = useFetch('/division')
+  const [input, setInput] = useState({
+    type: '',
+    directorateName: '',
+    divisionName: '',
+    unitName: '',
+    areaName: '',
+  })
 
-  useEffect(() => {
-    setDivisionType(divisions?.[0])
-  }, [divisions])
+  const [state, setState] = useState({
+    type: '',
+    directorateName: '',
+    divisionName: '',
+    unitName: '',
+    areaName: '',
+  })
+
+  const determineName = () => {
+    if (state.type === REPORT_TYPE.DIRECTORATE) {
+      return state.directorateName
+    }
+    if (state.type === REPORT_TYPE.DIVISION_SINGLE) {
+      return state.divisionName
+    }
+    if (state.type === REPORT_TYPE.UNIT) {
+      return state.unitName
+    }
+    return ""
+  }
+
+  const initOptions = async () => {
+    try {
+      const data = await fetchCfiOptionsReport();
+      setInput({
+        ...input,
+        directorateName: data.directorates[0],
+        divisionName: data.divisions[0],
+        unitName: data.units[0],
+      })
+      setOptions(data)
+    } catch (error) {
+      fireSwalError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(async () => {
+    await initOptions()
+  }, [])
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
       <div className='row justify-content-center mb-4'>
         <select
           className="form-select form-select-sm col-2 mx-2"
-          value={reportType}
+          value={input.type}
           onChange={(e) => {
-            setReportType(+e.target.value)
+            setInput({
+              ...input,
+              type: e.target.value,
+            })
           }}
         >
           <option className="btn" >Select Report</option>
-          <option className="btn" value="1">Rekap Seluruh Divisi</option>
-          <option className="btn" value="2">Rekap Per Divisi</option>
-          <option className="btn" value="3">Rekap Per Individu</option>
+          <option className="btn" value={REPORT_TYPE.DIVISION_SUMMARY}>Rekap Seluruh Divisi</option>
+          <option className="btn" value={REPORT_TYPE.DIVISION_SINGLE}>Rekap Per Divisi</option>
+          <option className="btn" value={REPORT_TYPE.INDIVIDUAL}>Rekap Per Individu</option>
         </select>
-        {reportType === 2 &&
+
+        {input.type === REPORT_TYPE.DIVISION_SINGLE &&
           <select
             className="form-select form-select-sm col-2 mx-2"
-            value={divisionType}
+            value={input.divisionName}
             onChange={(e) => {
-              setDivisionType(e.target.value)
+              setInput({
+                ...input,
+                divisionName: e.target.value,
+              })
             }}
           >
             <option className="btn" disabled>Select Division</option>
-            {divisions.map(division => <option className="btn" key={division} value={division}>{division}</option>)}
+            {options.divisions.map(division => <option className="btn" key={division} value={division}>{division}</option>)}
           </select>
         }
+
         <button
           type="button"
           className="btn btn-dark btn-fill btn-sm mx-2"
           onClick={() => {
-            setRenderOption({
-              reportType,
-              divisionType,
+            setState({
+              ...state,
+              ...input,
             })
           }}
         >
@@ -64,9 +133,9 @@ function SelfAssessment() {
         </button>
       </div>
 
-      {renderOption.reportType === 1 && <DivisionReport />}
-      {renderOption.reportType === 2 && <DivisionSingleReport divisionType={renderOption.divisionType} />}
-      {renderOption.reportType === 3 && <UserReport />}
+      {state.type === REPORT_TYPE.DIVISION_SUMMARY && <DivisionReport />}
+      {state.type === REPORT_TYPE.DIVISION_SINGLE && <DivisionSingleReport divisionType={state.divisionName} />}
+      {state.type === REPORT_TYPE.INDIVIDUAL && <UserReport type={state.type} name={determineName()} />}
     </>
   );
 };

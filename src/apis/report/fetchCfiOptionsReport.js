@@ -4,12 +4,8 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
-// top strengths and weaknesses
-export const fetchCfiSummaryReport = async ({
-  query,
-}) => {
-  const queryStr = query ? `?${query}` : ''
-  const { data } = await axios.get(`${config.baseUrl}/cfi/report/summary-strengh-weakness${queryStr}`, {
+export const fetchCfiOptionsReport = async () => {
+  const { data } = await axios.get(`${config.baseUrl}/options`, {
     headers: {
       access_token: localStorage.getItem('access_token')
     }

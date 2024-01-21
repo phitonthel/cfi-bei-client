@@ -5,12 +5,12 @@ import { config } from '../env';
 
 export const useFetch = (path) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(async () => {
     try {
-      setLoading(true)
+      setIsLoading(true)
       setData(null);
       setError(null);
 
@@ -24,9 +24,10 @@ export const useFetch = (path) => {
       })
 
       setData(data)
-      setLoading(false)
     } catch (error) {
       setError(error.response?.data?.message || error.message)
+    } finally {
+      setIsLoading(false)
     }
 
     return () => {
@@ -37,8 +38,8 @@ export const useFetch = (path) => {
   return { 
     data,
     setData,
-    loading,
-    setLoading, 
+    isLoading,
+    setIsLoading, 
     error,
     setError,
   }

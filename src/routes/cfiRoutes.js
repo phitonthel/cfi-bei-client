@@ -52,7 +52,7 @@ export const cfiRoutes = {
     },
     {
       path: "/cfi/individual-reports",
-      name: "Individual Reports",
+      name: "Team Reports",
       icon: "nc-icon nc-notes",
       component: IndividualReports,
       layout: "/admin",
@@ -61,24 +61,8 @@ export const cfiRoutes = {
       visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
     },
     {
-      path: "/cfi/graph-report",
-      name: "Graph Reports",
-      icon: "nc-icon nc-notes",
-      component: GraphReport,
-      layout: "/admin",
-      // access: Object.values(ACCESS_LEVEL),
-      access: [
-        ACCESS_LEVEL.SUPERADMIN,
-        ACCESS_LEVEL.KEPALA_DIVISI,
-        ACCESS_LEVEL.KEPALA_UNIT,
-        ACCESS_LEVEL.KEPALA_KANTOR
-      ],
-      hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
-    },
-    {
       path: "/cfi/group-report",
-      name: "Group Reports",
+      name: "CSV Reports",
       icon: "nc-icon nc-notes",
       component: GroupReport,
       layout: "/admin",

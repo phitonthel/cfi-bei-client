@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartBar, faUserTie, faChartPie } from '@fortawesome/free-solid-svg-icons';
 
 import DataTable from 'react-data-table-component';
 import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
@@ -12,6 +14,7 @@ import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
 import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
 import FilteredDataTable from '../../../components/FilteredDataTable';
 import { fetchCfiIndividualReportTable } from '../../../apis/report/fetchCfiIndividualReportTable';
+import { ACCESS_LEVEL } from '../../../routes/const';
 
 const columns = [
   {
@@ -23,6 +26,11 @@ const columns = [
   {
     name: <h4>Division</h4>,
     selector: row => row.division,
+    sortable: true,
+  },
+  {
+    name: <h4>Unit</h4>,
+    selector: row => row.unit,
     sortable: true,
   },
   {
@@ -44,12 +52,22 @@ function IndividualReports() {
   const [isLoading, setIsLoading] = useState(true)
 
   const Actions = (user) => {
+    const { level } = user
+    const {
+      KEPALA_DIVISI,
+      KEPALA_UNIT,
+      KEPALA_KANTOR
+    } = ACCESS_LEVEL
+
     return (
       <div>
-        <a href='#' className="badge badge-primary mx-1"
+        <a 
+          href='#' 
+          className="badge badge-primary mx-1"
+          style={{ fontSize: '11px'}}
           onClick={() => {
             dispatch(setAppReport({
-              individualReportUser: {
+              selectedUserReport: {
                 id: user.id,
                 fullname: user.fullname,
               }
@@ -57,8 +75,32 @@ function IndividualReports() {
             history.push('/admin/cfi/individual-report')
           }}
         >
-          See Report
+          {/* <FontAwesomeIcon icon={faUserTie} />  */}
+          Individual Report
         </a>
+
+
+
+        {
+          [KEPALA_DIVISI, KEPALA_UNIT, KEPALA_KANTOR].includes(level) &&
+          <a 
+            href='#' 
+            className="badge badge-secondary mx-1"
+            style={{ fontSize: '11px'}}
+            onClick={() => {
+              dispatch(setAppReport({
+                selectedUserReport: {
+                  id: user.id,
+                  fullname: user.fullname,
+                }
+              }));
+              history.push('/admin/cfi/graph-report')
+            }}
+          >
+            {/* <FontAwesomeIcon icon={faChartPie} />  */}
+            Graph Report
+          </a>
+        }
       </div>
     )
   }
@@ -72,6 +114,7 @@ function IndividualReports() {
           id: user.id,
           fullname: user.fullname,
           division: user.Division?.name,
+          unit: user.unit,
           positionName: user.positionName,
           actions: Actions(user)
         }
@@ -97,7 +140,7 @@ function IndividualReports() {
       <FilteredDataTable
         columns={columns}
         data={users}
-        filterKeys={['fullname', 'division', 'level']}
+        filterKeys={['fullname', 'division', 'unit', 'positionName']}
       />
     </>
   );

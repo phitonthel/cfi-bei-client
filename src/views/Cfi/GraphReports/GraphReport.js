@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 import { fetchCfiSummaryReport } from '../../../apis/report/fetchCfiSummaryReport';
 import { fireSwalError } from '../../../apis/fireSwal';
@@ -10,6 +11,8 @@ import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 
 const GraphReport = () => {
+  const appReports = useSelector(state => state.app.reports);
+
   const reportRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(true)
@@ -29,7 +32,7 @@ const GraphReport = () => {
         bottomFiveTech,
         topFiveBeha,
         bottomFiveBeha,
-      } = await fetchCfiSummaryReport()
+      } = await fetchCfiSummaryReport({query: `userId=${appReports.selectedUserReport.id}`})
 
       setUser(user)
       setUsers(users)
@@ -64,7 +67,8 @@ const GraphReport = () => {
             <div className="col-md-12">
               <h4>What is this report?</h4>
               <div>
-                This report outlines the top 5 strengths and areas to develop in your team, based on competencies that are at least 75% of team members have in common. Less common competencies aren't shown to keep the focus on what most of the team is working with.
+                This report outlines the top 5 strengths and areas to develop in your team, based on competencies that are at least 75% of team members have in common. 
+                Less common competencies aren't shown to keep the focus on what is most needed in your team.
               </div>
             </div>
           </div>

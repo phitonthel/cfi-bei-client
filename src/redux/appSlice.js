@@ -9,7 +9,7 @@ const initialState = {
       id: '',
       fullname: '',
     },
-    individualReportUser: {
+    selectedUserReport: {
       id: '',
       fullname: '',
     },

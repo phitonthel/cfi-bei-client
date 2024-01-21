@@ -2,7 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 import { downloadTxtFile } from '../utils';
 
-// import { data } from './data'
+const userHeaders = [
+  'NIK',
+  'Job Title',
+  'Nama',
+  'Divisi',
+  'Unit',
+]
+
+const summaryHeaders = [
+  'Total Meet Technical',
+  'Total Not Meet Technical',
+  'Total Meet Behavioural',
+  'Total Not Meet Behavioural',
+  'Percentage Meet Technical',
+  'Percentage Not Meet Technical',
+  'Percentage Meet Behavioural',
+  'Percentage Not Meet Behavioural',
+]
+
+const subHeaders = [
+  'Level Kompetensi Yang Diharapkan',
+  'Level Kompetensi Yang Ditunjukkan (Dinilai oleh Kepala Divisi)',
+  'Gap',
+  'Status',
+]
 
 function Table({
   reports,
@@ -14,6 +38,7 @@ function Table({
   const {
     uniqueAssociatedCompetencies,
     data,
+    footers,
   } = reports
 
   const renderHeaders = () => {
@@ -21,22 +46,18 @@ function Table({
     return (
       <thead>
         <tr>
-          <th rowSpan={2}>NIK</th>
-          <th rowSpan={2}>Job Title</th>
-          <th rowSpan={2}>Nama</th>
-          <th rowSpan={2}>Divisi</th>
-          <th rowSpan={2}>Unit</th>
-          <th rowSpan={2}>Total Meet Technical</th>
-          <th rowSpan={2}>Total Not Meet Technical</th>
-          <th rowSpan={2}>Total Meet Behavioural</th>
-          <th rowSpan={2}>Total Not Meet Behavioural</th>
-          <th colSpan={numberOfCompetencies}>Level Kompetensi Yang Diharapkan</th>
-          <th colSpan={numberOfCompetencies}>Level Kompetensi Yang Ditunjukkan (Dinilai oleh Kepala Divisi) | Jika Tidak Diisi Oleh Atasan, Maka Nilai Diambil Oleh Bawahan. Jika Keduanya Tidak Mengisi, Maka Nol</th>
-          <th colSpan={numberOfCompetencies}>Gap</th>
-          <th colSpan={numberOfCompetencies}>Status</th>
+          {
+            userHeaders.map(header => <th rowSpan={2}>{header}</th>)
+          }
+          {
+            summaryHeaders.map(header => <th rowSpan={2}>{header}</th>)
+          }
+          {
+            subHeaders.map(header => <th colSpan={numberOfCompetencies}>{header}</th>)
+          }
         </tr>
         <tr>
-          {[1, 2, 3, 4].map(i => {
+          {subHeaders.map(i => {
             return uniqueAssociatedCompetencies.map(competency => {
               return (
                 <th>{competency}</th>
@@ -65,32 +86,38 @@ function Table({
     )
   }
 
+  const renderFooters = () => {
+    return (
+      <tfoot>
+        <tr>
+        <th colSpan={userHeaders.length}>Total/Average</th>
+          {
+            footers.map(footer => <th>{footer}</th>)
+          }
+                    {
+            subHeaders.map(header => <th colSpan={uniqueAssociatedCompetencies.length}></th>)
+          }
+        </tr>
+      </tfoot>
+    )
+  }
+
   const createCsvHeaders = () => {
-    const MAIN_COL = 5
-    const SECONDARY_COL = 4
+    const userHeadersLength = userHeaders.length
+    const summaryHeadersLength = summaryHeaders.length
     const numberOfCompetencies = uniqueAssociatedCompetencies.length
 
-    const firstHeaders = `,`.repeat(MAIN_COL)
-      + `,`.repeat(SECONDARY_COL)
+    const firstHeaders = `,`.repeat(userHeadersLength)
+      + `,`.repeat(summaryHeadersLength)
       + `Level Kompetensi Yang Diharapkan` + `,`.repeat(numberOfCompetencies)
       + `Level Kompetensi Yang Ditunjukkan (Dinilai oleh Kepala Divisi)` + `,`.repeat(numberOfCompetencies)
       + `Gap` + `,`.repeat(numberOfCompetencies)
       + `Status` + `,`.repeat(numberOfCompetencies)
 
     const secondHeaders = [
-      'NIK',
-      'Job Title',
-      'Nama',
-      'Divisi',
-      'Unit',
-      'Total Meet Technical',
-      'Total Not Meet Technical',
-      'Total Meet Behavioural',
-      'Total Not Meet Behavioural',
-      ...uniqueAssociatedCompetencies,
-      ...uniqueAssociatedCompetencies,
-      ...uniqueAssociatedCompetencies,
-      ...uniqueAssociatedCompetencies,
+      ...userHeaders,
+      ...summaryHeaders,
+      ...subHeaders.map(i => uniqueAssociatedCompetencies).flat(),
     ]
 
     return {
@@ -110,6 +137,12 @@ function Table({
     reports.data.forEach(userData => {
       csv += userData.row.join(',') + '\n'
     });
+
+    // footers
+    csv += [
+      ...userHeaders.map(i => ''),
+      ...footers,
+    ].join(',') + '\n'
 
     return csv
   }
@@ -138,8 +171,7 @@ function Table({
       <table id="division-single-report" className="display nowrap" style={{ width: '1000%' }}>
         {renderHeaders()}
         {renderBody()}
-        <tfoot>
-        </tfoot>
+        {renderFooters()}
       </table>
     </>
   );

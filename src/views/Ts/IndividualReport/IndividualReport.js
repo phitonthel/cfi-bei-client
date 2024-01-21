@@ -37,7 +37,7 @@ function IndividualReport() {
         reviewee,
         reports,
         essayReports,
-      } = await fetchTsIndividualReport(appReports.individualReportUser.id);
+      } = await fetchTsIndividualReport(appReports.selectedUserReport.id);
 
       setReviewee(reviewee)
       setReports(reports)

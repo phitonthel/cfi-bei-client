@@ -1,19 +1,7 @@
 import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
 
-const FilterComponent = ({ filterText, onFilter }) => (
-  <div className="d-flex justify-content-end">
-    <input
-      id="search"
-      type="text"
-      placeholder="Filter By Text"
-      aria-label="Search Input"
-      className="form-control col-2 ms-auto my-2" // Bootstrap classes for styling and alignment
-      value={filterText}
-      onChange={onFilter}
-    />
-  </div>
-);
+import { FilterSearchBar } from './FilterSearchBar';
 
 const FilteredDataTable = ({
   data,
@@ -38,7 +26,7 @@ const FilteredDataTable = ({
 
   return (
     <div>
-      <FilterComponent onFilter={handleFilter} filterText={filterText} />
+      <FilterSearchBar onFilter={handleFilter} filterText={filterText} />
       <DataTable
         columns={columns} // define your columns here
         data={filteredData}

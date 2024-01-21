@@ -17,7 +17,7 @@ const TeamProfile = ({
             <tbody>
               <tr>
                 <td>Directorate</td>
-                <td>{user.directorate}</td>i
+                <td>{user.directorate}</td>
               </tr>
               <tr>
                 <td>Division</td>

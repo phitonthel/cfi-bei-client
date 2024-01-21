@@ -50,7 +50,7 @@ function IndividualReports() {
         <a href='#' className="badge badge-primary mx-1"
           onClick={() => {
             dispatch(setAppReport({
-              individualReportUser: {
+              selectedUserReport: {
                 id: user.id,
                 fullname: user.fullname,
               }

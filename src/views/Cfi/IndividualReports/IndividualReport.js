@@ -32,7 +32,7 @@ function IndividualReport() {
       const {
         user,
         reports,
-      } = await fetchCfiIndividualReport(appReports.individualReportUser.id);
+      } = await fetchCfiIndividualReport(appReports.selectedUserReport.id);
 
       setReviewee(user)
       setReports(reports)
