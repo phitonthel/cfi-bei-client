@@ -135,7 +135,7 @@ function Table({
     let csv = firstHeaders + '\n' + secondHeaders + '\n'
 
     reports.data.forEach(userData => {
-      csv += userData.row.join(',') + '\n'
+      csv += userData.row.map(e => e ? `"${e}"` : "").join(',') + '\n'
     });
 
     // footers

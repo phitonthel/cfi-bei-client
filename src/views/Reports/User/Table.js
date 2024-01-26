@@ -30,7 +30,7 @@ const summaryHeaders = {
 
 const subCompetencyHeaders = {
   'Expected Score': 'Expected Score',
-  'Actual Score': 'Actual Score',
+  'Validated Score': 'Validated Score',
   'Gap': 'Gap',
   'Status': 'Status',
 }
@@ -176,19 +176,22 @@ const Table = ({ reports }) => {
     let csv = createCsvHeaders()
 
     rowsValues.forEach(rowValues => {
-      csv += rowValues.join(',') + '\n'
+      csv += rowValues
+        .map(e => e || e === 0 ? `"${e}"` : "")
+        .join(',') + '\n'
+      // csv += rowValues.join(',') + '\n'
     });
 
     csv += [
       ...Object.values(usersHeaders).map(i => ''),
       calculateCsvSum(rowsValues, 8),
       calculateCsvSum(rowsValues, 9),
-      (calculateCsvSum(rowsValues, 10) / rowsValues.length).toFixed(2) + '%',
-      (calculateCsvSum(rowsValues, 11) / rowsValues.length).toFixed(2) + '%',
+      (calculateCsvSum(rowsValues, 10) / rowsValues.length).toFixed(2),
+      (calculateCsvSum(rowsValues, 11) / rowsValues.length).toFixed(2),
       calculateCsvSum(rowsValues, 12),
       calculateCsvSum(rowsValues, 13),
-      (calculateCsvSum(rowsValues, 14) / rowsValues.length).toFixed(2) + '%',
-      (calculateCsvSum(rowsValues, 15) / rowsValues.length).toFixed(2) + '%',
+      (calculateCsvSum(rowsValues, 14) / rowsValues.length).toFixed(2),
+      (calculateCsvSum(rowsValues, 15) / rowsValues.length).toFixed(2),
     ].join(',') + '\n'
 
     return csv

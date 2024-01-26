@@ -26,7 +26,7 @@ const Table = ({
       secondHeader += "Meet,,Not Meet,,"
     });
 
-    let thirdHeader = `No,Divisi,Jumlah Karyawan,Jumlah Kompetensi Per Divisi,Average Meet Kompetensi Divisi,Average Not Meet Kompetensi Divisi,`
+    let thirdHeader = `No,Divisi,Jumlah Karyawan,Jumlah Kompetensi Per Divisi,Average Meet (berdasarkan jumlah kompetensi di divisi terkait),Average Not Meet (berdasarkan jumlah kompetensi di divisi terkait),`
     competencies.forEach(() => {
       thirdHeader += "Jumlah Karyawan,Persentase,Jumlah Karyawan,Persentase,"
     });
@@ -66,8 +66,8 @@ const Table = ({
           <th rowSpan={3}>Divisi</th>
           <th rowSpan={3}>Jumlah Karyawan</th>
           <th rowSpan={3}>Jumlah Kompetensi Per Divisi</th>
-          <th rowSpan={3}>Average Meet Kompetensi Divisi</th>
-          <th rowSpan={3}>Average Not Meet Kompetensi Divisi</th>
+          <th rowSpan={3}>Average Meet (berdasarkan jumlah kompetensi di divisi terkait)</th>
+          <th rowSpan={3}>Average Not Meet (berdasarkan jumlah kompetensi di divisi terkait)</th>
           {
             competencies.map(competency =>
               <th colSpan={4} key={competency}>Kompetensi {competency}</th>

@@ -27,13 +27,13 @@ const columns = [
     sortable: true,
   },
   {
-    name: <b>Actual Score</b>,
+    name: <b>Validated Score</b>,
     selector: row => row.actualScore,
     width: '100px',
     sortable: true,
   },
   {
-    name: <b>Gap</b>,
+    name: <b>Gap between validated score and expected score</b>,
     selector: row => row.gap,
     width: '100px',
     sortable: true,
@@ -59,7 +59,7 @@ const FeedbackScores = ({ reports }) => {
   return (
     <div className="row mb-4 p-1">
       <div className="col-md-12">
-        <h2>Feedback Scores</h2>
+        <h2>CFI Result</h2>
         <DataTable
           columns={columns}
           data={reports}
