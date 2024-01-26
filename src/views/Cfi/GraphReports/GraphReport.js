@@ -67,8 +67,9 @@ const GraphReport = () => {
             <div className="col-md-12">
               <h4>What is this report?</h4>
               <div>
-                This report outlines the top 5 strengths and areas to develop in your team, based on competencies that are at least 75% of team members have in common. 
-                Less common competencies aren't shown to keep the focus on what is most needed in your team.
+                {/* This report outlines the top 5 strengths and areas to develop in your team, based on competencies that are at least 75% of team members have in common. 
+                Less common competencies aren't shown to keep the focus on what is most needed in your team. */}
+                This report outlines the top 5 strengths and the bottom 5 areas to develop in your team. The report is based on technical competencies and behavioral competencies. The competencies that are shown in the report are the major competencies that the team has in common, with at least 75% of team members are required to have the competencies.
               </div>
             </div>
           </div>

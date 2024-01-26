@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import html2canvas from 'html2canvas';
-import html2pdf from 'html2pdf.js';
-import jsPDF from 'jspdf';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-
-import { fetchTsIndividualReport } from '../../../apis/report/fetchTsIndividualReport';
 import { fireSwalError } from '../../../apis/fireSwal';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import Profile from '../../../components/Reports/UserProfile';
 import FeedbackScores from './components/FeedbackScores';
 import { fetchCfiIndividualReport } from '../../../apis/report/fetchCfiIndividualReport';
 import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
+import CompetencyInfoLegend from './components/CompetencyInfoLegend';
+import PageBreakPrint from 'components/Reports/PageBreakPrint';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -51,11 +47,11 @@ function IndividualReport() {
     <>
       <div className="container mt-4" ref={reportRef}>
         <div className="container mt-4">
+
           <div className="text-center mb-4">
             <h1>Competency Fit Index Report</h1>
             <p className="lead">Feedback for: {reviewee.fullname}</p>
           </div>
-
           <hr></hr>
           <Profile user={reviewee} />
 
@@ -64,10 +60,16 @@ function IndividualReport() {
             <div className="col-md-12">
               <h2>What is Competency Fit Index?</h2>
               <p>
-                It is a vital tool used to match an individual's skills and abilities with the specific needs of a role or task. It assesses various competencies, including technical and behavioral skills, to ensure optimal alignment in recruitment, promotions, and team assignments.
+                {/* It is a vital tool used to match an individual's skills and abilities with the specific needs of a role or task. It assesses various competencies, including technical and behavioral skills, to ensure optimal alignment in recruitment, promotions, and team assignments. */}
+                Competency Fit Index is a tool that is used to measure an individual's competency in relation to the skills necessary for their line of work. The competencies measured are technical and behavioral competencies. The Competency Fit Index assessment attempts to determine whether an employee's current competencies are appropriate for the role, and also focus on competency development (technical & behavioral) needed for the future.
               </p>
             </div>
           </div>
+          <PageBreakPrint />
+
+          <hr></hr>
+          <CompetencyInfoLegend />
+          <PageBreakPrint />
 
           <hr></hr>
           < FeedbackScores reports={reports} />

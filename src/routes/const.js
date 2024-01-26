@@ -23,8 +23,8 @@ export const APP_SETTINGS = {
   "CFI - Subordinates": "CFI - Subordinates",
   "CFI - Behavioural": "CFI - Behavioural",
   "CFI - Technical": "CFI - Technical",
-  "CFI - Individual Reports": "CFI - Individual Reports",
-  "CFI - Group Reports": "CFI - Group Reports",
+  "CFI - Team Reports": "CFI - Team Reports",
+  "CFI - CSV Reports": "CFI - CSV Reports",
   "CFI - Graph Reports": "CFI - Graph Reports",
   "Announcement": "Announcement",
 }

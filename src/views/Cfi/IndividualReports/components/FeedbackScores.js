@@ -15,7 +15,7 @@ const columns = [
     sortable: true,
   },
   {
-    name: <b>Expected Score</b>,
+    name: <b>Expected Score in Current Position</b>,
     selector: row => row.expectedScore,
     width: '100px',
     sortable: true,
@@ -39,7 +39,7 @@ const columns = [
     sortable: true,
   },
   {
-    name: <b>Status</b>,
+    name: <b>Competency Status</b>,
     selector: row => row.status,
     width: '200px',
     sortable: true,
@@ -49,7 +49,7 @@ const columns = [
 const customStyles = {
   headCells: {
     style: {
-      fontSize: '16px',
+      height: '120px',
     },
   },
 };
@@ -64,6 +64,7 @@ const FeedbackScores = ({ reports }) => {
           columns={columns}
           data={reports}
           highlightOnHover
+          customStyles={customStyles}
         />
       </div>
     </div>

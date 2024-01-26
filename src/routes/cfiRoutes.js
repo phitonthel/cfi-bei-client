@@ -58,7 +58,7 @@ export const cfiRoutes = {
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["CFI - Individual Reports"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - Team Reports"],
     },
     {
       path: "/cfi/group-report",
@@ -68,7 +68,7 @@ export const cfiRoutes = {
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: false,
-      visibilityByAppSetting: APP_SETTINGS["CFI - Group Reports"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - CSV Reports"],
     },
     {
       path: "/cfi/reports",
