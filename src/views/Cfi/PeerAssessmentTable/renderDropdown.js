@@ -2,7 +2,9 @@ import { renderScore } from '../../../components/AssessmentCard'
 
 export const renderDropdown = (propAssessment, setAssessments) => {
   return (
-    <select className="form-select" value={propAssessment.reviewerScore ?? undefined}
+    <select 
+      className="" value={propAssessment.reviewerScore ?? undefined}
+      style={{ width: '140px', height: '30px', fontSize: '14px' }}
       onChange={(e) => {
         const reviewerInputScore = e.target.value
 

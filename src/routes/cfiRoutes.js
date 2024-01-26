@@ -67,7 +67,6 @@ export const cfiRoutes = {
       icon: "nc-icon nc-notes",
       component: GroupReport,
       layout: "/admin",
-      // access: Object.values(ACCESS_LEVEL),
       access: [ACCESS_LEVEL.SUPERADMIN],
       hidden: false,
       visibilityByAppSetting: APP_SETTINGS["CFI - CSV Reports"],

@@ -133,7 +133,7 @@ function PeerAssessment() {
     `Supervisor score: Untuk dapat menilai anggota tim Anda, Pilih salah satu level yang dirasa sesuai dengan kondisi Anggota Tim terkait saat ini.`,
     `Default dari Supervisor score adalah penilaian yang diisi oleh subordinate. Anda dapat mengubahnya sesuai penilaian Anda. Jika tidak ada yang ingin diubah, click "submit".`,
     `Expected Score: Level kompetensi yang dipersyaratkan untuk karyawan terkait sesuai profil kompetensinya.`,
-    `Subordinate Score: Penilaian / Self assessment yang dilakukan oleh Anggota Tim Anda. Jika N/A menandakan tim Anda belum mengisi.`,
+    `Self Score: Penilaian / Self assessment yang dilakukan oleh Anggota Tim Anda. Jika N/A menandakan tim Anda belum mengisi.`,
     `Klik tanda panah pada setiap arrow untuk melihat definisi kompetensi dan indikator perilakunya. `,
     `Skor final adalah adalah skor terakhir yang sudah diberikan validasi penilaian oleh atasan (supervisor score)`,
   ]
