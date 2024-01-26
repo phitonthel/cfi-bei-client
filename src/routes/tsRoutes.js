@@ -7,6 +7,7 @@ import NominateSubordinates from "../views/Ts/NominateSubordinates/index.js";
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
 import GroupReport from "../views/Ts/GroupReport/GroupReport.js";
 import ReviewNomination from "../views/Ts/ReviewNominations/ReviewNominations.js";
+import FeedbackForm from "../views/Ts/FeedbackForms/FeedbackForm.js";
 
 export const tsRoutes = {
   path: "/360",
@@ -98,6 +99,16 @@ export const tsRoutes = {
       ],
       hidden: false,
       visibilityByAppSetting: APP_SETTINGS["360 - Group Report"],
+    },
+    {
+      path: "/feedback-form",
+      name: "Feedback Form",
+      icon: "nc-icon nc-paper-2",
+      component: FeedbackForm,
+      layout: "/admin",
+      access: Object.values(ACCESS_LEVEL)
+      .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
+      hidden: true,
     },
   ]
 }

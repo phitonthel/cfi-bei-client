@@ -63,7 +63,7 @@ function Subordinates() {
         <a href='#' className="badge badge-primary p-1"
           onClick={() => {
             localStorage.setItem('peer_id', user.id)
-            history.push('/admin/peer-assessment-table')
+            history.push('/admin/cfi/peer-assessment-table')
           }}
         >
           Assess

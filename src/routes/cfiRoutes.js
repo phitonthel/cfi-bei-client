@@ -8,6 +8,7 @@ import IndividualReport from "../views/Cfi/IndividualReports/IndividualReport.js
 import IndividualReports from "../views/Cfi/IndividualReports/IndividualReports.js";
 import GraphReport from "../views/Cfi/GraphReports/GraphReport.js";
 import GroupReport from "../views/Cfi/GroupReports/GroupReports.js";
+import PeerAssessmentTable from "../views/Cfi/PeerAssessmentTable/index.js";
 
 export const cfiRoutes = {
   path: "/cfi",
@@ -80,6 +81,46 @@ export const cfiRoutes = {
         ACCESS_LEVEL.SUPERADMIN
       ],
       hidden: false,
+    },
+    {
+      path: "/cfi/graph-report",
+      name: "Graph Reports",
+      icon: "nc-icon nc-notes",
+      component: GraphReport,
+      layout: "/admin",
+      access: [
+        ACCESS_LEVEL.SUPERADMIN,
+        ACCESS_LEVEL.KEPALA_DIVISI,
+        ACCESS_LEVEL.KEPALA_UNIT,
+        ACCESS_LEVEL.KEPALA_KANTOR,
+      ],
+      hidden: true,
+      visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
+    },
+    {
+      path: "/cfi/peer-assessment-table",
+      name: "CFI Assessment Review",
+      icon: "nc-icon nc-paper-2",
+      component: PeerAssessmentTable,
+      layout: "/admin",
+      access: [
+        ACCESS_LEVEL.KEPALA_UNIT,
+        ACCESS_LEVEL.KEPALA_KANTOR,
+        ACCESS_LEVEL.KEPALA_DIVISI,
+        ACCESS_LEVEL.DIREKTUR,
+        ACCESS_LEVEL.SUPERADMIN,
+      ],
+      hidden: true,
+    },
+    {
+      path: "/cfi/individual-report",
+      name: "Individual Report",
+      icon: "nc-icon nc-chart-bar-32",
+      component: IndividualReport,
+      layout: "/admin",
+      access: Object.values(ACCESS_LEVEL),
+      hidden: true,
+      visibilityByAppSetting: APP_SETTINGS["360 - Individual Report"],
     },
   ]
 }

@@ -81,12 +81,11 @@ function Sidebar({ color, image, routes }) {
         <Nav>
           {routes.map((prop, key) => {
             const isRedirect = prop.redirect
-            // const isAccessValid = !authUser.level ? true : prop.access.includes(authUser.level) // if guest, true
             const isHiddenFromSidebar = prop.hidden
 
-            // if (!isRedirect && !isHiddenFromSidebar && isAccessValid) {
               if (!isRedirect && !isHiddenFromSidebar) {
               if (prop.children) {
+                const filteredChildren = prop.children.filter(child => child.hidden !== true)
                 return (
                   <StyledNavDropdown
                     className="custom-nav-dropdown"
@@ -98,9 +97,9 @@ function Sidebar({ color, image, routes }) {
                     }
                     id={`nav-dropdown-${key}`}
                     key={key}
-                    isActive={activeRoute(prop.layout + prop.path, prop.children) === "active"}
+                    isActive={activeRoute(prop.layout + prop.path, filteredChildren) === "active"}
                   >
-                    {prop.children.map((child, childKey) => (
+                    {filteredChildren.map((child, childKey) => (
                       <StyledDropdownItem
                         to={child.layout + child.path}
                         activeClassName="active"

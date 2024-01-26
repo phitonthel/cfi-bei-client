@@ -12,9 +12,6 @@ import Announcement from "../views/Announcement/index.js";
 import Reports from "../views/Reports/index.js";
 import ReviewNominations from "../views/Ts/ReviewNominations/index.js";
 
-import PeerAssessmentTable from "../views/Cfi/PeerAssessmentTable/index.js";
-import FeedbackForm from "../views/Ts/FeedbackForms/FeedbackForm.js";
-
 import Article from "../views/article/index.js";
 import UserManagement from "../views/UserManagement/UserManagement.js";
 import ApplicationSettings from "../views/ApplicationSettings/ApplicationSettings.js";
@@ -22,76 +19,9 @@ import { tsRoutes } from "./tsRoutes.js";
 import { cfiRoutes } from "./cfiRoutes.js";
 
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
-import IndividualReport from "../views/Ts/IndividualReport/IndividualReport.js";
-import CfiIndividualReport from "../views/Cfi/IndividualReports/IndividualReport.js"
-import GraphReport from "../views/Cfi/GraphReports/GraphReport.js";
 
 const hiddenRoutes = [
-  {
-    path: "/peer-assessment-table",
-    name: "CFI Assessment Review",
-    icon: "nc-icon nc-paper-2",
-    component: PeerAssessmentTable,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.KEPALA_UNIT,
-      ACCESS_LEVEL.KEPALA_KANTOR,
-      ACCESS_LEVEL.KEPALA_DIVISI,
-      ACCESS_LEVEL.DIREKTUR,
-      ACCESS_LEVEL.SUPERADMIN,
-    ],
-    hidden: true,
-  },
-  {
-    path: "/feedback-form",
-    name: "Feedback Form",
-    icon: "nc-icon nc-paper-2",
-    component: FeedbackForm,
-    layout: "/admin",
-    access: Object.values(ACCESS_LEVEL)
-    .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
-    hidden: true,
-  },
-  {
-    path: "/individual-report",
-    name: "Individual Report",
-    icon: "nc-icon nc-chart-bar-32",
-    component: IndividualReport,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.KEPALA_UNIT,
-      ACCESS_LEVEL.KEPALA_KANTOR,
-      ACCESS_LEVEL.KEPALA_DIVISI,
-      ACCESS_LEVEL.DIREKTUR,
-      ACCESS_LEVEL.SUPERADMIN,
-    ],
-    hidden: true,
-    visibilityByAppSetting: APP_SETTINGS["360 - Individual Report"],
-  },
-  {
-    path: "/cfi/individual-report",
-    name: "Individual Report",
-    icon: "nc-icon nc-notes",
-    component: CfiIndividualReport,
-    layout: "/admin",
-    access: Object.values(ACCESS_LEVEL),
-    hidden: true,
-  },
-  {
-    path: "/cfi/graph-report",
-    name: "Graph Reports",
-    icon: "nc-icon nc-notes",
-    component: GraphReport,
-    layout: "/admin",
-    access: [
-      ACCESS_LEVEL.SUPERADMIN,
-      ACCESS_LEVEL.KEPALA_DIVISI,
-      ACCESS_LEVEL.KEPALA_UNIT,
-      ACCESS_LEVEL.KEPALA_KANTOR,
-    ],
-    hidden: true,
-    visibilityByAppSetting: APP_SETTINGS["CFI - Graph Reports"],
-  },
+
 ]
 
 export const guestRoutes = [
