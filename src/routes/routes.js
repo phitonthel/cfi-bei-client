@@ -20,10 +20,6 @@ import { cfiRoutes } from "./cfiRoutes.js";
 
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
 
-const hiddenRoutes = [
-
-]
-
 export const guestRoutes = [
   {
     path: "/home",
@@ -141,7 +137,6 @@ export const baseRoutes = [
     ],
     hidden: false,
   },
-  ...hiddenRoutes,
   tsRoutes,
   cfiRoutes,
 ];

@@ -59,7 +59,7 @@ function FeedbackForms() {
               }
             }));
             
-            history.push('/admin/feedback-form')
+            history.push('/admin/ts/feedback-form')
           }}
         >
           Review

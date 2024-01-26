@@ -19,7 +19,7 @@ export const tsRoutes = {
   visibilityByAppSetting: APP_SETTINGS["360"],
   children: [
     {
-      path: "/nominate-peers",
+      path: "/ts/nominate-peers",
       name: "Nominate Peers",
       icon: "nc-icon nc-favourite-28",
       component: NominatePeers,
@@ -33,7 +33,7 @@ export const tsRoutes = {
       visibilityByAppSetting: APP_SETTINGS["360 - Nominate Peers"],
     },
     {
-      path: "/nominate-subordinates",
+      path: "/ts/nominate-subordinates",
       name: "Nominate Subordinates",
       icon: "nc-icon nc-favourite-28",
       component: NominateSubordinates,
@@ -47,7 +47,7 @@ export const tsRoutes = {
       visibilityByAppSetting: APP_SETTINGS["360 - Nominate Peers"],
     },
     {
-      path: "/review-nominations",
+      path: "/ts/review-nominations",
       name: "Review Nominations",
       icon: "nc-icon nc-fav-remove",
       component: ReviewNomination,
@@ -58,7 +58,7 @@ export const tsRoutes = {
       hidden: false,
     },
     {
-      path: "/feedback-forms",
+      path: "/ts/feedback-forms",
       name: "Feedback Forms",
       icon: "nc-icon nc-ruler-pencil",
       component: FeedbackForms,
@@ -69,7 +69,7 @@ export const tsRoutes = {
       visibilityByAppSetting: APP_SETTINGS["360 - Feedback Form"],
     },
     {
-      path: "/individual-reports",
+      path: "/ts/individual-reports",
       name: "Individual Reports",
       icon: "nc-icon nc-chart-bar-32",
       component: IndividualReports,
@@ -85,7 +85,16 @@ export const tsRoutes = {
       visibilityByAppSetting: APP_SETTINGS["360 - Individual Report"],
     },
     {
-      path: "/group-report",
+      path: "/ts/individual-report",
+      name: "Individual Reports",
+      icon: "nc-icon nc-chart-bar-32",
+      component: IndividualReport,
+      layout: "/admin",
+      access: Object.values(ACCESS_LEVEL),
+      hidden: true,
+    },
+    {
+      path: "/ts/group-report",
       name: "Group Report",
       icon: "nc-icon nc-chart-bar-32",
       component: GroupReport,
@@ -101,7 +110,7 @@ export const tsRoutes = {
       visibilityByAppSetting: APP_SETTINGS["360 - Group Report"],
     },
     {
-      path: "/feedback-form",
+      path: "/ts/feedback-form",
       name: "Feedback Form",
       icon: "nc-icon nc-paper-2",
       component: FeedbackForm,

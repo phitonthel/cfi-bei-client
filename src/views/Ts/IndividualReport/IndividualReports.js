@@ -55,7 +55,7 @@ function IndividualReports() {
                 fullname: user.fullname,
               }
             }));
-            history.push('/admin/individual-report')
+            history.push('/admin/ts/individual-report')
           }}
         >
           See Report
