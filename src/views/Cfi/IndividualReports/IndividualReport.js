@@ -22,6 +22,7 @@ function IndividualReport() {
     email: ''
   })
   const [reports, setReports] = useState([])
+  const [reportsSummary, setReportsSummary] = useState({})
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(async () => {
@@ -29,10 +30,12 @@ function IndividualReport() {
       const {
         user,
         reports,
+        reportsSummary,
       } = await fetchCfiIndividualReport(appReports.selectedUserReport.id);
 
       setReviewee(user)
       setReports(sortReports(reports))
+      setReportsSummary(reportsSummary)
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -72,7 +75,10 @@ function IndividualReport() {
           <PageBreakPrint />
 
           <hr></hr>
-          < FeedbackScores reports={reports} />
+          < FeedbackScores
+            reports={reports}
+            reportsSummary={reportsSummary}
+          />
         </div>
       </div>
       {/* PDF Download Button */}

@@ -53,7 +53,7 @@ export const cfiRoutes = {
     },
     {
       path: "/cfi/individual-reports",
-      name: "Team Reports",
+      name: "Reports",
       icon: "nc-icon nc-notes",
       component: IndividualReports,
       layout: "/admin",
@@ -73,7 +73,7 @@ export const cfiRoutes = {
     },
     {
       path: "/cfi/reports",
-      name: "Reports",
+      name: "Reports (SA)",
       icon: "nc-icon nc-notes",
       component: Reports,
       layout: "/admin",

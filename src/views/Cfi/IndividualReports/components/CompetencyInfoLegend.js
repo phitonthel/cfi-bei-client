@@ -1,30 +1,4 @@
-import styled from 'styled-components';
-
-const StyledTable = styled.table`
-  font-size: 14px;
-  border-collapse: separate;
-  border-spacing: 0 0.5em;
-`;
-
-const StyledTr = styled.tr`
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 10px 0;
-`;
-
-const renderRow = (cols) => {
-  return (
-    <StyledTr>
-      {
-        cols.map(col =>
-          <td style={{ padding: '8px' }}>
-            {col}
-          </td>
-        )
-      }
-    </StyledTr>
-  );
-}
+import { CustomizedTable } from "./Table";
 
 const rows = [
   ['Expected Score in Current Position', 'Competency level required by the IDX for your current position'],
@@ -55,48 +29,29 @@ const CompetencyInfoLegend = () => {
       <div className="col-md-12">
         <h3>Competency Assessment Legend</h3>
 
-        <StyledTable className="table table-sm">
-          <thead>
-            <tr style={{ backgroundColor: '#f8f9fa' }}>
-              <th className="col-4">Category</th>
-              <th className="col-8">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              rows.map(row => renderRow(row))
-            }
-          </tbody>
-        </StyledTable>
+        <CustomizedTable 
+          headers={[
+            { text: 'Category', className: 'col-4' },
+            { text: 'Description', className: 'col-8' }
+          ]}
+          rows={rows}
+        />
 
-        <StyledTable className="table table-sm">
-          <thead>
-            <tr style={{ backgroundColor: '#f8f9fa' }}>
-              <th className="col-4">Score of Technical</th>
-              <th className="col-8">Level of Technical</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              rowsTechnical.map(row => renderRow(row))
-            }
-          </tbody>
-        </StyledTable>
+        <CustomizedTable 
+          headers={[
+            { text: 'Score of Technical', className: 'col-4' },
+            { text: 'Level of Technical', className: 'col-8' }
+          ]}
+          rows={rowsTechnical}
+        />
 
-        <StyledTable className="table table-sm">
-          <thead>
-            <tr style={{ backgroundColor: '#f8f9fa' }}>
-              <th className="col-4">Score of Behavioural</th>
-              <th className="col-8">Level of Behavioural</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              rowsBehavioural.map(row => renderRow(row))
-            }
-          </tbody>
-        </StyledTable>
-
+        <CustomizedTable 
+          headers={[
+            { text: 'Score of Behavioural', className: 'col-4' },
+            { text: 'Level of Behavioural', className: 'col-8' }
+          ]}
+          rows={rowsBehavioural}
+        />
       </div>
     </div>
   );

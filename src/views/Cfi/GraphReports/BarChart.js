@@ -4,8 +4,14 @@ export const CustomBarChart = ({
   reports,
   colors = ['#4F6F52', '#739072']
 }) => {
+  // if (reports.length === 0) {
+  //   return <>None</>
+  // }
+
+  const height = (reports.length * 60) + 120;
+
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={height}>
       <BarChart
         layout="vertical"
         data={reports}

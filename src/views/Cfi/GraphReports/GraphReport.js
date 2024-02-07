@@ -32,7 +32,7 @@ const GraphReport = () => {
         bottomFiveTech,
         topFiveBeha,
         bottomFiveBeha,
-      } = await fetchCfiSummaryReport({query: `userId=${appReports.selectedUserReport.id}`})
+      } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
 
       setUser(user)
       setUsers(users)
@@ -75,19 +75,10 @@ const GraphReport = () => {
           </div>
           <PageBreakPrint />
 
-
           <hr></hr>
           <div className="row mb-4 p-4">
             <div className="col-md-12">
-              <h4>Top 5 Technical</h4>
-              < CustomBarChart reports={topFiveTech} colors={['#4F6F52', '#739072']} />
-            </div>
-          </div>
-
-          <hr></hr>
-          <div className="row mb-4 p-4">
-            <div className="col-md-12">
-              <h4>Top 5 Behavioural</h4>
+              <h4>Meet Requirements Behavioral</h4>
               < CustomBarChart reports={topFiveBeha} colors={['#4F6F52', '#739072']} />
             </div>
           </div>
@@ -96,16 +87,24 @@ const GraphReport = () => {
           <hr></hr>
           <div className="row mb-4 p-4">
             <div className="col-md-12">
-              <h4>Bottom 5 Technical</h4>
-              < CustomBarChart reports={bottomFiveTech} colors={['#940000', '#c30101']} />
+              <h4>Need Development Behavioural</h4>
+              < CustomBarChart reports={bottomFiveBeha} colors={['#940000', '#c30101']} />
             </div>
           </div>
 
           <hr></hr>
           <div className="row mb-4 p-4">
             <div className="col-md-12">
-              <h4>Bottom 5 Behavioural</h4>
-              < CustomBarChart reports={bottomFiveBeha} colors={['#940000', '#c30101']} />
+              <h4>Meet Requirements Technical</h4>
+              < CustomBarChart reports={topFiveTech} colors={['#4F6F52', '#739072']} />
+            </div>
+          </div>
+
+          <hr></hr>
+          <div className="row mb-4 p-4">
+            <div className="col-md-12">
+              <h4>Need Development Technical</h4>
+              < CustomBarChart reports={bottomFiveTech} colors={['#940000', '#c30101']} />
             </div>
           </div>
 
@@ -114,7 +113,7 @@ const GraphReport = () => {
       {/* PDF Download Button */}
       <DownloadPdfButton
         reportRef={reportRef}
-        filename={`cfi_graph_report_${user.Division?.name.toLowerCase().replace(' ', '_')}`}
+        filename={`cfi_graph_report_${user.Division?.name.toLowerCase().replaceAll(' ', '_')}` + `_${(user.unit ?? '-').toLowerCase().replaceAll(' ', '_')}`}
       />
     </>
   );
