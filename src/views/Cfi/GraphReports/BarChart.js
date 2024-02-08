@@ -4,9 +4,10 @@ export const CustomBarChart = ({
   reports,
   colors = ['#4F6F52', '#739072']
 }) => {
-  // if (reports.length === 0) {
-  //   return <>None</>
-  // }
+  
+  if (reports.length === 0) {
+    return <>None</>
+  }
 
   const height = (reports.length * 60) + 120;
 

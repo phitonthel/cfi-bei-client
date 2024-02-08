@@ -18,28 +18,28 @@ const GraphReport = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState([])
   const [users, setUsers] = useState([])
-  const [topFiveTech, setTopFiveTech] = useState([])
-  const [bottomFiveTech, setBottomFiveTech] = useState([])
-  const [topFiveBeha, setTopFiveBeha] = useState([])
-  const [bottomFiveBeha, setBottomFiveBeha] = useState([])
+  const [topTechnicals, setTopTechnicals] = useState([])
+  const [bottomTechnicals, setBottomTechnicals] = useState([])
+  const [topBehaviourals, setTopBehaviourals] = useState([])
+  const [bottomBehaviourals, setBottomBehaviourals] = useState([])
 
   useEffect(async () => {
     try {
       const {
         user,
         users,
-        topFiveTech,
-        bottomFiveTech,
-        topFiveBeha,
-        bottomFiveBeha,
+        topTechnicals,
+        bottomTechnicals,
+        topBehaviourals,
+        bottomBehaviourals,
       } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
 
       setUser(user)
       setUsers(users)
-      setTopFiveTech(topFiveTech)
-      setBottomFiveTech(bottomFiveTech)
-      setTopFiveBeha(topFiveBeha)
-      setBottomFiveBeha(bottomFiveBeha)
+      setTopTechnicals(topTechnicals)
+      setBottomTechnicals(bottomTechnicals)
+      setTopBehaviourals(topBehaviourals)
+      setBottomBehaviourals(bottomBehaviourals)
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -69,7 +69,9 @@ const GraphReport = () => {
               <div>
                 {/* This report outlines the top 5 strengths and areas to develop in your team, based on competencies that are at least 75% of team members have in common. 
                 Less common competencies aren't shown to keep the focus on what is most needed in your team. */}
-                This report outlines the top 5 strengths and the bottom 5 areas to develop in your team. The report is based on technical competencies and behavioral competencies. The competencies that are shown in the report are the major competencies that the team has in common, with at least 75% of team members are required to have the competencies.
+                {/* This report outlines the strength and weaknesses to develop in your team based on technical and behavioral competencies. The competencies that are shown in the report are the major competencies that the team has in common, with at least 75% of team members are required to have the competencies. */}
+
+                This report presents an analysis of the strengths and areas for improvement within your team, focusing on both technical and behavioral competencies. It identifies key competencies shared by the team, highlighting those possessed by at least 75% of team members. This report is designed to help you understand the collective strengths and areas for development within your team, and to support you in making informed decisions about training and development opportunities.
               </div>
             </div>
           </div>
@@ -79,7 +81,7 @@ const GraphReport = () => {
           <div className="row mb-4 p-4">
             <div className="col-md-12">
               <h4>Meet Requirements Behavioral</h4>
-              < CustomBarChart reports={topFiveBeha} colors={['#4F6F52', '#739072']} />
+              < CustomBarChart reports={topBehaviourals} colors={['#4F6F52', '#739072']} />
             </div>
           </div>
           <PageBreakPrint />
@@ -88,23 +90,25 @@ const GraphReport = () => {
           <div className="row mb-4 p-4">
             <div className="col-md-12">
               <h4>Need Development Behavioural</h4>
-              < CustomBarChart reports={bottomFiveBeha} colors={['#940000', '#c30101']} />
+              < CustomBarChart reports={bottomBehaviourals} colors={['#940000', '#c30101']} />
             </div>
           </div>
+          <PageBreakPrint />
 
           <hr></hr>
           <div className="row mb-4 p-4">
             <div className="col-md-12">
               <h4>Meet Requirements Technical</h4>
-              < CustomBarChart reports={topFiveTech} colors={['#4F6F52', '#739072']} />
+              < CustomBarChart reports={topTechnicals} colors={['#4F6F52', '#739072']} />
             </div>
           </div>
+          <PageBreakPrint />
 
           <hr></hr>
           <div className="row mb-4 p-4">
             <div className="col-md-12">
               <h4>Need Development Technical</h4>
-              < CustomBarChart reports={bottomFiveTech} colors={['#940000', '#c30101']} />
+              < CustomBarChart reports={bottomTechnicals} colors={['#940000', '#c30101']} />
             </div>
           </div>
 
