@@ -120,7 +120,7 @@ export const cfiRoutes = {
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: true,
-      visibilityByAppSetting: APP_SETTINGS["360 - Individual Report"],
+      visibilityByAppSetting: APP_SETTINGS["CFI - Individual Report"],
     },
   ]
 }

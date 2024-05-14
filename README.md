@@ -1,9 +1,15 @@
 # cfi-bei-client
 cfi-bei-client
 
+# Run Dev
+- `npm run start`
+
 # Deployment
 - `npm run build`
 - `firebase deploy`
+
+OR
+- `npm run deploy`
 
 # Init Deployment
 1. add new project, namain projectnya

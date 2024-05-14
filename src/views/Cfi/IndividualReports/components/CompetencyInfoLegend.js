@@ -27,7 +27,7 @@ const CompetencyInfoLegend = () => {
   return (
     <div className="row mb-4 p-4">
       <div className="col-md-12">
-        <h3>Competency Assessment Legend</h3>
+        <h2>Competency Assessment Legend</h2>
 
         <CustomizedTable 
           headers={[
