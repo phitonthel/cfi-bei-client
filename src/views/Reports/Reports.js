@@ -6,7 +6,6 @@ import DivisionReport from './Division/index'
 import DivisionSingleReport from './DivisionSingle/index'
 import UserReport from './User/index'
 
-import { useFetch } from '../../apis/useFetch'
 import { fetchCfiOptionsReport } from '../../apis/report/fetchCfiOptionsReport';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 

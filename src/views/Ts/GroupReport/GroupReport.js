@@ -5,7 +5,6 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import DataTable from 'react-data-table-component';
-import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';

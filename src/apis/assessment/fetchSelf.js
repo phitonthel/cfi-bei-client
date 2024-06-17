@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
-export const fetchSelfAssessment = async (type) => {
+export const fetchSelfAssessmentDeprecated = async (type) => {
   const query = `?type=${type}`
   
   const { data } = await axios.get(`${config.baseUrl}/assessment/self${query}`, {
@@ -28,20 +28,33 @@ export const fetchSelfAssessment = async (type) => {
   })
 }
 
-// export const submitSelfAssessment = async (payload) => {
-//   const promises = payload.map(e => {
-//     return axios({
-//       method: 'POST',
-//       url: `${config.baseUrl}/assessment/assigned`,
-//       headers: {
-//         access_token: localStorage.getItem('access_token')
-//       },
-//       data: {
-//         assessmentId: e.assessmentId,
-//         assignedScore: e.assignedScore,
-//       }
-//     });
-//   })
+export const fetchSelfAssessment = async (queryParams) => {
+  console.log('queryParams', queryParams)
+  const query = Object.keys(queryParams)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+    .join('&');
+  
+  const { data } = await axios.get(`${config.baseUrl}/cfi/assessment/user?${query}`, {
+    headers: {
+      access_token: localStorage.getItem('access_token')
+    }
+  })
 
-//   await Promise.all(promises)
-// }
+  console.log('xxx', data)
+
+  return data
+
+  // return data.map(assessment => {
+  //   return {
+  //     id: assessment.id,
+  //     assignedScore: assessment.assignedScore,
+  //     reviewerScore: assessment.reviewerScore,
+  //     expectedScore: assessment.CompetencyRole.expectedScore,
+  //     category: assessment.CompetencyRole?.Competency?.category,
+  //     title: assessment.CompetencyRole?.Competency?.title,
+  //     description: assessment.CompetencyRole?.Competency?.description,
+  //     options: assessment.CompetencyRole?.Competency?.options,
+  //     shouldShowCriterias: false
+  //   }
+  // })
+}

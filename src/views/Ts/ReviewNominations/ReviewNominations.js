@@ -43,14 +43,16 @@ function ReviewNomination() {
 
   const [nominations, setNominations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  
+
   const Actions = ({
     reviewer,
     reviewee,
   }) => {
     return (
       <div>
-        <a href='#' className="badge badge-danger mx-1"
+        <span
+          className="badge badge-danger mx-1"
+          style={{ cursor: 'pointer ' }}
           onClick={(e) => {
             e.preventDefault();
             handleUnapprovalUser({
@@ -61,8 +63,10 @@ function ReviewNomination() {
           }}
         >
           Un-approve
-        </a>
-        <a href='#' className="badge badge-primary mx-1"
+        </span>
+        <span
+          className="badge badge-primary mx-1"
+          style={{ cursor: 'pointer ' }}
           onClick={(e) => {
             e.preventDefault();
             handleApprovalUser({
@@ -73,7 +77,7 @@ function ReviewNomination() {
           }}
         >
           Approve
-        </a>
+        </span>
       </div>
     )
   }
@@ -135,12 +139,12 @@ function ReviewNomination() {
       </div>
 
       <div className="d-flex justify-content-end m-2">
-        <DownloadCsvButton 
+        <DownloadCsvButton
           data={createCsv(nominations)}
           filename={`reviewnominations_${new Date().getTime()}.csv`}
         />
 
-        <ApproveAllNominationButton 
+        <ApproveAllNominationButton
           buttonText={'Approve All'}
           onFormSubmit={() => {
             initNominations()

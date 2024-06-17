@@ -125,10 +125,8 @@ function Admin() {
       // condition for rendering access level goes here
       // this is only for routes, not for Sidebar
       const isLayoutValid = prop.layout === "/admin"
-      // const isAccessValid = !level ? true : prop.access.includes(level)
       if (
         isLayoutValid
-        // isAccessValid
       ) {
         const path = prop.layout + prop.path
         return (

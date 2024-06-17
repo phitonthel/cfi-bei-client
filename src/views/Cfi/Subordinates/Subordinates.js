@@ -60,17 +60,16 @@ function Subordinates() {
   const Actions = (user) => {
     return (
       <div>
-        <a href='#' className="badge badge-primary p-1"
+        <span
+          className="badge badge-primary p-1"
+          style={{ cursor: 'pointer' }}
           onClick={() => {
             localStorage.setItem('peer_id', user.id)
             history.push('/admin/cfi/peer-assessment-table')
           }}
         >
           Assess
-        </a>
-        {/* <a href='#' className="badge badge-success mx-1">
-          Approve
-        </a> */}
+        </span>
       </div>
     )
   }

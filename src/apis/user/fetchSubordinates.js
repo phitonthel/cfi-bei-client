@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
+// deprecated
 export const fetchSubordinates = async () => {
   const response = await axios.get(`${config.baseUrl}/user/list-subordinate`, {
     headers: {

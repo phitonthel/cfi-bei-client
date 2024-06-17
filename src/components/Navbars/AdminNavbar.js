@@ -197,7 +197,7 @@ function Header() {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault()
-                  logout(dispatch)
+                  logout()
                   history.push('/admin/home');
                 }}
               >

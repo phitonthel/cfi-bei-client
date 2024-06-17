@@ -67,18 +67,22 @@ function UserManagement() {
   const Actions = (user) => {
     return (
       <div>
-        <a href='#' className="badge badge-primary mx-1"
+        <span
+          className="badge badge-primary mx-1"
+          style={{ cursor: 'pointer ' }}
           onClick={() => {
           }}
         >
           Update
-        </a>
-        <a href='#' className="badge badge-danger mx-1"
+        </span>
+        <span
+          className="badge badge-danger mx-1"
+          style={{ cursor: 'pointer ' }}
           onClick={() => {
           }}
         >
           Delete
-        </a>
+        </span>
       </div>
     )
   }

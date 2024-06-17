@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { fireSwalError } from '../../../apis/fireSwal';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import Profile from '../../../components/Reports/UserProfile';
@@ -8,13 +9,33 @@ import FeedbackScores from './components/FeedbackScores';
 import { fetchCfiIndividualReport } from '../../../apis/report/fetchCfiIndividualReport';
 import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
 import CompetencyInfoLegend from './components/CompetencyInfoLegend';
-import PageBreakPrint from 'components/Reports/PageBreakPrint';
+import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import { sortReports } from './utils';
+import Justification from './components/Justification';
+import Content from './components/Content';
+
+const divideArray = (array, parts) => {
+  let result = [];
+  let partSize = Math.floor(array.length / parts);
+  let remainder = array.length % parts;
+
+  let start = 0;
+
+  for (let i = 0; i < parts; i++) {
+    let end = start + partSize + (remainder > 0 ? 1 : 0);
+    result.push(array.slice(start, end));
+    start = end;
+    if (remainder > 0) remainder--;
+  }
+
+  return result;
+}
 
 function IndividualReport() {
   const reportRef = useRef(null);
   const authUser = useSelector(state => state.auth.user);
   const appReports = useSelector(state => state.app.reports);
+  const appUtilities = useSelector(state => state.app.utilities);
 
   const [reviewee, setReviewee] = useState({
     nik: '',
@@ -23,6 +44,7 @@ function IndividualReport() {
   })
   const [reports, setReports] = useState([])
   const [reportsSummary, setReportsSummary] = useState({})
+  const [reportJustifications, setReportJustifications] = useState({})
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(async () => {
@@ -31,11 +53,16 @@ function IndividualReport() {
         user,
         reports,
         reportsSummary,
-      } = await fetchCfiIndividualReport(appReports.selectedUserReport.id);
+        reportJustifications,
+      } = await fetchCfiIndividualReport({
+        userId: appReports.selectedUserReport.id,
+        cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id,
+      });
 
       setReviewee(user)
       setReports(sortReports(reports))
       setReportsSummary(reportsSummary)
+      setReportJustifications(reportJustifications)
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -49,43 +76,35 @@ function IndividualReport() {
 
   return (
     <>
-      <div className="container mt-4" ref={reportRef}>
-        <div className="container mt-4">
+      <DownloadPdfButton
+        reportRef={reportRef}
+        filename={`cfi_individual_report_${reviewee.fullname.toLowerCase().replaceAll(' ', '_')}`}
+        buttonText={`Download Report PDF`}
+      />
+      <div style={{ marginTop: 50}}/>
+      <hr></hr>
+      <div>
+        <Content
+          reviewee={reviewee}
+          reports={reports}
+          reportsSummary={reportsSummary}
+          reportJustifications={reportJustifications}
+          isForPrint={false}
+        />
+      </div>
 
-          <div className="text-center mb-4">
-            <h1>Competency Fit Index Report</h1>
-            <p className="lead">Feedback for: {reviewee.fullname}</p>
-          </div>
-          <hr></hr>
-          <Profile user={reviewee} />
-
-          <hr></hr>
-          <div className="row mb-4 p-4">
-            <div className="col-md-12">
-              <h2>What is Competency Fit Index?</h2>
-              <p>
-                Competency Fit Index is a tool that is used to measure an individual's competency in relation to the skills necessary for their line of work. The competencies measured are technical and behavioral competencies. The Competency Fit Index assessment attempts to determine whether an employee's current competencies are appropriate for the role, and also focus on competency development (technical & behavioral) needed for the future.
-              </p>
-            </div>
-          </div>
-          <PageBreakPrint />
-
-          <hr></hr>
-          <CompetencyInfoLegend />
-          <PageBreakPrint />
-
-          <hr></hr>
-          < FeedbackScores
+      {/* FOR PRINT ONLY */}
+      <div style={{ display: 'none' }}>
+        <div ref={reportRef}>
+          <Content
+            reviewee={reviewee}
             reports={reports}
             reportsSummary={reportsSummary}
+            reportJustifications={reportJustifications}
+            isForPrint={true}
           />
         </div>
       </div>
-      {/* PDF Download Button */}
-      <DownloadPdfButton
-        reportRef={reportRef}
-        filename={`cfi_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
-      />
     </>
   );
 }

@@ -5,7 +5,6 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 import DataTable from 'react-data-table-component';
-import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -47,7 +46,9 @@ function IndividualReports() {
   const Actions = (user) => {
     return (
       <div>
-        <a href='#' className="badge badge-primary mx-1"
+        <span
+          className="badge badge-primary mx-1"
+          style={{ cursor: 'pointer' }}
           onClick={() => {
             dispatch(setAppReport({
               selectedUserReport: {
@@ -59,7 +60,7 @@ function IndividualReports() {
           }}
         >
           See Report
-        </a>
+        </span>
       </div>
     )
   }

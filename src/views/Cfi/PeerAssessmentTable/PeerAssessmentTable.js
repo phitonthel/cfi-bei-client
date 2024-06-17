@@ -7,9 +7,9 @@ import DataTable from 'react-data-table-component';
 import { submitScore } from '../../../apis/assessment/submitScore';
 import { fetchById } from '../../../apis/assessment/fetchById';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
-import { renderScore } from '../../../components/AssessmentCard'
+import { renderScore } from '../../../components/Cfi/AssessmentCard'
 import { renderDropdown } from './renderDropdown'
-import { Criteria } from '../../../components/Criteria'
+import { Criteria } from '../../../components/Cfi/Criteria'
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions'
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SubmitButton } from '../../../components/SubmitButton';
@@ -119,11 +119,22 @@ function PeerAssessment() {
 
   const ExpandedComponent = ({ data }) => {
     return <>
-      <ul className="list-group m-4 px-4">
-        <li className="list-group-item"><b>{data.description}</b></li>
+      <ul className="list-group m-2">
+        <li className="list-group-item">
+          <div className='text-muted'>Staff Justification:</div>
+          <div>.................................</div>
+        </li>
       </ul>
-      <div className='mb-4'>
-        {Criteria(data)}
+      <div>
+        <ul className="list-group m-2">
+          <li className="list-group-item">
+            <div className='text-muted'>Competency Description: </div>
+            <div>{data.description}</div>
+            </li>
+        </ul>
+        <div className='mb-4'>
+          <Criteria assessment={data} />
+        </div>
       </div>
     </>
   }
@@ -137,8 +148,8 @@ function PeerAssessment() {
     `Klik tanda panah pada setiap arrow untuk melihat definisi kompetensi dan indikator perilakunya. `,
     `Skor final adalah adalah skor terakhir yang sudah diberikan validasi penilaian oleh atasan (supervisor score)`,
   ]
-  
-  
+
+
 
   if (isLoading) {
     return <LoadingSpinner />

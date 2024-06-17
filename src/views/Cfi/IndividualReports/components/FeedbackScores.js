@@ -16,7 +16,7 @@ const columns = [
     sortable: true,
   },
   {
-    name: <b>Expected Score in Current Position</b>,
+    name: <b>Expected Score</b>,
     selector: row => row.expectedScore,
     width: '100px',
     sortable: true,
@@ -28,13 +28,13 @@ const columns = [
     sortable: true,
   },
   {
-    name: <b>Validated Score</b>,
+    name: <b>Average Validated Score</b>,
     selector: row => row.actualScore,
     width: '100px',
     sortable: true,
   },
   {
-    name: <b>Gap between validated score and expected score</b>,
+    name: <b>Gap</b>,
     selector: row => row.gap,
     width: '100px',
     sortable: true,
@@ -42,7 +42,7 @@ const columns = [
   {
     name: <b>Competency Status</b>,
     selector: row => row.status,
-    width: '200px',
+    width: '150px',
     sortable: true,
   },
 ];
@@ -58,9 +58,9 @@ const customStyles = {
 const FeedbackScores = ({ reports, reportsSummary }) => {
 
   return (
-    <div className="row mb-4 p-1">
+    <div className="row mb-4 p-4">
       <div className="col-md-12">
-        <h2>CFI Result</h2>
+        <h3>CFI Result</h3>
         <CustomizedTable 
           headers={[
             { text: 'Competency'},

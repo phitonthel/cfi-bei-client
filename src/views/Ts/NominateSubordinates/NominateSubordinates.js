@@ -112,27 +112,27 @@ function NominateSubordinates() {
 
   const Actions = (user) => (
     <div style={{ display: 'flex', gap: '10px' }}>
-      <a
-        href='#'
+      <span
         className="badge badge-primary p-1"
+        style={{ cursor: 'pointer ' }}
         onClick={(e) => {
           e.preventDefault();
           handleNominateUser(user.id);
         }}
       >
         Nominate
-      </a>
+      </span>
 
-      <a
-        href='#'
+      <span
         className="badge badge-danger p-1"
+        style={{ cursor: 'pointer ' }}
         onClick={(e) => {
           e.preventDefault();
           handleUnnominateUser(user.id);
         }}
       >
         Un-nominate
-      </a>
+      </span>
     </div>
   );
 

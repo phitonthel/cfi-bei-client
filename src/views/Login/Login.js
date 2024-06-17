@@ -18,6 +18,11 @@ function Login() {
   const [password, setPassword] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showModal, setShowModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleChange = async (event) => {
     event.preventDefault()
@@ -72,18 +77,29 @@ function Login() {
 
                       <div className="form-outline mb-2">
                         <label className="form-label" htmlFor="form3Example4">Password</label>
-                        <input
-                          type="password"
-                          id="form3Example4"
-                          className="form-control"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
+                        <div className="input-group">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            id="form3Example4"
+                            className="form-control"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                          <div className="input-group-append">
+                            <span
+                              className="input-group-text"
+                              onClick={togglePasswordVisibility}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Forgot Password Text */}
                       <div className="text-end mb-4">
-                        <span className="text-danger"  style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={handleForgotPassword}>
+                        <span className="text-danger" style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={handleForgotPassword}>
                           Forgot Password?
                         </span>
                       </div>
@@ -100,11 +116,11 @@ function Login() {
                           <Modal.Title>Forgot Password</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                        If you have never changed your password before, please use 
-                        this <a href="https://bit.ly/ReqPassword-CFI" target="_blank">link</a> to request a new password.<br></br> 
-                        If you have already changed the password, please contact the
-                         Person In Charge at SDM (Amalia Maulida/ Carinna Andiva) for 
-                         assistance with the password.
+                          If you have never changed your password before, please use
+                          this <a href="https://bit.ly/ReqPassword-CFI" target="_blank">link</a> to request a new password.<br></br>
+                          If you have already changed the password, please contact the
+                          Person In Charge at SDM (Amalia Maulida/ Carinna Andiva) for
+                          assistance with the password.
                         </Modal.Body>
                         <Modal.Footer>
                           <Button variant="secondary" onClick={handleCloseModal}>

@@ -18,6 +18,12 @@ import ApplicationSettings from "../views/ApplicationSettings/ApplicationSetting
 import { tsRoutes } from "./tsRoutes.js";
 import { cfiRoutes } from "./cfiRoutes.js";
 
+// new
+import AssessmentSelection from "../views/Cfi/AssessmentSelection/AssessmentSelection.js";
+import CfiManagement from "../views/Cfi/CfiManagement/CfiManagement.js";
+import CfiTypeSelection from "../views/Cfi/CfiTypeSelection/CfiTypeSelection";
+import AssigneeManagement from "../views/Cfi/AssigneeManagement/AssigneeManagement.js";
+
 import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
 
 export const guestRoutes = [
@@ -137,6 +143,42 @@ export const baseRoutes = [
     ],
     hidden: false,
   },
+  {
+    path: "/cfi-route-selections",
+    name: "CFI Route Selection",
+    icon: "nc-icon nc-settings-gear-64",
+    component: CfiTypeSelection,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
+    hidden: true,
+  },
+  {
+    path: "/cfi-assignee-management",
+    name: "Assignee Management",
+    icon: "nc-icon nc-settings-gear-64",
+    component: AssigneeManagement,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
+    hidden: true,
+  },
+  {
+    path: "/cfi-management",
+    name: "CFI Management",
+    icon: "nc-icon nc-settings-gear-64",
+    component: CfiManagement,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
+    hidden: false,
+  },
+  {
+    path: "/cfi-assessment-selections",
+    name: "CFI Selection",
+    icon: "nc-icon nc-paper-2",
+    component: AssessmentSelection,
+    layout: "/admin",
+    access: Object.values(ACCESS_LEVEL),
+    hidden: false,
+  },
   tsRoutes,
-  cfiRoutes,
+  ...cfiRoutes,
 ];

@@ -5,11 +5,11 @@ import Swal from 'sweetalert2';
 import { config } from '../../env';
 
 // top strengths and weaknesses
-export const fetchCfiSummaryReport = async ({
+export const fetchCfiSummaryReport = async (
   query,
-}) => {
-  const queryStr = query ? `?${query}` : ''
-  const { data } = await axios.get(`${config.baseUrl}/cfi/report/summary-strengh-weakness${queryStr}`, {
+) => {
+  const stringifiedQuery = new URLSearchParams(query).toString();
+  const { data } = await axios.get(`${config.baseUrl}/cfi/report/summary-strengh-weakness?${stringifiedQuery}`, {
     headers: {
       access_token: localStorage.getItem('access_token')
     }

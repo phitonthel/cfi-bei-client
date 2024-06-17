@@ -7,7 +7,7 @@ const UserProfile = ({
     <>
       <div className="row mb-4 p-4">
         <div className="col-md-8">
-          <h2 >Profile</h2>
+          <h3 >Profile</h3>
           <table className="table table-bordered">
             <thead>
               <tr>

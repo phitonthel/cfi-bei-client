@@ -34,11 +34,7 @@ export const login = async ({ nik, password }) => {
   return response.data
 }
 
-export const logout = async (dispatch) => {
-  // const dispatch = useDispatch();
-
-  // dispatch(initAppRedux());
-  // dispatch(initAuthRedux());
+export const logout = async () => {
   localStorage.removeItem("access_token");
   localStorage.removeItem("fullname");
   localStorage.removeItem("level");

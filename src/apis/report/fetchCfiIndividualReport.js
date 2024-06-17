@@ -4,10 +4,10 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
-export const fetchCfiIndividualReport = async (userId) => {
-  const query = `?userId=${userId}`
-
-  const { data } = await axios.get(`${config.baseUrl}/cfi/report/individual${query}`, {
+// userId, cfiTypeAssessmentId
+export const fetchCfiIndividualReport = async (query) => {
+  const stringifiedQuery = new URLSearchParams(query).toString();
+  const { data } = await axios.get(`${config.baseUrl}/cfi/report/individual?${stringifiedQuery}`, {
     headers: {
       access_token: localStorage.getItem('access_token')
     }

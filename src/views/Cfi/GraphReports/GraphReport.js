@@ -12,6 +12,7 @@ import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 
 const GraphReport = () => {
   const appReports = useSelector(state => state.app.reports);
+  const appUtilities = useSelector(state => state.app.utilities);
 
   const reportRef = useRef(null);
 
@@ -32,7 +33,11 @@ const GraphReport = () => {
         bottomTechnicals,
         topBehaviourals,
         bottomBehaviourals,
-      } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
+        // } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
+      } = await fetchCfiSummaryReport({
+        userId: appReports.selectedUserReport.id,
+        cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id,
+      })
 
       setUser(user)
       setUsers(users)
