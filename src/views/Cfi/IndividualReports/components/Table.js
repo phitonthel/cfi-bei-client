@@ -12,12 +12,12 @@ const StyledTr = styled.tr`
   margin: 10px 0;
 `;
 
-const renderRow = (cols) => {
+const Row = ({cols}) => {
   return (
     <StyledTr>
       {
-        cols.map(col =>
-          <td style={{ padding: '8px' }}>
+        cols.map((col, index) =>
+          <td style={{ padding: '8px' }} key={index}>
             {col}
           </td>
         )
@@ -35,13 +35,13 @@ export const CustomizedTable = ({
       <thead>
         <tr style={{ backgroundColor: '#f8f9fa' }}>
           {
-            headers.map(header => <th className={header.className}>{header.text}</th>)
+            headers.map((header, index) => <th className={header.className} key={index}>{header.text}</th>)
           }
         </tr>
       </thead>
       <tbody>
         {
-          rows.map(row => renderRow(row))
+          rows.map((row, index) => <Row cols={row} key={index} />)
         }
       </tbody>
     </StyledTable>

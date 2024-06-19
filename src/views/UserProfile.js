@@ -1,9 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import axios from 'axios';
 
-// react-bootstrap components
+import axios from 'axios';
 import {
   Badge,
   Button,
@@ -15,9 +13,13 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+
+// react-bootstrap components
+
+import { fireSwalError, fireSwalSuccess } from '../apis/fireSwal';
 import { fetchSelfDetail } from '../apis/user/fetchSelfDetail';
 import { updateProfile } from '../apis/user/updateProfile';
-import { fireSwalError, fireSwalSuccess } from '../apis/fireSwal';
 
 
 function User() {

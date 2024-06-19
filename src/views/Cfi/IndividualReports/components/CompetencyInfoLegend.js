@@ -1,12 +1,11 @@
 import { CustomizedTable } from "./Table";
 
 const rows = [
-  ['Expected Score in Current Position', 'Competency level required by the IDX for your current position'],
-  ['Self Score', 'Self-assessment conducted by you'],
-  ['Validated Score', 'Validated assessment that has been validated by the direct supervisor'],
-  ['Gap between validated score and expected score', 'Validated Score - Expected Score'],
-  ['Meet', 'Competencies that fulfill the current position'],
-  ['Need Development', 'Requires competency development'],
+  ['Expected Score', 'Competency level required for your role'],
+  ['Self Score', 'Your self-assessment score'],
+  ['Average Validated Score', 'Average score from reviewers'],
+  ['Gap', 'Difference between Average Validated Score and Expected Score'],
+  ['Competency Status', 'Whether you have met the competency level required for your role'],
 ]
 
 const rowsTechnical = [
@@ -27,7 +26,7 @@ const CompetencyInfoLegend = () => {
   return (
     <div className="row mb-4 p-4">
       <div className="col-md-12">
-        <h2>Competency Assessment Legend</h2>
+        <h3>Competency Assessment Legend</h3>
 
         <CustomizedTable 
           headers={[

@@ -1,4 +1,4 @@
-import SelfAssessment from '../SelfAssessment/SelfAssessment';
+import SelfAssessment from '../CfiAssessment/CfiAssessment';
 
 const Technical = () => {
   return SelfAssessment('TECHNICAL')

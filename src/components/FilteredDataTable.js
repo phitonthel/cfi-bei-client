@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import DataTable from 'react-data-table-component';
 
 import { FilterSearchBar } from './FilterSearchBar';
@@ -7,6 +8,7 @@ const FilteredDataTable = ({
   data,
   columns,
   filterKeys, // array of string
+  otherProps,
 }) => {
   const [filterText, setFilterText] = useState('');
   
@@ -33,6 +35,7 @@ const FilteredDataTable = ({
         highlightOnHover
         pagination
         paginationPerPage={10}
+        {...otherProps}
         // ... other props
       />
     </div>

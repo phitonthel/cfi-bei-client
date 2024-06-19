@@ -10,3 +10,10 @@ export const convertISODateToDDMMYYYY = (isoString) => {
   
   return `${day}/${month}/${year}`;
 }
+
+export const formatISODateToMonthYear = (isoDate) => {
+  const date = new Date(isoDate);
+  
+  const options = { year: 'numeric', month: 'long' };
+  return date.toLocaleDateString('en-US', options);
+}

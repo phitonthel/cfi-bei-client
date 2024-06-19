@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import Swal from 'sweetalert2';
+
 import DataTable from 'react-data-table-component';
 import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2';
 
+import Instructions from './Instructions';
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { nominateUser } from '../../../apis/tsAssessment/nominateUser';
 import { unnominateUser } from '../../../apis/tsAssessment/unnominateUser'
-import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import NominatePeersModal from '../../../components/Modal/NominateUserModal';
 import { fetchTsPeerTable } from '../../../apis/user/fetchTsPeerTable';
 import { fetchAllTsPeers } from '../../../apis/user/ts/fetchAllTsPeers';
-import Instructions from './Instructions';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import NominatePeersModal from '../../../components/Modal/NominateUserModal';
 
 
 const columns = [
@@ -109,27 +110,27 @@ function NominatePeers() {
 
   const Actions = (user) => (
     <div style={{ display: 'flex', gap: '10px' }}>
-      <a
-        href='#'
+      <span
         className="badge badge-primary p-1"
+        style={{ cursor: 'pointer' }}
         onClick={(e) => {
           e.preventDefault();
           handleNominateUser(user.id);
         }}
       >
         Nominate
-      </a>
+      </span>
 
-      <a
-        href='#'
+      <span
         className="badge badge-danger p-1"
+        style={{ cursor: 'pointer' }}
         onClick={(e) => {
           e.preventDefault();
           handleUnnominateUser(user.id);
         }}
       >
         Un-nominate
-      </a>
+      </span>
     </div>
   );
 

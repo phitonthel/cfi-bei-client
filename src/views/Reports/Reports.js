@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
+
 import axios from 'axios';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import Swal from 'sweetalert2';
 
 import DivisionReport from './Division/index'
 import DivisionSingleReport from './DivisionSingle/index'
 import UserReport from './User/index'
-
-import { useFetch } from '../../apis/useFetch'
 import { fetchCfiOptionsReport } from '../../apis/report/fetchCfiOptionsReport';
-import { LoadingSpinner } from 'components/LoadingSpinner';
 
 const REPORT_TYPE = {
   DIVISION_SUMMARY: "Division Summary",

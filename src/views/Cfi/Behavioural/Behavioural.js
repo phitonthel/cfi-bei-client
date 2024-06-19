@@ -1,7 +1,7 @@
-import SelfAssessment from '../SelfAssessment';
+import SelfAssessment from '../CfiAssessment';
 
-const Technical = () => {
+const Behavioural = () => {
   return SelfAssessment('BEHAVIOURAL')
 };
 
-export default Technical
+export default Behavioural

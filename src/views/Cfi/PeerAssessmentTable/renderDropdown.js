@@ -1,4 +1,4 @@
-import { renderScore } from '../../../components/AssessmentCard'
+import { renderScore } from '../../../components/Cfi/AssessmentCard'
 
 export const renderDropdown = (propAssessment, setAssessments) => {
   return (

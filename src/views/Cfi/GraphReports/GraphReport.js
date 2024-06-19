@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+
+import UserProfile from 'components/Reports/UserProfile';
 import { useSelector } from 'react-redux';
 
-import { fetchCfiSummaryReport } from '../../../apis/report/fetchCfiSummaryReport';
-import { fireSwalError } from '../../../apis/fireSwal';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { CustomBarChart } from './BarChart';
-import TeamProfile from '../../../components/Reports/TeamProfile';
-import UserProfile from 'components/Reports/UserProfile';
+import { fireSwalError } from '../../../apis/fireSwal';
+import { fetchCfiSummaryReport } from '../../../apis/report/fetchCfiSummaryReport';
 import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
+import TeamProfile from '../../../components/Reports/TeamProfile';
 
 const GraphReport = () => {
   const appReports = useSelector(state => state.app.reports);
+  const appUtilities = useSelector(state => state.app.utilities);
 
   const reportRef = useRef(null);
 
@@ -32,7 +34,11 @@ const GraphReport = () => {
         bottomTechnicals,
         topBehaviourals,
         bottomBehaviourals,
-      } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
+        // } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
+      } = await fetchCfiSummaryReport({
+        userId: appReports.selectedUserReport.id,
+        cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id,
+      })
 
       setUser(user)
       setUsers(users)

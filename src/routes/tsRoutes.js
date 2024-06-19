@@ -1,13 +1,12 @@
-import IndividualReports from "../views/Ts/IndividualReport/IndividualReports.js";
+import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
+import FeedbackForm from "../views/Ts/FeedbackForms/FeedbackForm.js";
 import FeedbackForms from "../views/Ts/FeedbackForms/FeedbackForms.js";
+import GroupReport from "../views/Ts/GroupReport/GroupReport.js";
 import IndividualReport from "../views/Ts/IndividualReport/IndividualReport.js";
+import IndividualReports from "../views/Ts/IndividualReport/IndividualReports.js";
 import NominatePeers from "../views/Ts/NominatePeers/index.js";
 import NominateSubordinates from "../views/Ts/NominateSubordinates/index.js";
-
-import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
-import GroupReport from "../views/Ts/GroupReport/GroupReport.js";
 import ReviewNomination from "../views/Ts/ReviewNominations/ReviewNominations.js";
-import FeedbackForm from "../views/Ts/FeedbackForms/FeedbackForm.js";
 
 export const tsRoutes = {
   path: "/360",

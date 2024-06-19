@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
 import { fetchAppSettings } from '../../apis/applicationSetting/fetchAppSettings';
-import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
 import { setAppSettings } from '../../apis/applicationSetting/setAppSettings';
+import { fireSwalSuccess, fireSwalError } from '../../apis/fireSwal';
 
 function ApplicationSettings() {
   const [settings, setSettings] = useState([]);

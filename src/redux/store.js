@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import authReducer from './authSlice';
 import appReducer from './appSlice';
+import authReducer from './authSlice';
 import { loadState, saveState } from './utils'
 
 const preloadedState = loadState();

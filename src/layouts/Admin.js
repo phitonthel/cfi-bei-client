@@ -1,20 +1,18 @@
-import _ from "lodash";
 import React, { useState, Component } from "react";
+
+import _ from "lodash";
 import { useSelector } from 'react-redux';
 import { useLocation, Route, Switch } from "react-router-dom";
-
-import AdminNavbar from "../components/Navbars/AdminNavbar";
-import Footer from '../components/Footer/Footer';
-import Sidebar from "../components/Sidebar/Sidebar";
-import FixedPlugin from "../components/FixedPlugin/FixedPlugin.js";
 import Login from "views/Login";
 
-import { guestRoutes, baseRoutes } from '../routes/routes.js'
-
-import sidebarImage from '../assets/img/sidebar-7.jpg';
 import { fetchAppSettings } from "../apis/applicationSetting/fetchAppSettings";
-
-import { APP_SETTINGS } from "../routes/routes.js";
+import sidebarImage from '../assets/img/sidebar-7.jpg';
+import FixedPlugin from "../components/FixedPlugin/FixedPlugin.js";
+import Footer from '../components/Footer/Footer';
+import AdminNavbar from "../components/Navbars/AdminNavbar";
+import Sidebar from "../components/Sidebar/Sidebar";
+import { guestRoutes, baseRoutes, APP_SETTINGS } from '../routes/routes.js'
+import { fireSwalError } from "../apis/fireSwal";
 
 export const flattenRoutes = (routes) => {
   return routes.flatMap(route => {
@@ -91,13 +89,39 @@ const hideRoutesByAccessLevel = ({
   return filteredRoutes;
 }
 
+const getRoutes = (routes, level) => {
+  const flatRoutes = flattenRoutes(routes)
+
+  return flatRoutes.map((prop, key) => {
+    // condition for rendering access level goes here
+    // this is only for routes, not for Sidebar
+    const isLayoutValid = prop.layout === "/admin"
+    if (
+      isLayoutValid
+    ) {
+      const path = prop.layout + prop.path
+      return (
+        <Route
+          exact
+          path={path}
+          render={(props) => <prop.component {...props} />}
+          key={key}
+        />
+      );
+    } else {
+      return null;
+    }
+  });
+};
+
 function Admin() {
   // console.log('Running in:', process.env.NODE_ENV)
-  
+
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
   const [appSettings, setAppSettings] = React.useState([])
+  const [isLoading, setIsLoading] = React.useState(true)
 
   // need to clone to avoid mutating base routes
   // without cloning, it introduces bug when login to diff user
@@ -118,33 +142,6 @@ function Admin() {
     authUser,
   })
 
-  const getRoutes = (routes, level) => {
-    const flatRoutes = flattenRoutes(routes)
-
-    return flatRoutes.map((prop, key) => {
-      // condition for rendering access level goes here
-      // this is only for routes, not for Sidebar
-      const isLayoutValid = prop.layout === "/admin"
-      // const isAccessValid = !level ? true : prop.access.includes(level)
-      if (
-        isLayoutValid
-        // isAccessValid
-      ) {
-        const path = prop.layout + prop.path
-        return (
-          <Route
-            exact
-            path={path}
-            render={(props) => <prop.component {...props} />}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
-
   React.useEffect(async () => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -158,9 +155,32 @@ function Admin() {
       element.parentNode.removeChild(element);
     }
 
-    const { data } = await fetchAppSettings()
-    setAppSettings(data)
+    try {
+      const { data } = await fetchAppSettings()
+      setAppSettings(data)
+    } catch (error) {
+      fireSwalError(error)
+    } finally {
+      setIsLoading(false)
+    }
   }, [location]);
+
+  if (isLoading) {
+    return (
+      <>
+        <div className="wrapper">
+          <Sidebar color={color} image={hasImage ? image : ""} routes={[]} />
+          <div className="main-panel" ref={mainPanel}>
+            <AdminNavbar />
+            <div className="content">
+              <Switch>{getRoutes(guestRoutes)}</Switch>
+            </div>
+            <Footer />
+          </div>
+        </div>
+      </>
+    )
+  }
 
   if (!localStorage.getItem('access_token')) {
     return (

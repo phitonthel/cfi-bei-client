@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import Swal from 'sweetalert2';
+
 import DataTable from 'react-data-table-component';
 import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2';
 
+import Instructions from './Instructions';
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { nominateUser } from '../../../apis/tsAssessment/nominateUser';
-
 import { unnominateUser } from '../../../apis/tsAssessment/unnominateUser'
 import { fetchTsSubordinateTable } from '../../../apis/user/fetchTsSubordinateTable'
-import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { fetchAllTsSubordinates } from '../../../apis/user/ts/fetchAllTsSubordinates';
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import NominateUserModal from '../../../components/Modal/NominateUserModal';
-import { fetchAllTsSubordinates } from '../../../apis/user/ts/fetchAllTsSubordinates';
-import Instructions from './Instructions';
 
 
 const columns = [
@@ -112,27 +112,27 @@ function NominateSubordinates() {
 
   const Actions = (user) => (
     <div style={{ display: 'flex', gap: '10px' }}>
-      <a
-        href='#'
+      <span
         className="badge badge-primary p-1"
+        style={{ cursor: 'pointer ' }}
         onClick={(e) => {
           e.preventDefault();
           handleNominateUser(user.id);
         }}
       >
         Nominate
-      </a>
+      </span>
 
-      <a
-        href='#'
+      <span
         className="badge badge-danger p-1"
+        style={{ cursor: 'pointer ' }}
         onClick={(e) => {
           e.preventDefault();
           handleUnnominateUser(user.id);
         }}
       >
         Un-nominate
-      </a>
+      </span>
     </div>
   );
 

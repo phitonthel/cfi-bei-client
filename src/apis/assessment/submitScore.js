@@ -7,22 +7,20 @@ import { config } from '../../env';
  * Can be used to submit reviewerScore or assignedScore
  */
 export const submitScore = async ({
-  assessmentId,
-  assignedScore,
-  reviewerScore,
-  reviewerId,
+  id,
+  justification,
+  score,
 }) => {
   const response = await axios({
     method: 'PUT',
-    url: `${config.baseUrl}/assessment/score`,
+    url: `${config.baseUrl}/cfi/assessment/score`,
     headers: {
       access_token: localStorage.getItem('access_token')
     },
     data: {
-      assessmentId,
-      assignedScore,
-      reviewerScore,
-      reviewerId,
+      id,
+      justification,
+      score,
     }
   });
   return response

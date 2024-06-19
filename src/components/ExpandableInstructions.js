@@ -1,5 +1,6 @@
-import { Accordion } from 'react-bootstrap';
 import React, { useState } from 'react';
+
+import { Accordion } from 'react-bootstrap';
 
 import arrowDown from './svgs/arrowDown.svg'
 import arrowRight from './svgs/arrowRight.svg'

@@ -1,7 +1,6 @@
 import React from "react";
+
 // react plugin for creating notifications over the dashboard
-import NotificationAlert from "react-notification-alert";
-// react-bootstrap components
 import {
   Alert,
   Badge,
@@ -14,6 +13,8 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import NotificationAlert from "react-notification-alert";
+// react-bootstrap components
 
 function Notifications() {
   const [showModal, setShowModal] = React.useState(false);

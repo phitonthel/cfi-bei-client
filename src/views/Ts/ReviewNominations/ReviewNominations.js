@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
+
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 
-import { fetchReviewNomination } from '../../../apis/user/fetchReviewNomination';
+import ApproveAllNominationButton from './ApproveAllNominationButton';
+import { handleApprovalUser, handleUnapprovalUser } from './utils';
+import { columns } from './vars';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
+import { fetchReviewNomination } from '../../../apis/user/fetchReviewNomination';
+import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
+import FilteredDataTable from '../../../components/FilteredDataTable';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import NominateUserModal from '../../../components/Modal/NominateUserModal';
-import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
-import { handleApprovalUser, handleUnapprovalUser } from './utils';
-import ApproveAllNominationButton from './ApproveAllNominationButton';
-import { columns } from './vars';
-import FilteredDataTable from '../../../components/FilteredDataTable';
-import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 
 const createCsv = (data) => {
   if (data.length === 0) return ''
@@ -43,14 +44,16 @@ function ReviewNomination() {
 
   const [nominations, setNominations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  
+
   const Actions = ({
     reviewer,
     reviewee,
   }) => {
     return (
       <div>
-        <a href='#' className="badge badge-danger mx-1"
+        <span
+          className="badge badge-danger mx-1"
+          style={{ cursor: 'pointer ' }}
           onClick={(e) => {
             e.preventDefault();
             handleUnapprovalUser({
@@ -61,8 +64,10 @@ function ReviewNomination() {
           }}
         >
           Un-approve
-        </a>
-        <a href='#' className="badge badge-primary mx-1"
+        </span>
+        <span
+          className="badge badge-primary mx-1"
+          style={{ cursor: 'pointer ' }}
           onClick={(e) => {
             e.preventDefault();
             handleApprovalUser({
@@ -73,7 +78,7 @@ function ReviewNomination() {
           }}
         >
           Approve
-        </a>
+        </span>
       </div>
     )
   }
@@ -135,12 +140,12 @@ function ReviewNomination() {
       </div>
 
       <div className="d-flex justify-content-end m-2">
-        <DownloadCsvButton 
+        <DownloadCsvButton
           data={createCsv(nominations)}
           filename={`reviewnominations_${new Date().getTime()}.csv`}
         />
 
-        <ApproveAllNominationButton 
+        <ApproveAllNominationButton
           buttonText={'Approve All'}
           onFormSubmit={() => {
             initNominations()

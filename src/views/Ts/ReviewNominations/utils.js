@@ -1,6 +1,6 @@
+import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { approveNomination } from '../../../apis/tsAssessment/approveNomination';
 import { unapproveNomination } from '../../../apis/tsAssessment/unapproveNomination';
-import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 
 export const handleApprovalUser = async ({
   reviewer,

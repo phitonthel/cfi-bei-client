@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+
 import axios from 'axios';
+import DataTable from 'react-data-table-component';
+import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 
-import DataTable from 'react-data-table-component';
-import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
 import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import BaseInstructions from '../BaseInstructions';
 import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
+import BaseInstructions from '../BaseInstructions';
 
 const columns = [
   {
@@ -50,7 +51,9 @@ function FeedbackForms() {
   const Actions = (user) => {
     return (
       <div>
-        <a href='#' className="badge badge-primary mx-1"
+        <span
+          className="badge badge-primary mx-1"
+          style={{ cursor: 'pointer' }}
           onClick={() => {
             dispatch(setAppReport({
               feedbackFormUser: {
@@ -58,12 +61,12 @@ function FeedbackForms() {
                 fullname: user.fullname,
               }
             }));
-            
+
             history.push('/admin/ts/feedback-form')
           }}
         >
           Review
-        </a>
+        </span>
       </div>
     )
   }
@@ -114,7 +117,7 @@ function FeedbackForms() {
     <>
       <div className='m-4'>
         {/* <ExpandableInstructions instructions={instructions} /> */}
-        < BaseInstructions 
+        < BaseInstructions
           instructions={[
             "Your ratees are in the spotlight and it's review time! Please proceed by clicking the 'Review' button.",
             "Psst.., they will not know that you are reviewing them (unless you tell them of course)"

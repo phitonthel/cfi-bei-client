@@ -1,12 +1,13 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { handleDownloadPDF, handleDownloadPDFV2 } from "../../utils/handleDownloadPdf";
 import { downloadTxtFile } from "../../views/Reports/utils"
-import { handleDownloadPDF } from "../../utils/handleDownloadPdf";
 
 export const DownloadPdfButton = ({
   reportRef,
   filename,
+  buttonText,
 }) => {
   return (
     <div className="text-center mt-4">
@@ -15,7 +16,7 @@ export const DownloadPdfButton = ({
         onClick={() => handleDownloadPDF(reportRef, filename)}
       >
         <FontAwesomeIcon className="mr-2" icon={faDownload} />
-        Download PDF
+        {buttonText || `Download PDF`}
       </button>
     </div>
   )

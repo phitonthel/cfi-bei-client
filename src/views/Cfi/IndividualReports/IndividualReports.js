@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import Swal from 'sweetalert2'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faUserTie, faChartPie } from '@fortawesome/free-solid-svg-icons';
 
 import DataTable from 'react-data-table-component';
-import { fetchFeedbackFormUsers } from '../../../apis/user/fetchFeedbackFormUsers';
+import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
+
+
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
-import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
-import FilteredDataTable from '../../../components/FilteredDataTable';
 import { fetchCfiIndividualReportTable } from '../../../apis/report/fetchCfiIndividualReportTable';
+import FilteredDataTable from '../../../components/FilteredDataTable';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { setAppReport } from '../../../redux/appSlice';
 import { ACCESS_LEVEL } from '../../../routes/const';
 
 const columns = [
@@ -61,10 +57,9 @@ function IndividualReports() {
 
     return (
       <div>
-        <a 
-          href='#' 
+        <span
           className="badge badge-primary mx-1"
-          style={{ fontSize: '11px'}}
+          style={{ fontSize: '11px', cursor: 'pointer' }}
           onClick={() => {
             dispatch(setAppReport({
               selectedUserReport: {
@@ -77,16 +72,15 @@ function IndividualReports() {
         >
           {/* <FontAwesomeIcon icon={faUserTie} />  */}
           Individual Report
-        </a>
+        </span>
 
 
 
         {
           [KEPALA_DIVISI, KEPALA_UNIT, KEPALA_KANTOR].includes(level) &&
-          <a 
-            href='#' 
+          <span
             className="badge badge-secondary mx-1"
-            style={{ fontSize: '11px'}}
+            style={{ fontSize: '11px', cursor: 'pointer' }}
             onClick={() => {
               dispatch(setAppReport({
                 selectedUserReport: {
@@ -99,7 +93,7 @@ function IndividualReports() {
           >
             {/* <FontAwesomeIcon icon={faChartPie} />  */}
             Graph Report
-          </a>
+          </span>
         }
       </div>
     )

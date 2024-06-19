@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 
-export const Criteria = (assessment) => {
+export const Criteria = ({options}) => {
   return (
     <div>
       {
-        assessment.options.map(option => {
+        options.map(option => {
           return (
-            <ul className="list-group mx-4 px-4">
+            <ul className="list-group m-2" key={option.level}>
               <li className="list-group-item">{option.level}</li>
               <div className="list-group-item">
                 {
                   option.criterias.map((criteria, index) => {
+                    console.log({key: option.level + index})
                     return (
-                      <div className="mx-2 text-left col" key={index}>
+                      <div className="mx-2 text-left col" key={option.level + index}>
                         {criteria}
                       </div>
                     )
