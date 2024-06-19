@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+
 import { Button, Modal, Form } from 'react-bootstrap';
 
 import directorateOptions from './data/directorateOptions'
-import levelOptions from './data/levelOptions'
-import unitOptions from './data/unitOptions'
-import positionOptions from './data/positionOptions'
-import locationOptions from './data/locationOptions'
 import divisionOptions from './data/divisionOptions'
+import levelOptions from './data/levelOptions'
+import locationOptions from './data/locationOptions'
+import positionOptions from './data/positionOptions'
 import roleOptions from './data/roleOptions'
+import unitOptions from './data/unitOptions'
 
 const AddUserModal = ({ buttonText }) => {
     const [showModal, setShowModal] = useState(false);

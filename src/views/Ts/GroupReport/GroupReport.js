@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+
 import axios from 'axios';
+import DataTable from 'react-data-table-component';
+import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 
-import DataTable from 'react-data-table-component';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
-import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import BaseInstructions from '../BaseInstructions';
-import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
-import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
 import { fetchTsGroupReport } from '../../../apis/report/fetchTsGroupReport';
-import { downloadTxtFile } from '../../../views/Reports/utils';
+import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
 import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
+import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import FilteredDataTable from '../../../components/FilteredDataTable';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
+import { downloadTxtFile } from '../../../views/Reports/utils';
+import BaseInstructions from '../BaseInstructions';
 
 const getCompetenciesTitle = (reports) => {
   if (reports.length === 0) return {}

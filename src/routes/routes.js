@@ -1,30 +1,26 @@
-import Dashboard from "../views/Dashboard.js";
-import UserProfile from "../views/UserProfile.js";
-import Typography from "../views/Typography.js";
-import Icons from "../views/Icons.js";
-import Maps from "../views/Maps.js";
-import Notifications from "../views/Notifications.js";
-import Upgrade from "../views/Upgrade.js";
-import Login from "../views/Login/index.js";
-import LandingPage from "../views/LandingPage/LandingPage.js";
-
-import Announcement from "../views/Announcement/index.js";
-import Reports from "../views/Reports/index.js";
-import ReviewNominations from "../views/Ts/ReviewNominations/index.js";
-
-import Article from "../views/article/index.js";
-import UserManagement from "../views/UserManagement/UserManagement.js";
-import ApplicationSettings from "../views/ApplicationSettings/ApplicationSettings.js";
-import { tsRoutes } from "./tsRoutes.js";
 import { cfiRoutes } from "./cfiRoutes.js";
-
-// new
+import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
+import { tsRoutes } from "./tsRoutes.js";
+import Announcement from "../views/Announcement/index.js";
+import ApplicationSettings from "../views/ApplicationSettings/ApplicationSettings.js";
+import Article from "../views/article/index.js";
 import AssessmentSelection from "../views/Cfi/AssessmentSelection/AssessmentSelection.js";
+import AssigneeManagement from "../views/Cfi/AssigneeManagement/AssigneeManagement.js";
 import CfiManagement from "../views/Cfi/CfiManagement/CfiManagement.js";
 import CfiTypeSelection from "../views/Cfi/CfiTypeSelection/CfiTypeSelection";
-import AssigneeManagement from "../views/Cfi/AssigneeManagement/AssigneeManagement.js";
-
-import { ACCESS_LEVEL, APP_SETTINGS } from './const.js'
+import Dashboard from "../views/Dashboard.js";
+import Icons from "../views/Icons.js";
+import LandingPage from "../views/LandingPage/LandingPage.js";
+import Login from "../views/Login/index.js";
+import Maps from "../views/Maps.js";
+import Notifications from "../views/Notifications.js";
+import Reports from "../views/Reports/index.js";
+import ReviewNominations from "../views/Ts/ReviewNominations/index.js";
+// new
+import Typography from "../views/Typography.js";
+import Upgrade from "../views/Upgrade.js";
+import UserManagement from "../views/UserManagement/UserManagement.js";
+import UserProfile from "../views/UserProfile.js";
 
 export const guestRoutes = [
   {
@@ -164,15 +160,17 @@ export const baseRoutes = [
   {
     path: "/cfi-management",
     name: "CFI Management",
-    icon: "nc-icon nc-settings-gear-64",
+    icon: "nc-icon nc-single-copy-04",
     component: CfiManagement,
     layout: "/admin",
-    access: Object.values(ACCESS_LEVEL),
+    access: [
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
     hidden: false,
   },
   {
-    path: "/cfi-assessment-selections",
-    name: "CFI Selection",
+    path: "/cfi/assessment/selections",
+    name: "CFI Assessments",
     icon: "nc-icon nc-paper-2",
     component: AssessmentSelection,
     layout: "/admin",

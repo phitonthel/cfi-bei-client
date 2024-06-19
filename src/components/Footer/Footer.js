@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import { Container } from "react-bootstrap";
 
 class Footer extends Component {
@@ -28,7 +29,7 @@ class Footer extends Component {
             <nav>
               <p className="" style={paragraphStyle}>
                 <>© 2022 {"  "}</>
-                <a href="https://www.linkedin.com/in/bartolomeus-delphito/" target="_blank">phitonthel x giovannyptr</a>
+                <a href="https://www.linkedin.com/in/bartolomeus-delphito/" target="_blank" rel="noreferrer">phitonthel x giovannyptr</a>
               </p>
               {/* <p className="col-2"></p> */}
             </nav>

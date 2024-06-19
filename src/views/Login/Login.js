@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useLocation, useHistory } from "react-router-dom";
-import { Modal, Button } from 'react-bootstrap'; // Importing necessary components from react-bootstrap
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
 
+import axios from 'axios';
+import { Modal, Button } from 'react-bootstrap'; // Importing necessary components from react-bootstrap
 import DataTable from 'react-data-table-component';
+import { useDispatch } from 'react-redux';
+import { useLocation, useHistory } from "react-router-dom";
+
+import { fireSwalError } from '../../apis/fireSwal';
 import { login } from '../../apis/user/auth';
 import { SubmitButton } from '../../components/SubmitButton';
-import { fireSwalError } from '../../apis/fireSwal';
 import { setAuth } from "../../redux/authSlice";
 
 function Login() {
@@ -31,7 +32,7 @@ function Login() {
       setIsSubmitting(true)
       const auth = await login({ nik, password })
       dispatch(setAuth(auth));
-      history.push('/admin/self-assessment-behavioural')
+      history.push('/admin/cfi/assessment/selections')
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -117,7 +118,7 @@ function Login() {
                         </Modal.Header>
                         <Modal.Body>
                           If you have never changed your password before, please use
-                          this <a href="https://bit.ly/ReqPassword-CFI" target="_blank">link</a> to request a new password.<br></br>
+                          this <a href="https://bit.ly/ReqPassword-CFI" target="_blank" rel="noreferrer">link</a> to request a new password.<br></br>
                           If you have already changed the password, please contact the
                           Person In Charge at SDM (Amalia Maulida/ Carinna Andiva) for
                           assistance with the password.

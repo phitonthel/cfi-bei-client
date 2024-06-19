@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
+
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 
-import { fetchReviewNomination } from '../../../apis/user/fetchReviewNomination';
+import ApproveAllNominationButton from './ApproveAllNominationButton';
+import { handleApprovalUser, handleUnapprovalUser } from './utils';
+import { columns } from './vars';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
+import { fetchReviewNomination } from '../../../apis/user/fetchReviewNomination';
+import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
+import FilteredDataTable from '../../../components/FilteredDataTable';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import NominateUserModal from '../../../components/Modal/NominateUserModal';
-import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
-import { handleApprovalUser, handleUnapprovalUser } from './utils';
-import ApproveAllNominationButton from './ApproveAllNominationButton';
-import { columns } from './vars';
-import FilteredDataTable from '../../../components/FilteredDataTable';
-import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 
 const createCsv = (data) => {
   if (data.length === 0) return ''

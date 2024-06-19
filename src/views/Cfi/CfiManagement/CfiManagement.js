@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import DataTable from 'react-data-table-component';
 
+import axios from 'axios';
+import { Button, Form } from 'react-bootstrap';
+import DataTable from 'react-data-table-component';
+import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+
+import Card from './Card';
 import FilteredDataTable from '../../../components/FilteredDataTable';
+import Instructions from '../../../components/Instructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SubmitButton } from '../../../components/SubmitButton';
-import Instructions from '../../../components/Instructions';
-import Card from './Card';
 
 const dummyData = [
   {

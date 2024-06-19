@@ -1,15 +1,16 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faUsers, faClipboardCheck, faChartBar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useQuery } from 'react-query';
 
 import CustomCard from './Card';
-import { setUtilities } from '../../../redux/appSlice';
 import { fetchCfiDetailedTypeAssessments } from '../../../apis/cfi/cfiTypeAssessments';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { setUtilities } from '../../../redux/appSlice';
 
 const CfiTypeSelection = () => {
   const cfiTypeAssessment = useSelector(state => state.app.utilities.cfiTypeAssessment);
@@ -87,7 +88,7 @@ const CfiTypeSelection = () => {
             title="Technical Assessments"
             description="Take the assessment."
             icon={faClipboardCheck}
-            link="/admin/cfi/self-assessment-technical"
+            link="/admin/cfi/assessment/technical"
             progressBarLabel={`${data.progress.cfiTechnicalCompleted} / ${data.progress.cfiTechnicalTotal}`}
             progressBarValue={data.progress.cfiTechnicalCompleted / data.progress.cfiTechnicalTotal}
             assessmentType="TECHNICAL"
@@ -99,7 +100,7 @@ const CfiTypeSelection = () => {
             title="Behavioural Assessments"
             description="Take the assessment."
             icon={faClipboardCheck}
-            link="/admin/cfi/self-assessment-behavioural"
+            link="/admin/cfi/assessment/behavioural"
             progressBarLabel={`${data.progress.cfiBehaviouralCompleted} / ${data.progress.cfiBehaviouralTotal}`}
             progressBarValue={data.progress.cfiBehaviouralCompleted / data.progress.cfiBehaviouralTotal}
             assessmentType="BEHAVIOURAL"

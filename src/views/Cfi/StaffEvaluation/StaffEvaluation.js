@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import axios from 'axios';
-import Swal from 'sweetalert2'
-import { useDispatch, useSelector } from 'react-redux';
-import { useQuery } from 'react-query';
 
+import axios from 'axios';
 import DataTable from 'react-data-table-component';
-import { fetchStaffForEvaluation } from '../../../apis/user/fetchStaffForEvaluation';
+import { useQuery } from 'react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2'
+
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
-import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { fetchStaffForEvaluation } from '../../../apis/user/fetchStaffForEvaluation';
 import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
-import { convertISODateToDDMMYYYY } from '../../../utils/date'
+import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import Instructions from '../../../components/Instructions';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { setUtilities } from '../../../redux/appSlice';
+import { convertISODateToDDMMYYYY } from '../../../utils/date'
 
 const columns = [
   {
@@ -104,7 +105,7 @@ function StaffEvaluation() {
                 isSelfReview: false,
               }
             }));
-            history.push(`/admin/cfi/self-assessment-technical`);
+            history.push(`/admin/cfi/assessment/technical`);
           }}
         >
           Assess Technical
@@ -121,7 +122,7 @@ function StaffEvaluation() {
                 isSelfReview: false,
               }
             }));
-            history.push(`/admin/cfi/self-assessment-behavioural`);
+            history.push(`/admin/cfi/assessment/behavioural`);
           }}
         >
           Assess Behavioural

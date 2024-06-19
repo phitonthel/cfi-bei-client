@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+
 import { Button, Modal, Form, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import SearchableDropdown from '../SearchableDropdown'
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { approveNomination } from '../../apis/tsAssessment/approveNomination';
+import SearchableDropdown from '../SearchableDropdown'
 
 const NominateUserModal = ({
   modalTitle,

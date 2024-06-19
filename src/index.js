@@ -1,11 +1,12 @@
 import React from "react";
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { store } from "redux/store";
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/animate.min.css";

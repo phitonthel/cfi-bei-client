@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { AssessmentRadios } from './AssessmentRadiosV2';
 import { Criteria } from './Criteria';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 export const renderScore = (score, type) => {
   if (type === 'TECHNICAL') {

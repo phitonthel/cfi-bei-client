@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
+
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import { useSelector, useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 
 
-import { fetchFeedbackForm } from '../../../apis/tsAssessment/fetchFeedbackForm';
-
-import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
-import { submitTsScore, submitTsEssay } from '../../../apis/assessment/submitScore';
-import { SubmitButton } from '../../../components/SubmitButton';
 import OpenFeedbackForm from './OpenFeedbackForm';
+import ScoringLegend from './ScoringLegend';
+import { submitTsScore, submitTsEssay } from '../../../apis/assessment/submitScore';
+import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
+import { fetchFeedbackForm } from '../../../apis/tsAssessment/fetchFeedbackForm';
 import { FloatingMessage } from '../../../components/FloatingMessage';
 import QuestionForm from '../../../components/QuestionForm/QuestionForm';
-import ScoringLegend from './ScoringLegend';
-import { LoadingSpinner } from 'components/LoadingSpinner';
+import { SubmitButton } from '../../../components/SubmitButton';
+
 
 const arrText = [
   'Secara konsisten melebihi standar perilaku yang diharapkan.',

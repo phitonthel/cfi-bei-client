@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import axios from 'axios';
-import Swal from 'sweetalert2'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Tippy from '@tippy.js/react';
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2'
 import 'tippy.js/dist/tippy.css';
-
 import DataTable from 'react-data-table-component';
-import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
+
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
+import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
-import { LoadingSpinner } from 'components/LoadingSpinner';
-import { downloadTxtFile } from '../Reports/utils';
-import AddUserModal from '../../components/Modal/AddUserModal'
 import FilteredDataTable from '../../components/FilteredDataTable';
+import AddUserModal from '../../components/Modal/AddUserModal'
+import { downloadTxtFile } from '../Reports/utils';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const columns = [
   {

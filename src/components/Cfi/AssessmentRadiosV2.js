@@ -1,10 +1,12 @@
 import React from 'react';
-import { renderScore } from './AssessmentCardV2';
-import { Tooltip, OverlayTrigger } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+
+import { renderScore } from './AssessmentCardV2';
 
 const StyledButton = styled.button`
   &.btn {
@@ -80,11 +82,11 @@ export const AssessmentRadios = ({
       <div className='row d-flex justify-content-center'>
         <div className="col-12 text-left">
           <span>{getScoreText(assessmentRadioType)}</span>
-          <OverlayTrigger
+          {/* <OverlayTrigger
             placement="top"
             overlay={renderTooltip('This is the score you assign to this assessment')}>
             <FontAwesomeIcon icon={faInfoCircle} className="ml-2" style={{ cursor: 'pointer' }} />
-          </OverlayTrigger>
+          </OverlayTrigger> */}
         </div>
       </div>
       {Array.from({ length: 5 }, (_, index) => (

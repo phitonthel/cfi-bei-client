@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+
 import { Toast } from 'react-bootstrap';
+import styled from 'styled-components';
 
 const FloatingToast = styled.div`
   position: fixed;

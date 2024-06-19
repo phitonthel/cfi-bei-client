@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Card, ListGroup, Badge, Container, Row, Col, Form } from 'react-bootstrap';
 
 const CustomBadge = ({isPassed}) => {

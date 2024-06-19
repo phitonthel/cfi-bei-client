@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import DivisionTable from './DivisionTable'
-import { LoadingSpinner } from '../../../components/LoadingSpinner'
 import { fireSwalError } from '../../../apis/fireSwal';
 import { fetchDivisionReport } from '../../../apis/report/division';
 import { useFetch } from '../../../apis/useFetch';
+import { LoadingSpinner } from '../../../components/LoadingSpinner'
 
 const DivisionReport = () => {
   // const [data, setData] = useState(null)

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+
+import { flattenRoutes } from "layouts/Admin";
+import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from "react-router-dom";
-import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
-import { baseRoutes } from '../../routes/routes'
 import { logout } from "../../apis/user/auth";
-import { flattenRoutes } from "layouts/Admin";
+import { baseRoutes } from '../../routes/routes'
 
 function Header() {
   const history = useHistory()

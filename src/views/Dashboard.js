@@ -1,6 +1,5 @@
 import React from "react";
-import ChartistGraph from "react-chartist";
-// react-bootstrap components
+
 import {
   Badge,
   Button,
@@ -15,6 +14,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import ChartistGraph from "react-chartist";
+// react-bootstrap components
 
 function Dashboard() {
   return (

@@ -1,47 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import { useSelector } from 'react-redux';
-import { Card, Badge, Row, Col, Button, Spinner } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import { Card, Badge, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2';
 
-import { fetchSelfAssessment, submitSelfAssessment } from '../../../apis/assessment/fetchSelf'
-import { AssessmentCard } from '../../../components/Cfi/AssessmentCardV2'
-import { InstructionsTech } from './InstructionsTech'
 import { InstructionsBehav } from './InstructionsBehav'
-import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
+import { InstructionsTech } from './InstructionsTech'
+import { fetchSelfAssessment } from '../../../apis/assessment/fetchSelf'
 import { submitScore } from '../../../apis/assessment/submitScore';
-import { SubmitButton } from '../../../components/SubmitButton';
+import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
+import { AssessmentCard } from '../../../components/Cfi/AssessmentCardV2'
 import { FloatingMessage } from '../../../components/FloatingMessage'
+import { SubmitButton } from '../../../components/SubmitButton';
 
-const SelfAssessment = (type) => {
+const CfiAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
-  const [hasAgreed, setHasAgreed] = useState(true)
+  const [hasAgreed, setHasAgreed] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const authUser = useSelector(state => state.auth.user);
   const cfiTypeAssessment = useSelector(state => state.app.utilities.cfiTypeAssessment);
   const cfiAssessment = useSelector(state => state.app.utilities.cfiAssessment);
 
+  const history = useHistory()
+
   const submit = async () => {
     try {
       setIsSubmitting(true)
-      const assessmentPayload = assessments.map(assessment => {
+      const assessmentPromises = assessments.map(assessment => {
         const cfiReview = assessment.cfiReviews.find(review => review.reviewerId === authUser.id)
-        return {
+        return submitScore({
           id: cfiReview.id,
           score: cfiReview.score,
           justification: cfiReview.justification
-        }
-      })
-      const promises = assessments.map(assessment => {
-        return submitScore({
-          assessmentId: assessment.id,
-          assignedScore: assessment.assignedScore
         })
       })
-      await Promise.all(promises)
+      await Promise.all(assessmentPromises)
 
       fireSwalSuccess('Your work has been submitted!')
     } catch (error) {
@@ -96,12 +94,17 @@ const SelfAssessment = (type) => {
           cancelButtonText: `Cancel`,
         })
 
-        if (result.isConfirmed) {
-          await submit()
+        if (!result.isConfirmed) {
+          return
         }
-        return
       }
       await submit()
+
+      if (cfiAssessment.isSelfReview) {
+        history.push('/admin/cfi-route-selections');
+      } else {
+        history.push('/admin/cfi/staff-evaluation');
+      }
     }
   }
 
@@ -118,7 +121,7 @@ const SelfAssessment = (type) => {
     }
   }, [])
 
-  if (!hasAgreed) {
+  if (!hasAgreed && cfiAssessment.isSelfReview) {
     if (type === 'TECHNICAL') {
       return (
         <div className='mb-4'>
@@ -176,4 +179,4 @@ const SelfAssessment = (type) => {
   );
 };
 
-export default SelfAssessment
+export default CfiAssessment

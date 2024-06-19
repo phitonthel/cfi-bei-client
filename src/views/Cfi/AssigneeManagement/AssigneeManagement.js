@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
+
 import { Button } from 'react-bootstrap';
+import DataTable from 'react-data-table-component';
+
+import SearchableDropdownTable from './SeachableDropdownTable';
+import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
 import FilteredDataTable from '../../../components/FilteredDataTable';
 import NominateUserModal from '../../../components/Modal/NominateUserModal';
 import SearchableDropdown from '../../../components/SearchableDropdown';
-import SearchableDropdownTable from './SeachableDropdownTable';
-import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
 
 const data = [
   { id: 1, fullname: 'John Doe', division: 'HR', unit: 'Recruitment', status: 'Assigned' },

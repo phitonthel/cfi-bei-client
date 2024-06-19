@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+
 import { useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { fireSwalError } from '../../../apis/fireSwal';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import Profile from '../../../components/Reports/UserProfile';
+import CompetencyInfoLegend from './components/CompetencyInfoLegend';
+import Content from './components/Content';
 import FeedbackScores from './components/FeedbackScores';
+import Justification from './components/Justification';
+import { sortReports } from './utils';
+import { fireSwalError } from '../../../apis/fireSwal';
 import { fetchCfiIndividualReport } from '../../../apis/report/fetchCfiIndividualReport';
 import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
-import CompetencyInfoLegend from './components/CompetencyInfoLegend';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
-import { sortReports } from './utils';
-import Justification from './components/Justification';
-import Content from './components/Content';
+import Profile from '../../../components/Reports/UserProfile';
 
 const divideArray = (array, parts) => {
   let result = [];

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+
+import { dataFactory } from './dataFactory'
 import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 import { downloadTxtFile } from '../utils';
 
-import { dataFactory } from './dataFactory'
 // import { data } from './data'
 
 const Table = ({

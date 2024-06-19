@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+
 import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
-import { downloadTxtFile } from '../utils';
 import { filterData, FilterSearchBar } from '../../../components/FilterSearchBar';
 import { getPaginatedData, Pagination } from '../../../components/Table/Pagination';
+import { downloadTxtFile } from '../utils';
 
 // import { data } from './data'
 

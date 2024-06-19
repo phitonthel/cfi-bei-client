@@ -1,20 +1,20 @@
-import styled from 'styled-components';
 import React, { useState, useEffect, useRef } from 'react';
+
+import { fireSwalError } from 'apis/fireSwal';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import CardBreakdown from './components/CardBreakdown'
-import { fetchTsIndividualReport } from '../../../apis/report/fetchTsIndividualReport';
-import OpenFeedbacks from './components/OpenFeedbacks';
-import Graph from './components/Graph';
-import { fireSwalError } from 'apis/fireSwal';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import Profile from '../../../components/Reports/UserProfile';
 import FeedbackScores from './components/FeedbackScores';
-import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
-import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
+import Graph from './components/Graph';
+import OpenFeedbacks from './components/OpenFeedbacks';
+import { fetchTsIndividualReport } from '../../../apis/report/fetchTsIndividualReport';
 import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
-
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
+import Profile from '../../../components/Reports/UserProfile';
+import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
 
 function IndividualReport() {
   const reportRef = useRef(null);

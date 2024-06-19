@@ -1,8 +1,8 @@
 
-import Profile from '../../../../components/Reports/UserProfile';
-import FeedbackScores from '../components/FeedbackScores';
-import CompetencyInfoLegend from '../components/CompetencyInfoLegend';
 import PageBreakPrint from '../../../../components/Reports/PageBreakPrint';
+import Profile from '../../../../components/Reports/UserProfile';
+import CompetencyInfoLegend from '../components/CompetencyInfoLegend';
+import FeedbackScores from '../components/FeedbackScores';
 import Justification from '../components/Justification';
 
 const Content = ({

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import { useDispatch } from 'react-redux';
 
 import DataTable from 'react-data-table-component';
+import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-dom";
+
+
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { fetchCfiIndividualReportTable } from '../../../apis/report/fetchCfiIndividualReportTable';
+import FilteredDataTable from '../../../components/FilteredDataTable';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { setAppReport } from '../../../redux/appSlice';
-import FilteredDataTable from '../../../components/FilteredDataTable';
-import { fetchCfiIndividualReportTable } from '../../../apis/report/fetchCfiIndividualReportTable';
 import { ACCESS_LEVEL } from '../../../routes/const';
 
 const columns = [

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory } from "react-router-dom";
+
 import axios from 'axios';
-import hero from '../../assets/img/hero-img.png'
+import DataTable from 'react-data-table-component';
+import { useLocation, useHistory } from "react-router-dom";
 import WebFont from 'webfontloader';
 
-import DataTable from 'react-data-table-component';
 import { login } from '../../apis/user/auth';
+import hero from '../../assets/img/hero-img.png'
 
 function LandingPage() {
   const history = useHistory()

@@ -1,8 +1,8 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { downloadTxtFile } from "../../views/Reports/utils"
 import { handleDownloadPDF, handleDownloadPDFV2 } from "../../utils/handleDownloadPdf";
+import { downloadTxtFile } from "../../views/Reports/utils"
 
 export const DownloadPdfButton = ({
   reportRef,
