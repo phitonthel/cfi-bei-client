@@ -32,11 +32,11 @@ const CfiAssessment = (type) => {
     try {
       setIsSubmitting(true)
       const assessmentPromises = assessments.map(assessment => {
-        const cfiReview = assessment.cfiReviews.find(review => review.reviewerId === authUser.id)
+        const reviewerAssessment = assessment.reviewerAssessment
         return submitScore({
-          id: cfiReview.id,
-          score: cfiReview.score,
-          justification: cfiReview.justification
+          id: reviewerAssessment.id,
+          score: reviewerAssessment.score,
+          justification: reviewerAssessment.justification
         })
       })
       await Promise.all(assessmentPromises)
@@ -55,11 +55,7 @@ const CfiAssessment = (type) => {
     button: (assessmentId, score) => {
       assessments.forEach(assessment => {
         if (assessment.id === assessmentId) {
-          assessment.cfiReviews.forEach(review => {
-            if (review.reviewerId === authUser.id) {
-              review.score = score;
-            }
-          });
+          assessment.reviewerAssessment.score = score;
         }
       });
       setAssessments([...assessments])
@@ -67,24 +63,24 @@ const CfiAssessment = (type) => {
     justification: (assessmentId, newValue) => {
       assessments.forEach(assessment => {
         if (assessment.id === assessmentId) {
-          assessment.cfiReviews.forEach(review => {
-            if (review.reviewerId === authUser.id) {
-              review.justification = newValue;
-            }
-          });
+          assessment.reviewerAssessment.justification = newValue;
         }
       });
       setAssessments([...assessments])
     },
     // send request to server
     submitConfirmation: async () => {
-      const flattenedCfiReviews = assessments.map(assessment => assessment.cfiReviews).flatMap(review => review)
-      const correspondingReviews = flattenedCfiReviews.filter(review => review.reviewerId === authUser.id)
-      const completedCorrespondingReviews = correspondingReviews.filter(review => review.score !== null)
+      const reviewerAssessments = assessments.map(assessment => assessment.reviewerAssessment)
+      const completedReviewerAssessments = reviewerAssessments.filter(review => review.score !== null)
 
-      if (completedCorrespondingReviews.length !== correspondingReviews.length) {
+      console.log({
+        completedReviewerAssessments,
+        reviewerAssessments
+      })
+
+      if (completedReviewerAssessments.length !== reviewerAssessments.length) {
         const result = await Swal.fire({
-          title: `${completedCorrespondingReviews.length}/${correspondingReviews.length} Assessment!`,
+          title: `${completedReviewerAssessments.length}/${reviewerAssessments.length} Assessment!`,
           text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
           icon: 'warning',
           showCancelButton: true,
@@ -113,7 +109,8 @@ const CfiAssessment = (type) => {
       const data = await fetchSelfAssessment({
         type,
         cfiTypeAssessmentId: cfiTypeAssessment.id,
-        userId: cfiAssessment.userId,
+        revieweeId: cfiAssessment.revieweeId,
+        reviewerId: cfiAssessment.reviewerId,
       })
       setAssessments(data)
     } catch (error) {
@@ -138,10 +135,9 @@ const CfiAssessment = (type) => {
     }
   }
 
-  const flattenedCfiReviews = assessments.map(assessment => assessment.cfiReviews).flatMap(review => review)
-  const correspondingReviews = flattenedCfiReviews.filter(review => review.reviewerId === authUser.id)
-  const completedCorrespondingReviews = correspondingReviews.filter(review => review.score !== null)
-  const assessmentsPercentage = `${completedCorrespondingReviews.length}/${correspondingReviews.length}`
+  const flattenedCfiReviews = assessments.map(assessment => assessment.reviewerAssessment)
+  const completedCorrespondingReviews = flattenedCfiReviews.filter(review => review.score !== null)
+  const assessmentsPercentage = `${completedCorrespondingReviews.length}/${flattenedCfiReviews.length}`
   const buttonText = `Submit ${assessmentsPercentage} Assessments`
 
   return (
@@ -154,7 +150,7 @@ const CfiAssessment = (type) => {
         <Card className="mb-3">
           <Card.Body className="d-flex align-items-center">
             <FontAwesomeIcon icon={faUser} className="mr-4" size="lg" />
-            <Card.Title as="h4" className="mb-0">{cfiAssessment.userFullname}</Card.Title>
+            <Card.Title as="h4" className="mb-0">{cfiAssessment.revieweeFullname}</Card.Title>
           </Card.Body>
         </Card>
         {

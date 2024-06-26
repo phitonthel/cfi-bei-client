@@ -7,6 +7,7 @@ import Justification from '../components/Justification';
 
 const Content = ({
   reviewee,
+  cfiTypeAssessment,
   reports,
   reportsSummary,
   reportJustifications,
@@ -19,6 +20,7 @@ const Content = ({
 
           <div className="text-center mb-4">
             <h1>Competency Fit Index Report</h1>
+            <h2>{cfiTypeAssessment.name}</h2>
             <p className="lead">Feedback for: {reviewee.fullname}</p>
           </div>
           <hr></hr>
@@ -47,7 +49,7 @@ const Content = ({
           <PageBreakPrint />
 
           <hr></hr>
-          <Justification 
+          <Justification
             reportJustifications={reportJustifications}
             isForPrint={isForPrint}
           />

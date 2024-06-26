@@ -27,6 +27,10 @@ const initialState = {
       userId: '', // can be owner (self) or staff (peer)
       userFullname: '',
       type: '', // TECHNICAL or BEHAVIOURAL
+      revieweeId: '',
+      revieweeFullname: '',
+      reviewerId: '',
+      reviewerFullname: '',
       isSelfReview: false,
     },
   }

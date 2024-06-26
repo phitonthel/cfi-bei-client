@@ -6,6 +6,9 @@ import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { fetchStaffForEvaluation } from '../../../apis/user/fetchStaffForEvaluation';
@@ -15,6 +18,7 @@ import Instructions from '../../../components/Instructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { setUtilities } from '../../../redux/appSlice';
 import { convertISODateToDDMMYYYY } from '../../../utils/date'
+import { determineDirectSupervisorLevel } from '../../../utils/determineLevels';
 
 const columns = [
   {
@@ -60,6 +64,33 @@ const columns = [
   },
 ];
 
+const UserFullname = ({ subordinate, authUser }) => {
+  const subordinateDirectSupervisorLevel = determineDirectSupervisorLevel(subordinate.level);
+  const isThisUserDirectSubordinate = authUser.level === subordinateDirectSupervisorLevel;
+
+  const renderTooltip = () => {
+    return (
+      <Tooltip id="tooltip">
+        Required as this user is your direct subordinate
+      </Tooltip>
+    );
+  };
+
+  return (
+    <>
+      <>{subordinate.fullname}</>
+      <>{isThisUserDirectSubordinate ? (
+        <OverlayTrigger
+          placement="top"
+          overlay={renderTooltip()}
+        >
+          <FontAwesomeIcon icon={faInfoCircle} className="ml-2" style={{ cursor: 'pointer' }} />
+        </OverlayTrigger>
+      ) : null}</>
+    </>
+  );
+};
+
 function StaffEvaluation() {
   const history = useHistory()
   const dispatch = useDispatch()
@@ -99,10 +130,14 @@ function StaffEvaluation() {
             // history.push('/admin/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
-                userId: user.id,
-                userFullname: user.fullname,
+                // userId: user.id,
+                // userFullname: user.fullname,
                 type: 'TECHNICAL',
                 isSelfReview: false,
+                revieweeId: user.id,
+                reviewerId: authUser.id,
+                revieweeFullname: user.fullname,
+                reviewerFullname: authUser.fullname,
               }
             }));
             history.push(`/admin/cfi/assessment/technical`);
@@ -116,10 +151,14 @@ function StaffEvaluation() {
             // history.push('/admin/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
-                userId: user.id,
-                userFullname: user.fullname,
+                // userId: user.id,
+                // userFullname: user.fullname,
                 type: 'BEHAVIOURAL',
                 isSelfReview: false,
+                revieweeId: user.id,
+                reviewerId: authUser.id,
+                revieweeFullname: user.fullname,
+                reviewerFullname: authUser.fullname,
               }
             }));
             history.push(`/admin/cfi/assessment/behavioural`);
@@ -148,10 +187,10 @@ function StaffEvaluation() {
 
   const staffs = data ? data.map(user => ({
     id: user.id,
-    fullname: user.fullname,
+    fullname: <UserFullname subordinate={user} authUser={authUser} />,
     division: user.Division?.name,
     positionName: user.positionName,
-    selfLastUpdated: convertISODateToDDMMYYYY(user.selfLastUpdate),
+    selfLastUpdated: convertISODateToDDMMYYYY(user.selfLastUpdated),
     reviewerLastUpdated: convertISODateToDDMMYYYY(user.reviewerLastUpdated),
     selfReviewProgress: user.selfReviewProgress,
     reviewerReviewProgress: user.reviewerReviewProgress,
@@ -184,6 +223,8 @@ function StaffEvaluation() {
         data={staffs}
         highlightOnHover
       />
+
+      <div className='mb-4' />
     </>
   );
 };

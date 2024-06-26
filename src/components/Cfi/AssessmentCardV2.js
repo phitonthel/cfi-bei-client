@@ -26,18 +26,17 @@ export const AssessmentCard = ({ assessment, handlers, type, isSelfReview }) => 
   const [shouldShowCriterias, setShouldShowCriterias] = useState(false)
 
   const descriptionClassName = isSelfReview ? "col-9 text-left" : "col-6 text-left"
-  console.log('AMELIA', isSelfReview)
 
   return (
     <div className="card mx-6">
       <div className="card-header text-left mx-2">
-        <h3>{assessment.competencyRole.Competency.category}</h3>
+        <h3>{assessment.reviewerAssessment.competencyRole.Competency.category}</h3>
       </div>
       <div className="card-body">
         <div className="row">
           <div className={descriptionClassName}>
-            <h4 className="card-title mx-4">{assessment.competencyRole.Competency.title}</h4>
-            <p className="card-text mx-4">{assessment.competencyRole.Competency.description}</p>
+            <h4 className="card-title mx-4">{assessment.reviewerAssessment.competencyRole.Competency.title}</h4>
+            <p className="card-text mx-4">{assessment.reviewerAssessment.competencyRole.Competency.description}</p>
             <div className="mx-4">
               <a
                 className="link"
@@ -54,21 +53,12 @@ export const AssessmentCard = ({ assessment, handlers, type, isSelfReview }) => 
                 <div className="mt-4">
                   <div className="row">
                     <div className="col">
-                      <Criteria options={assessment.competencyRole.Competency.options} />
+                      <Criteria options={assessment.reviewerAssessment.competencyRole.Competency.options} />
                     </div>
                   </div>
                 </div>
               )}
             </div>
-          </div>
-          <div className="col-3">
-            <AssessmentRadios
-              assessment={assessment}
-              handlers={handlers}
-              type={type}
-              isSelfReview={isSelfReview}
-              assessmentRadioType={`SELF`}
-            />
           </div>
           {
             !isSelfReview && (
@@ -77,12 +67,21 @@ export const AssessmentCard = ({ assessment, handlers, type, isSelfReview }) => 
                   assessment={assessment}
                   handlers={handlers}
                   type={type}
-                  isSelfReview={isSelfReview}
-                  assessmentRadioType={`REVIEWER`}
+                  isDisabled={true}
+                  assessmentRadioType={`SELF`}
                 />
               </div>
             )
           }
+          <div className="col-3">
+            <AssessmentRadios
+              assessment={assessment}
+              handlers={handlers}
+              type={type}
+              isDisabled={false}
+              assessmentRadioType={`REVIEWER`}
+            />
+          </div>
         </div>
       </div>
     </div>

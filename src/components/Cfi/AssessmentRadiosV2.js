@@ -52,20 +52,20 @@ export const AssessmentRadios = ({
   assessment,
   handlers,
   type,
-  isSelfReview,
-  assessmentRadioType, // ENUM: SELF OR REVIWER
+  isDisabled,
+  assessmentRadioType, // ENUM: SELF OR REVIEWER
 }) => {
   const authUser = useSelector(state => state.auth.user);
 
-  const score = assessmentRadioType === 'SELF'
-    ? assessment.cfiReviews.find(review => assessment.ownerId === review.reviewerId)?.score
-    : assessment.cfiReviews.find(review => authUser.id === review.reviewerId)?.score
+  console.log("XXXX", assessment)
 
-  const justificationValue = assessmentRadioType === 'SELF'
-    ? assessment.cfiReviews.find(review => assessment.ownerId === review.reviewerId)?.justification
-    : assessment.cfiReviews.find(review => authUser.id === review.reviewerId)?.justification
+  const score = assessmentRadioType === 'REVIEWER'
+    ? assessment.reviewerAssessment.score
+    : assessment.revieweeAssessment.score
 
-  const isDisabled = assessmentRadioType === 'SELF' && !isSelfReview
+  const justificationValue = assessmentRadioType === 'REVIEWER'
+    ? assessment.reviewerAssessment.justification
+    : assessment.revieweeAssessment.justification
 
   const generateClass = (num) => num == score
     ? 'btn btn-outline-dark btn-block btn-sm active'
