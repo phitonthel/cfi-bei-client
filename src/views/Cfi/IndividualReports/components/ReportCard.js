@@ -2,9 +2,7 @@ import React from 'react';
 
 import { Card, ListGroup, Badge, Container, Row, Col, Form } from 'react-bootstrap';
 
-const CustomBadge = ({isPassed}) => {
-  //  <Badge className="badge-success ml-auto">{isPassed}</Badge>
-  console.log({ isPassed })
+const CustomBadge = ({ isPassed }) => {
   if (isPassed) {
     return <Badge className="badge-success ml-auto">Meet</Badge>
   }
@@ -38,12 +36,12 @@ const ReportCard = ({
               </Card.Title>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <strong>Self Score: {selfScore}</strong>
+                  <strong>Self Score: {selfScore === null ? "(none)" : selfScore}</strong>
                   <Form.Control as="textarea" rows={2} placeholder="-" value={selfJustification} readOnly />
                 </ListGroup.Item>
                 {reviewerFeedback.map((feedback, index) => (
                   <ListGroup.Item key={index}>
-                    <strong>Reviewer {index + 1} Score: {feedback.score}</strong>
+                    <strong>Reviewer {index + 1} Score: {feedback.score === null ? "(none)" : feedback.score}</strong>
                     <Form.Control as="textarea" rows={2} placeholder="-" value={feedback.justification} readOnly />
                   </ListGroup.Item>
                 ))}

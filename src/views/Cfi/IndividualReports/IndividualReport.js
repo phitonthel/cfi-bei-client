@@ -63,7 +63,7 @@ function IndividualReport() {
       setReviewee(user)
       setReports(sortReports(reports))
       setReportsSummary(reportsSummary)
-      setReportJustifications(reportJustifications)
+      setReportJustifications(sortReports(reportJustifications))
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -82,11 +82,12 @@ function IndividualReport() {
         filename={`cfi_individual_report_${reviewee.fullname.toLowerCase().replaceAll(' ', '_')}`}
         buttonText={`Download Report PDF`}
       />
-      <div style={{ marginTop: 50}}/>
+      <div style={{ marginTop: 50 }} />
       <hr></hr>
       <div>
         <Content
           reviewee={reviewee}
+          cfiTypeAssessment={appUtilities.cfiTypeAssessment}
           reports={reports}
           reportsSummary={reportsSummary}
           reportJustifications={reportJustifications}
@@ -99,6 +100,7 @@ function IndividualReport() {
         <div ref={reportRef}>
           <Content
             reviewee={reviewee}
+            cfiTypeAssessment={appUtilities.cfiTypeAssessment}
             reports={reports}
             reportsSummary={reportsSummary}
             reportJustifications={reportJustifications}

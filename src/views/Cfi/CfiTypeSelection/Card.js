@@ -28,20 +28,28 @@ const CustomCard = ({
     if (assessmentType === 'TECHNICAL') {
       dispatch(setUtilities({
         cfiAssessment: {
-          userId: authUser.id,
-          userFullname: authUser.fullname,
+          // userId: authUser.id,
+          // userFullname: authUser.fullname,
           type: 'TECHNICAL',
           isSelfReview: true,
+          revieweeId: authUser.id,
+          reviewerId: authUser.id,
+          revieweeFullname: authUser.fullname,
+          reviewerFullname: authUser.fullname,
         }
       }));
     }
     if (assessmentType === 'BEHAVIOURAL') {
       dispatch(setUtilities({
         cfiAssessment: {
-          userId: authUser.id,
-          userFullname: authUser.fullname,
+          // userId: authUser.id,
+          // userFullname: authUser.fullname,
           type: 'BEHAVIOURAL',
           isSelfReview: true,
+          revieweeId: authUser.id,
+          reviewerId: authUser.id,
+          revieweeFullname: authUser.fullname,
+          reviewerFullname: authUser.fullname,
         }
       }));
     }

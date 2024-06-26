@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import Swal from 'sweetalert2';
 
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import DivisionReport from './Division/index'
 import DivisionSingleReport from './DivisionSingle/index'
 import UserReport from './User/index'

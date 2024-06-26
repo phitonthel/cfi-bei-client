@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from 'react-query';
 
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
@@ -11,57 +12,55 @@ import FilteredDataTable from '../../../components/FilteredDataTable';
 import Instructions from '../../../components/Instructions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SubmitButton } from '../../../components/SubmitButton';
+import AddCfiTypeAssessmentModal from './AddCfiTypeAssessmentModal';
+import { fetchCfiTypeAssessments } from '../../../apis/cfi/cfiTypeAssessments';
+import { fireSwalError } from '../../../apis/fireSwal';
 
-const dummyData = [
-  {
-    assessmentName: 'Annual CFI Assessment 2020',
-    numberOfPeople: 501,
-  },
-  {
-    assessmentName: 'Annual CFI Assessment 2021',
-    numberOfPeople: 512,
-  },
-  {
-    assessmentName: 'Annual CFI Assessment 2022',
-    numberOfPeople: 511,
-  },
-  {
-    assessmentName: 'Annual CFI Assessment 2023',
-    numberOfPeople: 485,
-  },
-]
 
 function CfiManagement() {
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(async () => {
-    try {
-    } catch (error) {
-      fireSwalError(error)
-    } finally {
-      setIsLoading(false)
+  const { data: cfiTypeAssessments, error, isLoading, refetch } = useQuery(
+    'cfiTypeAssessment',
+    fetchCfiTypeAssessments,
+    {
+      onError: fireSwalError,
     }
-  }, [])
+  );
+
+  const onSubmitFinish = () => {
+    // Handle save logic here
+    refetch()
+    console.log("Form data has been handled in the parent component");
+  };
 
   if (isLoading) {
     return <LoadingSpinner />
   }
 
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+
   return (
     <>
-      <div className='col-12'>
-        <div className="d-flex justify-content-end align-items-end mb-3">
-          <Button variant="primary">Add CFI Assessment</Button>
+      <div className='d-flex flex-column align-items-center'>
+        <div className="d-flex justify-content-end align-items-end mb-3 w-100">
+          {/* <Button variant="primary">Add CFI Assessment</Button> */}
+          <AddCfiTypeAssessmentModal
+            title="Add CFI Assessment"
+            buttonLabel="Add CFI Assessment"
+            onSubmitFinish={onSubmitFinish}
+          />
         </div>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-center flex-wrap w-100">
           {
-            dummyData.map((data, index) => (
-              <Card key={index} {...data} />
+            cfiTypeAssessments.map((data, index) => (
+              <Card key={data.id} {...data} />
             ))
           }
         </div>
       </div>
     </>
+
   );
 };
 

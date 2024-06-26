@@ -3,41 +3,47 @@ import React, { useState } from 'react';
 import { Card, Button, Form } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 
-const CustomCard = ({ assessmentName, numberOfPeople }) => {
-  const [settings, setSettings] = useState([
-    { id: 1, name: 'Staff Evaluation', isEnabled: false },
-    { id: 2, name: 'Behavioural Assessment', isEnabled: false },
-    { id: 3, name: 'Technical Assessment', isEnabled: false },
-    { id: 4, name: 'Reports', isEnabled: false },
-  ]);
+import { convertISODateToDDMMYYYY } from 'utils/date';
+import { updateCfiTypeAssessment } from '../../../apis/cfi/cfiTypeAssessments';
+import { fireSwalError } from 'apis/fireSwal';
+
+const CustomCard = ({ id, name, config, competencyRoleType, createdAt, updatedAt, nominationLength }) => {
+  const [settings, setSettings] = useState(config);
 
   const history = useHistory()
 
-  const handleToggle = (id) => {
-    setSettings(settings.map(setting =>
-      setting.id === id ? { ...setting, isEnabled: !setting.isEnabled } : setting
-    ));
+  const handleToggle = async (settingId) => {
+    try {
+      const config = settings.map(setting =>
+        setting.id === settingId ? { ...setting, isEnabled: !setting.isEnabled } : setting
+      )
+      const response = await updateCfiTypeAssessment({ id, config })
+
+      setSettings(config);
+    } catch (error) {
+      fireSwalError(error);
+    }
   };
 
   const handleOnClick = () => {
-    console.log('Manage Assignee');
-    history.push('/admin/cfi-assignee-management')
+    console.log('Manage Assignee', { id, name, config, competencyRoleType, createdAt, updatedAt, nominationLength });
+    history.push(`/admin/cfi-assignee-management?cfiTypeAssessmentId=${id}`)
   }
 
   return (
-    <Card className="m-3 p-3" style={{ width: '24rem', height: '32rem' }}>
-      <Card.Header className='mb-3' style={{ fontSize: '1.5rem' }}>{assessmentName}</Card.Header>
+    <Card className="col-3 m-3 p-3" style={{ height: '36rem' }}>
+      <Card.Header className='mb-3' style={{ fontSize: '1.5rem' }}>{name}</Card.Header>
       <Card.Text className="ml-3 text-muted">
-        CFI Mapping 2023
+        Type: {competencyRoleType}
       </Card.Text>
       <Card.Body>
         <div className="mb-3">
           <p className='pt-1'><strong>Enable/Disable Features:</strong></p>
           {settings.map(setting => (
-            <Form.Group key={setting.id} controlId={`setting-${setting.id}`} className="d-flex align-items-center">
+            <Form.Group key={id+setting.id} controlId={`setting-${setting.id}`} className="d-flex align-items-center">
               <Form.Check
                 type="switch"
-                id={`switch-${assessmentName}-${setting.id}`}
+                id={`switch-${name}-${setting.id}`}
                 label={setting.name}
                 checked={setting.isEnabled}
                 onChange={() => handleToggle(setting.id)}
@@ -47,7 +53,10 @@ const CustomCard = ({ assessmentName, numberOfPeople }) => {
           ))}
         </div>
         <Card.Text className="text-muted">
-          Participants: {numberOfPeople}
+          Nominations: {nominationLength}
+        </Card.Text>
+        <Card.Text className="text-muted">
+          {convertISODateToDDMMYYYY(createdAt)}
         </Card.Text>
         <Button variant="primary" style={{ position: 'absolute', bottom: '1rem', right: '1rem' }} onClick={handleOnClick}>
           Manage Assignee

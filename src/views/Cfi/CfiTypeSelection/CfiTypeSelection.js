@@ -10,7 +10,6 @@ import { useHistory } from 'react-router-dom';
 import CustomCard from './Card';
 import { fetchCfiDetailedTypeAssessments } from '../../../apis/cfi/cfiTypeAssessments';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { setUtilities } from '../../../redux/appSlice';
 
 const CfiTypeSelection = () => {
   const cfiTypeAssessment = useSelector(state => state.app.utilities.cfiTypeAssessment);
@@ -20,42 +19,18 @@ const CfiTypeSelection = () => {
   const dispatch = useDispatch();
 
   const { data, error, isLoading } = useQuery(
-    ['cfiTypeAssessment', { userId: authUser.id, cfiTypeAssessmentId: cfiTypeAssessment.id }],
+    ['cfiDetailedTypeAssessment', { userId: authUser.id, cfiTypeAssessmentId: cfiTypeAssessment.id }],
     fetchCfiDetailedTypeAssessments,
     {
       onError: () => {},
     }
   );
 
-  // const onTechnicalAssessmentClick = () => {
-  //   dispatch(setUtilities({
-  //     cfiAssessment: {
-  //       userId: authUser.id,
-  //       userFullname: authUser.fullname,
-  //       type: 'TECHNICAL',
-  //       isSelfReview: true,
-  //     }
-  //   }));
-  //   history.push(link);
-  // }
-
-  // const onBehaviouralAssessmentClick = () => {
-  //   if (assessmentType === 'BEHAVIOURAL') {
-  //     dispatch(setUtilities({
-  //       cfiAssessment: {
-  //         userId: authUser.id,
-  //         userFullname: authUser.fullname,
-  //         type: 'BEHAVIOURAL',
-  //         isSelfReview: true,
-  //       }
-  //     }));
-  //   }
-  //   history.push(link);
-  // }
-
   if (isLoading) {
     return <LoadingSpinner />
   }
+
+  console.log(data.cfiTypeAssessment.config.find(e => e.name === 'Staff Evaluation').isEnabled);
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center p-3">
@@ -69,7 +44,7 @@ const CfiTypeSelection = () => {
             description="Evaluate staff performance and provide feedback."
             icon={faUsers}
             link="/admin/cfi/staff-evaluation"
-            disabled={!data.cfiTypeAssessment.config.staffEvaluation}
+            disabled={!data.cfiTypeAssessment.config.find(e => e.name === 'Staff Evaluation').isEnabled}
           />
         </Col>
         <Col md={4} className="mb-3">
@@ -78,7 +53,7 @@ const CfiTypeSelection = () => {
             description="Generate and view detailed reports."
             icon={faChartBar}
             link="/admin/cfi/individual-reports"
-            disabled={!data.cfiTypeAssessment.config.report}
+            disabled={!data.cfiTypeAssessment.config.find(e => e.name === 'Reports').isEnabled}
           />
         </Col>
       </Row>
@@ -92,7 +67,7 @@ const CfiTypeSelection = () => {
             progressBarLabel={`${data.progress.cfiTechnicalCompleted} / ${data.progress.cfiTechnicalTotal}`}
             progressBarValue={data.progress.cfiTechnicalCompleted / data.progress.cfiTechnicalTotal}
             assessmentType="TECHNICAL"
-            disabled={!data.cfiTypeAssessment.config.technical}
+            disabled={!data.cfiTypeAssessment.config.find(e => e.name === 'Technical Assessment').isEnabled}
           />
         </Col>
         <Col md={4} className="mb-3">
@@ -104,7 +79,7 @@ const CfiTypeSelection = () => {
             progressBarLabel={`${data.progress.cfiBehaviouralCompleted} / ${data.progress.cfiBehaviouralTotal}`}
             progressBarValue={data.progress.cfiBehaviouralCompleted / data.progress.cfiBehaviouralTotal}
             assessmentType="BEHAVIOURAL"
-            disabled={!data.cfiTypeAssessment.config.behavioural}
+            disabled={!data.cfiTypeAssessment.config.find(e => e.name === 'Behavioural Assessment').isEnabled}
           />
         </Col>
       </Row>

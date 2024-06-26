@@ -130,10 +130,14 @@ function StaffEvaluation() {
             // history.push('/admin/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
-                userId: user.id,
-                userFullname: user.fullname,
+                // userId: user.id,
+                // userFullname: user.fullname,
                 type: 'TECHNICAL',
                 isSelfReview: false,
+                revieweeId: user.id,
+                reviewerId: authUser.id,
+                revieweeFullname: user.fullname,
+                reviewerFullname: authUser.fullname,
               }
             }));
             history.push(`/admin/cfi/assessment/technical`);
@@ -147,10 +151,14 @@ function StaffEvaluation() {
             // history.push('/admin/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
-                userId: user.id,
-                userFullname: user.fullname,
+                // userId: user.id,
+                // userFullname: user.fullname,
                 type: 'BEHAVIOURAL',
                 isSelfReview: false,
+                revieweeId: user.id,
+                reviewerId: authUser.id,
+                revieweeFullname: user.fullname,
+                reviewerFullname: authUser.fullname,
               }
             }));
             history.push(`/admin/cfi/assessment/behavioural`);
@@ -179,7 +187,6 @@ function StaffEvaluation() {
 
   const staffs = data ? data.map(user => ({
     id: user.id,
-    // fullname: user.fullname,
     fullname: <UserFullname subordinate={user} authUser={authUser} />,
     division: user.Division?.name,
     positionName: user.positionName,

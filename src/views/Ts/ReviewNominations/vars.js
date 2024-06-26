@@ -44,7 +44,7 @@ export const columns = [
   {
     name: <h4>Nomination</h4>,
     width: '150px',
-    selector: 'isNominatedByReviewee',
+    selector: row => row.isNominatedByReviewee,
     cell: row => (
       <span style={{ color: row.isNominatedByReviewee ? 'navy' : 'darkred' }}>
         {row.isNominatedByReviewee ? 'Nominated' : 'Unnominated'}
@@ -55,7 +55,8 @@ export const columns = [
   {
     name: <h4>Approval</h4>,
     width: '150px',
-    selector: 'isApproved',
+    // selector: 'isApproved',
+    selector: row => row.isApproved,
     cell: row => (
       <span style={{ color: row.isApproved ? 'navy' : 'darkred' }}>
         {row.isApproved ? 'Approved' : 'Unnapproved'}

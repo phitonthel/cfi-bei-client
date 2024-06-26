@@ -1,5 +1,6 @@
 import { referenceCompetencies } from "./vars";
 
+// sort by .title
 export const sortReports = (reports) => {
   // Reference array that defines the desired order
   // const referenceArray = ['dog', 'cat', 'bird', 'fish'];
