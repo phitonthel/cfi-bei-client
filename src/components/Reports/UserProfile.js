@@ -38,10 +38,13 @@ const UserProfile = ({
                 <td>Email</td>
                 <td>{user.email}</td>
               </tr>
-              <tr>
-                <td>CFI Position</td>
-                <td>{user.cfiRole}</td>
-              </tr>
+              {/* FOR CFI ONLY */}
+              {user.cfiRole &&
+                <tr>
+                  <td>CFI Position</td>
+                  <td>{user.cfiRole}</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
