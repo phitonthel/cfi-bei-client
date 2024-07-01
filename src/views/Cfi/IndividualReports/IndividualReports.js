@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import DataTable from 'react-data-table-component';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 
@@ -35,6 +35,11 @@ const columns = [
     sortable: true,
   },
   {
+    name: <h4>CFI Position</h4>,
+    selector: row => row.cfiRole,
+    sortable: true,
+  },
+  {
     name: <h4>Actions</h4>,
     cell: row => row.actions,
   },
@@ -43,6 +48,8 @@ const columns = [
 function IndividualReports() {
   const history = useHistory()
   const dispatch = useDispatch();
+
+  const appUtilities = useSelector(state => state.app.utilities)
 
   const [users, setUsers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -101,7 +108,7 @@ function IndividualReports() {
 
   useEffect(async () => {
     try {
-      let data = await fetchCfiIndividualReportTable()
+      let data = await fetchCfiIndividualReportTable(appUtilities.cfiTypeAssessment.id)
 
       const users = data.map((user, idx) => {
         return {
@@ -110,6 +117,7 @@ function IndividualReports() {
           division: user.Division?.name,
           unit: user.unit,
           positionName: user.positionName,
+          cfiRole: user.cfiRole,
           actions: Actions(user)
         }
       })

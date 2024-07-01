@@ -11,7 +11,6 @@ export const Criteria = ({options}) => {
               <div className="list-group-item">
                 {
                   option.criterias.map((criteria, index) => {
-                    console.log({key: option.level + index})
                     return (
                       <div className="mx-2 text-left col" key={option.level + index}>
                         {criteria}

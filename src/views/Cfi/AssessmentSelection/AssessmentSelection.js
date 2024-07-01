@@ -21,7 +21,7 @@ import { setAppAnnouncements, setUtilities } from '../../../redux/appSlice';
 
 function AssessmentSelection() {
   const { data, error, isLoading } = useQuery(
-    'cfiTypeAssessment',
+    'fetchCfiTypeAssessments',
     fetchCfiTypeAssessments,
     {
       onError: fireSwalError,
@@ -32,7 +32,6 @@ function AssessmentSelection() {
   const history = useHistory()
 
   const handleClick = (item) => {
-    console.log(`Name: ${item.name}, Date: ${item.date}`);
     dispatch(setUtilities({
       cfiTypeAssessment: {
         id: item.id,

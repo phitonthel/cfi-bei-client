@@ -5,7 +5,6 @@ export const fireSwalError = (
   error,
   timer,
 ) => {
-  console.log(error);
   Swal.fire({
     position: 'top',
     icon: 'error',

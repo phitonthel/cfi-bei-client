@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 import 'tippy.js/dist/tippy.css';
 import DataTable from 'react-data-table-component';
+import { useQuery } from 'react-query';
 
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
@@ -16,18 +17,23 @@ import FilteredDataTable from '../../components/FilteredDataTable';
 import AddUserModal from '../../components/Modal/AddUserModal'
 import { downloadTxtFile } from '../Reports/utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { fetchUsersForSuperadmin } from '../../apis/user/users';
+import { GenericDownloadCsvButton } from 'components/Buttons/DownloadButtons';
 
 const columns = [
   {
     name: <h4>NIK</h4>,
     selector: row => row.nik,
-    width: '150px',
     sortable: true,
   },
   {
     name: <h4>Name</h4>,
     selector: row => row.fullname,
-    width: '300px',
+    sortable: true,
+  },
+  {
+    name: <h4>Email</h4>,
+    selector: row => row.email,
     sortable: true,
   },
   {
@@ -36,33 +42,37 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
+    name: <h4>Unit</h4>,
+    selector: row => row.unit,
+    sortable: true,
+  },
+  {
+    name: <h4>Position</h4>,
+    selector: row => row.positionName,
+    sortable: true,
+  },
+  {
+    name: <h4>CFI Position</h4>,
+    selector: row => row.cfiRole,
     sortable: true,
   },
   {
     name: <h4>Password</h4>,
-    cell: row => (
-      <Tippy content={row.password} placement="bottom">
-        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-          <FontAwesomeIcon icon={faEye} />
-          <span style={{ marginLeft: '5px' }}>Hover to view</span>
-        </div>
-      </Tippy>
-    ),
+    selector: row => row.password,
     sortable: true,
-  },
-  {
-    name: <h4>Actions</h4>,
-    cell: row => row.actions,
   },
 ];
 
 function UserManagement() {
   const history = useHistory()
 
-  const [subordinates, setSubordinates] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: users, error, isLoading } = useQuery(
+    'fetchUsersForSuperadmin',
+    fetchUsersForSuperadmin,
+    {
+      onError: fireSwalError,
+    }
+  );
 
   const Actions = (user) => {
     return (
@@ -87,36 +97,6 @@ function UserManagement() {
     )
   }
 
-  useEffect(async () => {
-    try {
-      const { data } = await fetchSubordinates()
-      if (data.message) {
-        return Swal.fire({
-          position: 'top',
-          text: data.message,
-          showConfirmButton: false,
-          timer: 1000
-        })
-      }
-
-      setSubordinates(data.map(user => {
-        return {
-          id: user.id,
-          nik: user.nik,
-          fullname: user.fullname,
-          division: user.Division?.name,
-          level: user.level,
-          password: user.password,
-          actions: Actions(user)
-        }
-      }));
-    } catch (error) {
-      fireSwalError(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
   if (isLoading) {
     return <LoadingSpinner />
   }
@@ -125,13 +105,18 @@ function UserManagement() {
     <>
 
       <div className="d-flex justify-content-end m-2">
-        < AddUserModal buttonText={'ADD NEW USER'} />
+        {/* < AddUserModal buttonText={'ADD NEW USER'} /> */}
+        <GenericDownloadCsvButton
+          title={'Download CSV'}
+          array={users}
+          filename={`${new Date().getTime()}_users.csv`}
+        />
       </div>
 
       < FilteredDataTable
         columns={columns}
-        data={subordinates}
-        filterKeys={['nik', 'fullname', 'division', 'level']}
+        data={users}
+        filterKeys={['nik','email','fullname', 'division', 'unit', 'position']}
       />
     </>
   );

@@ -1,111 +1,123 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 
-import SearchableDropdownTable from './SeachableDropdownTable';
 import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
 import FilteredDataTable from '../../../components/FilteredDataTable';
-import NominateUserModal from '../../../components/Modal/NominateUserModal';
-import SearchableDropdown from '../../../components/SearchableDropdown';
-import { fetchCfiNominationsForAdmin } from '../../../apis/cfi/cfiNominations';
+import { deleteCfiNominationById, fetchCfiNominationsForAdmin } from '../../../apis/cfi/cfiNominations';
 import { fireSwalError } from 'apis/fireSwal';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import NominateCfiUserModal from '../../../components/Modal/NominateCfiUserModal';
+import { fireSwalSuccess } from 'apis/fireSwal';
+import Swal from 'sweetalert2';
 
 const columns = [
   {
-    name: <h4>Reviewee Name</h4>,
-    selector: row => row.reviewee.fullname,
+    name: <b>Reviewee Name</b>,
+    selector: row => row.revieweeFullname,
     sortable: true,
   },
   {
-    name: <h4>Reviewee Position</h4>,
-    selector: row => row.reviewee.positionName,
+    name: <b>Reviewee Position</b>,
+    selector: row => row.revieweePosition,
     sortable: true,
   },
   {
-    name: <h4>Reviewee Division</h4>,
-    selector: row => row.reviewee.Division?.name,
+    name: <b>Reviewee Division</b>,
+    selector: row => row.revieweeDivision,
     sortable: true,
   },
   {
-    name: <h4>Reviewee Unit</h4>,
-    selector: row => row.reviewee.unit,
+    name: <b>Reviewee Unit</b>,
+    selector: row => row.revieweeUnit,
     sortable: true,
   },
   {
-    name: <h4>Reviewer Name</h4>,
-    selector: row => row.reviewer.fullname,
+    name: <b>Reviewer Name</b>,
+    selector: row => row.reviewerFullname,
     sortable: true,
   },
   {
-    name: <h4>Reviewer Position</h4>,
-    selector: row => row.reviewer.positionName,
+    name: <b>Reviewer Position</b>,
+    selector: row => row.reviewerPosition,
     sortable: true,
   },
   {
-    name: <h4>Reviewer Division</h4>,
-    selector: row => row.reviewer.Division?.name,
+    name: <b>Reviewer Division</b>,
+    selector: row => row.reviewerDivision,
     sortable: true,
   },
   {
-    name: <h4>Reviewer Unit</h4>,
-    selector: row => row.reviewer.unit,
+    name: <b>Reviewer Unit</b>,
+    selector: row => row.reviewerUnit,
     sortable: true,
   },
   {
-    name: <h4>CFI Competency Role</h4>,
-    selector: row => row.reviewee.role,
+    name: <b>CFI Position</b>,
+    selector: row => row.cfiRole,
     sortable: true,
+  },
+  {
+    name: <b>Actions</b>,
+    cell: (row) => Actions(row.id, row.refetch),
   },
 ];
 
+const Actions = (nominationId, refetch) => {
+  return (
+    <div>
+      <span
+        className="badge badge-danger mx-1"
+        style={{ cursor: 'pointer ' }}
+        onClick={async (e) => {
+          e.preventDefault();
+          try {
+            const result = await Swal.fire({
+              title: `This cannot be undone!`,
+              text: `Deleting the nomination will also delete the assessments associated with it. Are you sure you want to delete this nomination?`,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: `Yes`,
+              cancelButtonText: `Cancel`,
+            })
+
+            if (!result.isConfirmed) {
+              return
+            }
+
+            await deleteCfiNominationById(nominationId);
+            fireSwalSuccess({ text: 'Nomination deleted!' });
+          } catch (error) {
+            fireSwalError(error);
+          } finally {
+            refetch()
+          }
+        }}
+      >
+        Delete
+      </span>
+    </div>
+  )
+}
+
 const AssigneeManagement = () => {
-  // const [tableData, setTableData] = useState(data.map(item => ({ ...item, isSelected: false })));
-  // const [tableData, setTableData] = useState([]);
-  // const [selectAll, setSelectAll] = useState(false);
   const appUtilities = useSelector(state => state.app.utilities);
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const cfiTypeAssessmentId = searchParams.get('cfiTypeAssessmentId');
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const cfiTypeAssessmentId = searchParams.get('cfiTypeAssessmentId');
-
-  const { data: cfiNominations, error, isLoading } = useQuery(
-    ['cfiNominations', { cfiTypeAssessmentId }],
+  const { data: cfiNominations, error, isLoading, refetch } = useQuery(
+    ['fetchCfiNominationsForAdmin', { cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id }],
     fetchCfiNominationsForAdmin,
     {
       onError: fireSwalError,
     }
   );
-
-  console.log('cfiNominations:', cfiNominations);
-
-  const handleAddSelectedUsers = () => {
-    const selectedUsers = tableData.filter(item => item.isSelected);
-    console.log('Selected Users:', selectedUsers);
-  };
-
-  // dummy
-  const users = []
-
-  // const rows = tableData.map((row, idx) => {
-  //   return {
-  //     ...row,
-  //     cfiProfile: <SearchableDropdownTable
-  //       users={users}
-  //       onChange={() => console.log('Selected User')}
-  //       selected={users[idx]}
-  //     />
-  //   }
-  // })
-
-  // useEffect(async () => {
-  //   const { data } = await fetchAllUsers();
-  //   console.log('All Users:', data);
-  //   setTableData(data);
-  // }, [])
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -113,15 +125,25 @@ const AssigneeManagement = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-end align-items-end mb-2">
-        <Button onClick={handleAddSelectedUsers}>Add Selected Users</Button>
+      <div className="d-flex justify-content-end m-2">
+        <NominateCfiUserModal
+          modalTitle={'Create Nomination'}
+          buttonText={'Create Nomination'}
+          onSubmitFinish={() => {
+            refetch()
+          }}
+        />
       </div>
       <FilteredDataTable
         columns={columns}
-        data={cfiNominations}
-        // 'Division.name' doesnt work
-        filterKeys={['fullname', 'Division.name', 'positionName', 'unit']}
-        // otherProps={{ selectableRows: true }}
+        data={cfiNominations.map(nomination => {
+          return {
+            ...nomination,
+            refetch
+          }
+        })}
+        filterKeys={['revieweeFullname', 'revieweeDivision', 'revieweeLevel', 'reviewerFullname', 'reviewerDivision', 'reviewerLevel', 'cfiRole']}
+        otherProps={{ title: appUtilities.cfiTypeAssessment.name}}
       />
     </div>
   );

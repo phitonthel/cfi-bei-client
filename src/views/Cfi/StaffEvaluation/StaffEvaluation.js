@@ -71,7 +71,7 @@ const UserFullname = ({ subordinate, authUser }) => {
   const renderTooltip = () => {
     return (
       <Tooltip id="tooltip">
-        Required as this user is your direct subordinate
+        This user might be your direct subordinate.
       </Tooltip>
     );
   };

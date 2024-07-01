@@ -28,8 +28,6 @@ const CustomCard = ({
     if (assessmentType === 'TECHNICAL') {
       dispatch(setUtilities({
         cfiAssessment: {
-          // userId: authUser.id,
-          // userFullname: authUser.fullname,
           type: 'TECHNICAL',
           isSelfReview: true,
           revieweeId: authUser.id,
@@ -42,8 +40,6 @@ const CustomCard = ({
     if (assessmentType === 'BEHAVIOURAL') {
       dispatch(setUtilities({
         cfiAssessment: {
-          // userId: authUser.id,
-          // userFullname: authUser.fullname,
           type: 'BEHAVIOURAL',
           isSelfReview: true,
           revieweeId: authUser.id,
@@ -77,7 +73,10 @@ const CustomCard = ({
         <Card.Text>{description}</Card.Text>
         {progressBarLabel && (
           <div style={{ width: '80%', marginTop: '20px' }}>
-            <ProgressBar now={progressBarValue * 100} label={progressBarLabel} />
+            <ProgressBar
+              now={15 + (progressBarValue * 85)}
+              label={progressBarLabel}
+            />
           </div>
         )}
       </Card.Body>

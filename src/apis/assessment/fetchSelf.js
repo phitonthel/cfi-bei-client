@@ -31,7 +31,6 @@ export const fetchSelfAssessmentDeprecated = async (type) => {
 
 // TODO: rename to fetchCfiAssessments
 export const fetchSelfAssessment = async (queryParams) => {
-  console.log('queryParams', queryParams)
   const query = Object.keys(queryParams)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
     .join('&');
@@ -45,7 +44,6 @@ export const fetchSelfAssessment = async (queryParams) => {
 }
 
 // export const fetchSelfAssessment = async (queryParams) => {
-//   console.log('queryParams', queryParams)
 //   const query = Object.keys(queryParams)
 //     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
 //     .join('&');

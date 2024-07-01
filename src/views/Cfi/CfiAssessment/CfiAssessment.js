@@ -73,11 +73,6 @@ const CfiAssessment = (type) => {
       const reviewerAssessments = assessments.map(assessment => assessment.reviewerAssessment)
       const completedReviewerAssessments = reviewerAssessments.filter(review => review.score !== null)
 
-      console.log({
-        completedReviewerAssessments,
-        reviewerAssessments
-      })
-
       if (completedReviewerAssessments.length !== reviewerAssessments.length) {
         const result = await Swal.fire({
           title: `${completedReviewerAssessments.length}/${reviewerAssessments.length} Assessment!`,

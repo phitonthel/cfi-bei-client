@@ -6,9 +6,9 @@ import PageBreakPrint from '../../../../components/Reports/PageBreakPrint';
 const Justification = ({
   reportJustifications,
   isForPrint
- }) => {
-  const HACKY_MARGIN_FOR_NOT_BEING_CUT = 9
-  
+}) => {
+  const HACKY_MARGIN_FOR_NOT_BEING_CUT = 6
+
   return (
     <div className="row p-4">
       <div className="col-md-12">
@@ -18,7 +18,7 @@ const Justification = ({
           reportJustifications.map((justification, index) => (
             <>
               {
-                (index > 0 && index % 3 === 0 && isForPrint) && (
+                (index > 0 && index % 2 === 0 && isForPrint) && (
                   <>
                     <PageBreakPrint />
                     <div style={{ marginBottom: index * HACKY_MARGIN_FOR_NOT_BEING_CUT }} />

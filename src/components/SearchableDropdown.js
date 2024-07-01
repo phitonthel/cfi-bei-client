@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 
 import { Dropdown, FormControl } from 'react-bootstrap';
 
-const SearchableDropdown = ({ users, onChange, selected }) => {
+const SearchableDropdown = ({ items, field, onChange, selected }) => {
   const [search, setSearch] = useState('');
-  const [displayedUsers, setDisplayedUsers] = useState(users);
+  const [displayedItems, setDisplayedItems] = useState(items);
 
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearch(value);
 
-    const filteredUsers = users.filter(user =>
-      user.fullname.toLowerCase().includes(value.toLowerCase())
+    const filteredItems = items.filter(item =>
+      item[field].toLowerCase().includes(value.toLowerCase())
     ).slice(0, 15);
 
-    setDisplayedUsers(filteredUsers);
+    setDisplayedItems(filteredItems);
   };
 
   const handleSelect = (selectedValue) => {
@@ -24,7 +24,7 @@ const SearchableDropdown = ({ users, onChange, selected }) => {
   return (
     <Dropdown>
       <Dropdown.Toggle variant="primary" id="dropdown-basic">
-        {selected.fullname || 'Select User'}
+        {selected[field] || 'Select Item'}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
@@ -36,11 +36,11 @@ const SearchableDropdown = ({ users, onChange, selected }) => {
           value={search}
         />
         {
-          displayedUsers
+          displayedItems
             .slice(0, 15)
             .map((user, index) => (
               <Dropdown.Item key={index} onClick={() => handleSelect(user)}>
-                {`${user.fullname}`}
+                {`${user[field]}`}
               </Dropdown.Item>
             ))
         }

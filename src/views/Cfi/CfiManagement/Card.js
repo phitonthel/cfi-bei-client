@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 
 import { Card, Button, Form } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
 
 import { convertISODateToDDMMYYYY } from 'utils/date';
 import { updateCfiTypeAssessment } from '../../../apis/cfi/cfiTypeAssessments';
 import { fireSwalError } from 'apis/fireSwal';
+import { setUtilities } from '../../../redux/appSlice';
 
 const CustomCard = ({ id, name, config, competencyRoleType, createdAt, updatedAt, nominationLength }) => {
   const [settings, setSettings] = useState(config);
 
+  const dispatch = useDispatch();
   const history = useHistory()
 
   const handleToggle = async (settingId) => {
@@ -26,21 +29,28 @@ const CustomCard = ({ id, name, config, competencyRoleType, createdAt, updatedAt
   };
 
   const handleOnClick = () => {
-    console.log('Manage Assignee', { id, name, config, competencyRoleType, createdAt, updatedAt, nominationLength });
-    history.push(`/admin/cfi-assignee-management?cfiTypeAssessmentId=${id}`)
+    dispatch(setUtilities({
+      cfiTypeAssessment: {
+        id,
+        name,
+        config,
+      }
+    }));
+    history.push(`/admin/cfi-assignee-management`)
   }
 
   return (
     <Card className="col-3 m-3 p-3" style={{ height: '36rem' }}>
-      <Card.Header className='mb-3' style={{ fontSize: '1.5rem' }}>{name}</Card.Header>
+      <Card.Header className='mb-3' style={{ minHeight: '8rem', fontSize: '1.5rem' }}>{name}</Card.Header>
       <Card.Text className="ml-3 text-muted">
         Type: {competencyRoleType}
       </Card.Text>
+      <hr></hr>
       <Card.Body>
         <div className="mb-3">
           <p className='pt-1'><strong>Enable/Disable Features:</strong></p>
           {settings.map(setting => (
-            <Form.Group key={id+setting.id} controlId={`setting-${setting.id}`} className="d-flex align-items-center">
+            <Form.Group key={id + setting.id} controlId={`setting-${setting.id}`} className="d-flex align-items-center">
               <Form.Check
                 type="switch"
                 id={`switch-${name}-${setting.id}`}

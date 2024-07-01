@@ -57,8 +57,6 @@ export const AssessmentRadios = ({
 }) => {
   const authUser = useSelector(state => state.auth.user);
 
-  console.log("XXXX", assessment)
-
   const score = assessmentRadioType === 'REVIEWER'
     ? assessment.reviewerAssessment.score
     : assessment.revieweeAssessment.score

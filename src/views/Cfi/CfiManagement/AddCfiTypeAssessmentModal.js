@@ -25,7 +25,6 @@ const AddCfiTypeAssessmentModal = ({ title, buttonLabel, onSubmitFinish }) => {
 
   const handleSave = async () => {
     try {
-      console.log("Form data saved:", formData);
       await createCfiTypeAssessment({
         name: formData.assessmentName,
         competencyRoleType: formData.cfiCompetencyRoleType || null
@@ -81,7 +80,7 @@ const AddCfiTypeAssessmentModal = ({ title, buttonLabel, onSubmitFinish }) => {
             Close
           </Button>
           <Button variant="primary" onClick={handleSave}>
-            Save Changes
+            Add
           </Button>
         </Modal.Footer>
       </Modal>

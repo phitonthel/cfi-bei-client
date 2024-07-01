@@ -1,8 +1,4 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { useLocation, useHistory } from "react-router-dom";
-import { initAppRedux } from "redux/appSlice";
-import { initAuthRedux } from "redux/authSlice";
 import Swal from 'sweetalert2';
 
 import { config } from '../../env';

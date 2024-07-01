@@ -19,7 +19,7 @@ import { fireSwalError } from '../../../apis/fireSwal';
 
 function CfiManagement() {
   const { data: cfiTypeAssessments, error, isLoading, refetch } = useQuery(
-    'cfiTypeAssessment',
+    'fetchCfiTypeAssessments',
     fetchCfiTypeAssessments,
     {
       onError: fireSwalError,
@@ -27,9 +27,7 @@ function CfiManagement() {
   );
 
   const onSubmitFinish = () => {
-    // Handle save logic here
     refetch()
-    console.log("Form data has been handled in the parent component");
   };
 
   if (isLoading) {
@@ -44,12 +42,13 @@ function CfiManagement() {
     <>
       <div className='d-flex flex-column align-items-center'>
         <div className="d-flex justify-content-end align-items-end mb-3 w-100">
-          {/* <Button variant="primary">Add CFI Assessment</Button> */}
-          <AddCfiTypeAssessmentModal
-            title="Add CFI Assessment"
-            buttonLabel="Add CFI Assessment"
-            onSubmitFinish={onSubmitFinish}
-          />
+          <div style={{ marginRight: 100}}>
+            <AddCfiTypeAssessmentModal
+              title="Add CFI Assessment"
+              buttonLabel="Add CFI Assessment"
+              onSubmitFinish={onSubmitFinish}
+            />
+          </div>
         </div>
         <div className="d-flex justify-content-center flex-wrap w-100">
           {

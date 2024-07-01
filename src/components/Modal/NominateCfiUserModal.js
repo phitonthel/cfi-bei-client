@@ -4,21 +4,29 @@ import { Button, Modal, Form, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
-import { approveNomination } from '../../apis/tsAssessment/approveNomination';
+import { approveUser } from '../../apis/tsAssessment/approveNomination';
+import { nominateUser } from '../../apis/tsAssessment/nominateUser';
+import { nominateUserBySuperadmin } from '../../apis/tsAssessment/nominateUserBySuperadmin';
+import { fetchAllUsers } from '../../apis/user/fetchAllUsers';
 import SearchableDropdown from '../SearchableDropdown'
+import { fetchCfiCompetencyRoles } from '../../apis/cfi/cfiCompetencyRoles';
+import { createCfiNominationAndAssessments } from '../../apis/cfi/cfiNominations';
 
-const NominateUserModal = ({
+const NominateCfiUserModal = ({
   modalTitle,
   buttonText,
-  fetchUserOptions,
-  onFormSubmit: notifyParent
+  onSubmitFinish,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [users, setUsers] = useState([]);
   const [reviewee, setReviewee] = useState('');
   const [reviewer, setReviewer] = useState('');
+  const [cfiRole, setCfiRole] = useState('');
+
+  const [users, setUsers] = useState([]);
+  const [cfiRoles, setCfiRoles] = useState([]);
 
   const authUser = useSelector(state => state.auth.user);
+  const appUtilities = useSelector(state => state.app.utilities);
 
   const handleButtonClick = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -27,38 +35,41 @@ const NominateUserModal = ({
     try {
       event.preventDefault();
 
-      await approveNomination({
-        revieweeId: reviewee.id || authUser.id,
-        reviewerId: reviewer.id
+      await createCfiNominationAndAssessments({
+        cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id,
+        revieweeId: reviewee.id,
+        reviewerId: reviewer.id,
+        cfiRole: cfiRole.role
       })
 
-      fireSwalSuccess({ text: 'Nomination created!' });
+      fireSwalSuccess({ text: 'User Nominated Successfully!' });
     } catch (error) {
-      fireSwalError(error)
+      fireSwalError(error, 2000)
     } finally {
       setShowModal(false);
-      if (notifyParent) {
-        notifyParent();
+      if (onSubmitFinish) {
+        onSubmitFinish();
       }
     }
   };
 
   useEffect(async () => {
-    const { data } = await fetchUserOptions();
-
+    const { data: allUsers } = await fetchAllUsers();
     setUsers(
-      data.sort((a, b) => {
+      allUsers.sort((a, b) => {
         if (a.fullname.toLowerCase() > b.fullname.toLowerCase()) return 1;
         if (a.fullname.toLowerCase() < b.fullname.toLowerCase()) return -1;
         return 0;
       })
     );
 
+    const { data: competencyRoles } = await fetchCfiCompetencyRoles('A');
+    setCfiRoles(competencyRoles)
   }, []);
 
   return (
     <div>
-      <Button onClick={handleButtonClick}>{buttonText}</Button>
+      <Button className='btn btn-sm  mx-1' onClick={handleButtonClick}>{buttonText}</Button>
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
@@ -66,7 +77,6 @@ const NominateUserModal = ({
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleFormSubmit}>
-
             <Form.Group controlId="input1">
               <Form.Label>Ratee</Form.Label>
               <SearchableDropdown
@@ -76,7 +86,6 @@ const NominateUserModal = ({
                 field={`fullname`}
               />
             </Form.Group>
-
             <Form.Group controlId="input2">
               <Form.Label>Rater</Form.Label>
               <SearchableDropdown
@@ -84,6 +93,15 @@ const NominateUserModal = ({
                 onChange={(selectedValue) => setReviewer(selectedValue)}
                 selected={reviewer}
                 field={`fullname`}
+              />
+            </Form.Group>
+            <Form.Group controlId="input3">
+              <Form.Label>CFI Position</Form.Label>
+              <SearchableDropdown
+                items={cfiRoles}
+                onChange={(selectedValue) => setCfiRole(selectedValue)}
+                selected={cfiRole}
+                field={`role`}
               />
             </Form.Group>
 
@@ -95,4 +113,4 @@ const NominateUserModal = ({
   );
 };
 
-export default NominateUserModal;
+export default NominateCfiUserModal;
