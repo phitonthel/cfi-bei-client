@@ -94,6 +94,7 @@ export const AssessmentRadios = ({
               className={generateClass(index)}
               onClick={() => handlers.button(assessment.id, index)}
               disabled={isDisabled}
+              style={{ fontSize: '12px' }}
             >
               {renderScore(index, type)}
             </StyledButton>
