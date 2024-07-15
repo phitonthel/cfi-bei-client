@@ -32,10 +32,14 @@ const CfiTypeSelection = () => {
 
   const isDisabled = (name) => {
     if (name === 'Technical Assessment') {
-      return data.progress.cfiTechnicalTotal === 0;
+      if (data.progress.cfiTechnicalTotal === 0) {
+        return true
+      }
     }
     if (name === 'Behavioural Assessment') {
-      return data.progress.cfiBehaviouralTotal === 0;
+      if (data.progress.cfiBehaviouralTotal === 0) {
+        return true
+      }
     }
     return !data.cfiTypeAssessment.config.find(e => e.name === name).isEnabled;
   }
