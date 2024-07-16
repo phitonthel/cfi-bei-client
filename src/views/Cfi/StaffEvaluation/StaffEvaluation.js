@@ -39,22 +39,22 @@ const columns = [
     sortable: true,
   },
   {
-    name: <b>Staff Last Updated</b>,
+    name: <b>Self Assessment Last Update</b>,
     selector: row => row.selfLastUpdated,
     sortable: true,
   },
   {
-    name: <b>Reviewer Last Updated</b>,
+    name: <b>Reviewer Last Update</b>,
     selector: row => row.reviewerLastUpdated,
     sortable: true,
   },
   {
-    name: <b>Staff Review</b>,
+    name: <b>Self Assessment</b>,
     selector: row => row.selfReviewProgress,
     sortable: true,
   },
   {
-    name: <b>Supervisor Review</b>,
+    name: <b>Reviewed by Supervisor</b>,
     selector: row => row.reviewerReviewProgress,
     sortable: true,
   },
