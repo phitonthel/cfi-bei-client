@@ -15,11 +15,15 @@ export const fetchUsersForSuperadmin = async () => {
       nik: user.nik,
       fullname: user.fullname,
       email: user.email,
+      password: user.password,
+      level: user.level,
+      directorate: user.directorate,
       division: user.Division?.name,
       unit: user.unit,
+      location: user.location,
       positionName: user.positionName,
-      cfiRole: user.role,
-      password: user.password,
+      cfiPosition: user.role,
+      isActive: 'Yes'
     }
   })
 }

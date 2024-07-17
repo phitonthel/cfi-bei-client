@@ -18,7 +18,7 @@ import AddUserModal from '../../components/Modal/AddUserModal'
 import { downloadTxtFile } from '../Reports/utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { fetchUsersForSuperadmin } from '../../apis/user/users';
-import { GenericDownloadCsvButton } from 'components/Buttons/DownloadButtons';
+import { GenericDownloadCsvButton } from '../../components/Buttons/DownloadButtons';
 
 const columns = [
   {
