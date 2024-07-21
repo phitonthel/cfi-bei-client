@@ -9,6 +9,7 @@ import IndividualReports from "../views/Cfi/IndividualReports/IndividualReports.
 import StaffEvaluation from "../views/Cfi/StaffEvaluation/StaffEvaluation";
 import Technical from "../views/Cfi/Technical/Technical.js";
 import Reports from "../views/Reports/index.js";
+import UserReport from '../views/Reports/User'
 
 export const cfiRoutes = [
   // {
@@ -123,5 +124,16 @@ export const cfiRoutes = [
     access: Object.values(ACCESS_LEVEL),
     hidden: true,
     visibilityByAppSetting: APP_SETTINGS["CFI - Individual Report"],
+  },
+  {
+    path: "/cfi/reports/csv/individual",
+    name: "CFI CSV Reports",
+    icon: "nc-icon nc-notes",
+    component: UserReport,
+    layout: "/admin",
+    access: [
+      ACCESS_LEVEL.SUPERADMIN,
+    ],
+    hidden: true,
   },
 ]

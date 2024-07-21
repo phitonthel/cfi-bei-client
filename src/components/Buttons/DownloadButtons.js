@@ -77,3 +77,28 @@ export const GenericDownloadCsvButton = ({
     </div>
   )
 }
+
+export const GenericDownloadCsvButtonFromServer = ({
+  fetchApiFn,
+  query,
+}) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const buttonText = isLoading ? `Processing...` : `Download CSV`
+  return (
+    <div className="">
+      <button
+        className='btn btn-primary btn-sm mx-1'
+        onClick={async () => {
+          setIsLoading(true)
+          try {
+            await fetchApiFn(query)
+          } catch (error) { }
+          setIsLoading(false)
+        }}
+      >
+        <FontAwesomeIcon className="mr-2" icon={faDownload} />
+        {buttonText}
+      </button>
+    </div>
+  )
+}

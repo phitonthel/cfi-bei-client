@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
-
+import { Button, Modal, Form } from 'react-bootstrap';
 
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { fetchCfiIndividualReportTable } from '../../../apis/report/fetchCfiIndividualReportTable';
@@ -11,6 +11,8 @@ import FilteredDataTable from '../../../components/FilteredDataTable';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { setAppReport } from '../../../redux/appSlice';
 import { ACCESS_LEVEL } from '../../../routes/const';
+import { downloadCfiIndividualsCsv } from '../../../apis/report/downloadCfiIndividualsCsv';
+import { GenericDownloadCsvButtonFromServer } from '../../../components/Buttons/DownloadButtons';
 
 const columns = [
   {
@@ -98,7 +100,6 @@ function IndividualReports() {
               history.push('/admin/cfi/graph-report')
             }}
           >
-            {/* <FontAwesomeIcon icon={faChartPie} />  */}
             Graph Report
           </span>
         }
@@ -137,7 +138,11 @@ function IndividualReports() {
 
   return (
     <>
-      <div className='m-4'>
+      <div className="d-flex justify-content-end m-2">
+        {/* <GenericDownloadCsvButtonFromServer
+          fetchApiFn={downloadCfiIndividualsCsv}
+          query={{ cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id }}
+        /> */}
       </div>
       <FilteredDataTable
         columns={columns}

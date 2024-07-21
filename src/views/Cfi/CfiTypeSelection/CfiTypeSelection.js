@@ -95,6 +95,18 @@ const CfiTypeSelection = () => {
           />
         </Col>
       </Row>
+      {authUser.level === 'SUPERADMIN' &&
+        <Row className="w-100 justify-content-center">
+          <Col md={4} className="mb-3">
+            <CustomCard
+              title="Reports (SA)"
+              description="See individual CSV reports."
+              icon={faChartBar}
+              link="/admin/cfi/reports/csv/individual"
+            />
+          </Col>
+        </Row>
+      }
     </Container>
   );
 };
