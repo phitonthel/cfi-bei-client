@@ -46,6 +46,7 @@ const Content = ({
             reports={reports}
             reportsSummary={reportsSummary}
           />
+
           <PageBreakPrint />
 
           <hr></hr>
@@ -53,6 +54,18 @@ const Content = ({
             reportJustifications={reportJustifications}
             isForPrint={isForPrint}
           />
+
+          {/* {!isForPrint &&
+            <>
+              <PageBreakPrint />
+
+              <hr></hr>
+              <Justification
+                reportJustifications={reportJustifications}
+                isForPrint={isForPrint}
+              />
+            </>
+          } */}
 
         </div>
       </div>

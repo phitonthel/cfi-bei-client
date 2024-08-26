@@ -59,6 +59,7 @@ const columns = [
     name: <b>CFI Position</b>,
     selector: row => row.cfiRole,
     sortable: true,
+    wrap: true,
   },
   {
     name: <b>Actions</b>,
@@ -143,7 +144,7 @@ const AssigneeManagement = () => {
           }
         })}
         filterKeys={['revieweeFullname', 'revieweeDivision', 'revieweeLevel', 'reviewerFullname', 'reviewerDivision', 'reviewerLevel', 'cfiRole']}
-        otherProps={{ title: appUtilities.cfiTypeAssessment.name}}
+        otherProps={{ title: appUtilities.cfiTypeAssessment.name }}
       />
     </div>
   );

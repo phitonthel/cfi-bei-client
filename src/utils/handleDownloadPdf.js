@@ -20,11 +20,11 @@ export const handleDownloadPDF = async (
           // before: "#nextpage1", 
           after: ['#pagebreakprint']
         },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 1.5 },
         jsPDF: {
           unit: 'mm',
           format: 'a3',
-          // format: [300, 420],
+          // format: [300, 630],
           orientation: 'portrait',
           // compress: true,
         },

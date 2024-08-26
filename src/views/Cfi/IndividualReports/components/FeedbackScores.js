@@ -20,31 +20,31 @@ const columns = [
   {
     name: <b>Expected Score</b>,
     selector: row => row.expectedScore,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Self Score</b>,
     selector: row => row.selfScore,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Average Validated Score</b>,
     selector: row => row.actualScore,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Gap</b>,
     selector: row => row.gap,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Competency Status</b>,
     selector: row => row.status,
-    width: '150px',
+    width: '180px',
     sortable: true,
   },
 ];

@@ -21,10 +21,6 @@ export const DownloadPdfButton = ({
 
   const text = isLoading ? `Processing...` : buttonText || `Download PDF`
 
-  // if (isLoading) {
-  //   return <LoadingSpinner text={`This may take a while`} />
-  // }
-
   return (
     <div className="text-center mt-4">
       <button
