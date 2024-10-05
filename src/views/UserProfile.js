@@ -42,7 +42,7 @@ function User() {
       const data = await fetchSelfDetail()
       setUser({
         nik: data?.nik,
-        division: data?.Division?.name,
+        division: data?.division,
         positionName: data?.positionName,
         email: data?.email
       })

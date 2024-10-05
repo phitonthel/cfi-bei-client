@@ -5,7 +5,7 @@ import Instructions from 'components/Instructions';
 import { Card as BootstrapCard, Container, Row, Col } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import { useQuery } from 'react-query';
-import { useSelector , useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
@@ -37,6 +37,7 @@ function AssessmentSelection() {
         id: item.id,
         name: item.name,
         config: item.config,
+        competencyRoleType: item.competencyRoleType,
       }
     }));
     history.push('/admin/cfi-route-selections')

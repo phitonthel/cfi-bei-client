@@ -88,7 +88,7 @@ function FeedbackForms() {
         return {
           id: user.id,
           fullname: user.fullname,
-          division: user.Division?.name,
+          division: user.division,
           level: user.level,
           feedbackCompleted: user.feedbackCompleted,
           actions: Actions(user)

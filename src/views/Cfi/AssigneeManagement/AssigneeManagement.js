@@ -108,9 +108,6 @@ const Actions = (nominationId, refetch) => {
 
 const AssigneeManagement = () => {
   const appUtilities = useSelector(state => state.app.utilities);
-  // const location = useLocation();
-  // const searchParams = new URLSearchParams(location.search);
-  // const cfiTypeAssessmentId = searchParams.get('cfiTypeAssessmentId');
 
   const { data: cfiNominations, error, isLoading, refetch } = useQuery(
     ['fetchCfiNominationsForAdmin', { cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id }],

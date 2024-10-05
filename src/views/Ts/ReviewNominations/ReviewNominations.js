@@ -100,10 +100,10 @@ function ReviewNomination() {
         return {
           id: nomination.id,
           revieweeFullname: nomination.Reviewee?.fullname,
-          revieweeDivision: nomination.Reviewee?.Division.name,
+          revieweeDivision: nomination.Reviewee?.division,
           revieweeLevel: nomination.Reviewee?.level,
           reviewerFullname: nomination.Reviewer?.fullname,
-          reviewerDivision: nomination.Reviewer?.Division.name,
+          reviewerDivision: nomination.Reviewer?.division,
           reviewerLevel: nomination.Reviewer?.level,
           feedbackCompleted: nomination.feedbackCompleted,
           isNominatedByReviewee: nomination.isNominatedByReviewee,

@@ -54,6 +54,7 @@ const NominateCfiUserModal = ({
   };
 
   useEffect(async () => {
+    console.log({ appUtilities })
     const { data: allUsers } = await fetchAllUsers();
     setUsers(
       allUsers.sort((a, b) => {
@@ -63,7 +64,7 @@ const NominateCfiUserModal = ({
       })
     );
 
-    const { data: competencyRoles } = await fetchCfiCompetencyRoles('A');
+    const { data: competencyRoles } = await fetchCfiCompetencyRoles(appUtilities.cfiTypeAssessment.competencyRoleType);
     setCfiRoles(competencyRoles)
   }, []);
 

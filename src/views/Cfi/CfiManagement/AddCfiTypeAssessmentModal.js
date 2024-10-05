@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
+import { useQuery } from 'react-query';
 
 import { createCfiTypeAssessment } from '../../../apis/cfi/cfiTypeAssessments';
 import { fireSwalSuccess } from '../../../apis/fireSwal';
 import { fireSwalError } from '../../../apis/fireSwal';
+import { fetchCfiTypeAssessments } from '../../../apis/cfi/cfiTypeAssessments';
 
 const AddCfiTypeAssessmentModal = ({ title, buttonLabel, onSubmitFinish }) => {
   const [show, setShow] = useState(false);
@@ -11,6 +13,16 @@ const AddCfiTypeAssessmentModal = ({ title, buttonLabel, onSubmitFinish }) => {
     assessmentName: '',
     cfiCompetencyRoleType: ''
   });
+
+  const { data: cfiTypeAssessments, error, isLoading, refetch } = useQuery(
+    'fetchCfiTypeAssessments',
+    fetchCfiTypeAssessments,
+    {
+      onError: fireSwalError,
+    }
+  );
+
+  const distinctCompetencyRoleTypes = [...new Set(cfiTypeAssessments.map(e => e.competencyRoleType))];
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -68,11 +80,11 @@ const AddCfiTypeAssessmentModal = ({ title, buttonLabel, onSubmitFinish }) => {
                 onChange={handleChange}
               >
                 <option value="">Choose...</option>
-                <option value="CFI_2023">CFI_2023</option>
-                {/* Add more options as needed */}
+                {
+                  distinctCompetencyRoleTypes.map((role, index) => <option key={index} value={role}>{role}</option>)
+                }
               </Form.Control>
             </Form.Group>
-            {/* Add more form fields as needed */}
           </Form>
         </Modal.Body>
         <Modal.Footer>

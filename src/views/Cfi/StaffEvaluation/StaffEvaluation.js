@@ -188,7 +188,7 @@ function StaffEvaluation() {
   const staffs = data ? data.map(user => ({
     id: user.id,
     fullname: <UserFullname subordinate={user} authUser={authUser} />,
-    division: user.Division?.name,
+    division: user.division,
     positionName: user.positionName,
     selfLastUpdated: convertISODateToDDMMYYYY(user.selfLastUpdated),
     reviewerLastUpdated: convertISODateToDDMMYYYY(user.reviewerLastUpdated),

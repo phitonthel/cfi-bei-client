@@ -122,7 +122,7 @@ const GraphReport = () => {
       {/* PDF Download Button */}
       <DownloadPdfButton
         reportRef={reportRef}
-        filename={`cfi_graph_report_${user.Division?.name.toLowerCase().replaceAll(' ', '_')}` + `_${(user.unit ?? '-').toLowerCase().replaceAll(' ', '_')}`}
+        filename={`cfi_graph_report_${user.division.toLowerCase().replaceAll(' ', '_')}` + `_${(user.unit ?? '-').toLowerCase().replaceAll(' ', '_')}`}
       />
     </>
   );

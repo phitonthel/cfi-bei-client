@@ -18,7 +18,7 @@ export const fetchUsersForSuperadmin = async () => {
       password: user.password,
       level: user.level,
       directorate: user.directorate,
-      division: user.Division?.name,
+      division: user.division,
       unit: user.unit,
       location: user.location,
       positionName: user.positionName,

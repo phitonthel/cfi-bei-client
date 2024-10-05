@@ -180,7 +180,6 @@ const Table = ({ reports }) => {
       csv += rowValues
         .map(e => e || e === 0 ? `"${e}"` : "")
         .join(',') + '\n'
-      // csv += rowValues.join(',') + '\n'
     });
 
     csv += [

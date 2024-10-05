@@ -74,7 +74,7 @@ function IndividualReports() {
         return {
           id: user.id,
           fullname: user.fullname,
-          division: user.Division?.name,
+          division: user.division,
           level: user.level,
           actions: Actions(user)
         }
