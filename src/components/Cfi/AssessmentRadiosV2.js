@@ -42,11 +42,30 @@ const StyledButton = styled.button`
   }
 `;
 
+const StyledTextarea = styled.textarea`
+  background-color: white;
+  color: black;
+  opacity: 1;
+  // cursor: ${(props) => (props.disabled ? 'not-allowed' : 'auto')};
+  // pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+  resize: none;
+
+  &:disabled {
+    // background-color: #e8e8e8;
+    background-color: white;
+    color: black;
+  }
+`;
+
 const getScoreText = (assessmentRadioType) => {
   if (assessmentRadioType === 'SELF') return 'Self Score:'
   return 'Reviewer Score:'
 }
 
+const ASSESSMEMNT_RADIO_TYPE = {
+  SELF: 'SELF',
+  REVIEWER: 'REVIEWER',
+}
 
 export const AssessmentRadios = ({
   assessment,
@@ -57,11 +76,11 @@ export const AssessmentRadios = ({
 }) => {
   const authUser = useSelector(state => state.auth.user);
 
-  const score = assessmentRadioType === 'REVIEWER'
+  const score = assessmentRadioType === ASSESSMEMNT_RADIO_TYPE.REVIEWER
     ? assessment.reviewerAssessment.score
     : assessment.revieweeAssessment.score
 
-  const justificationValue = assessmentRadioType === 'REVIEWER'
+  const justificationValue = assessmentRadioType === ASSESSMEMNT_RADIO_TYPE.REVIEWER
     ? assessment.reviewerAssessment.justification
     : assessment.revieweeAssessment.justification
 
@@ -80,11 +99,13 @@ export const AssessmentRadios = ({
       <div className='row d-flex justify-content-center'>
         <div className="col-12 text-left">
           <span>{getScoreText(assessmentRadioType)}</span>
-          {/* <OverlayTrigger
-            placement="top"
-            overlay={renderTooltip('This is the score you assign to this assessment')}>
-            <FontAwesomeIcon icon={faInfoCircle} className="ml-2" style={{ cursor: 'pointer' }} />
-          </OverlayTrigger> */}
+          {getScoreText(assessmentRadioType) === 'Self Score:' && (
+            <OverlayTrigger
+              placement="top"
+              overlay={renderTooltip('The ratee has set this as their own score/justification')}>
+              <FontAwesomeIcon icon={faInfoCircle} className="ml-2" style={{ cursor: 'pointer' }} />
+            </OverlayTrigger>
+          )}
         </div>
       </div>
       {Array.from({ length: 5 }, (_, index) => (
@@ -109,15 +130,20 @@ export const AssessmentRadios = ({
             overlay={renderTooltip('Provide a justification for the selected score')}>
             <FontAwesomeIcon icon={faInfoCircle} className="ml-2" style={{ cursor: 'pointer' }} />
           </OverlayTrigger> */}
-          <textarea
+          <StyledTextarea
             value={justificationValue}
             className="form-control mt-1"
-            placeholder="(Optional) Describe the factors that led to this score"
+            placeholder="(Required) Describe the factors that led to this score"
             rows="4"
             onChange={(e) => handlers.justification(assessment.id, e.target.value)}
-            // onChange={(e) => { }}
             disabled={isDisabled}
           />
+          {/* set error text */}
+          {assessment.errorMessage && assessmentRadioType === ASSESSMEMNT_RADIO_TYPE.REVIEWER && (
+            <div className="text-danger mt-1">
+              {assessment.errorMessage}
+            </div>
+          )}
         </div>
       </div>
     </div>

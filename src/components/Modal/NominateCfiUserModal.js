@@ -54,7 +54,6 @@ const NominateCfiUserModal = ({
   };
 
   useEffect(async () => {
-    console.log({ appUtilities })
     const { data: allUsers } = await fetchAllUsers();
     setUsers(
       allUsers.sort((a, b) => {
@@ -97,7 +96,7 @@ const NominateCfiUserModal = ({
               />
             </Form.Group>
             <Form.Group controlId="input3">
-              <Form.Label>CFI Position</Form.Label>
+              <Form.Label>Competency Mapping</Form.Label>
               <SearchableDropdown
                 items={cfiRoles}
                 onChange={(selectedValue) => setCfiRole(selectedValue)}

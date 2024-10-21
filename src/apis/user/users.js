@@ -22,7 +22,7 @@ export const fetchUsersForSuperadmin = async () => {
       unit: user.unit,
       location: user.location,
       positionName: user.positionName,
-      cfiPosition: user.role,
+      role: user.role,
       isActive: 'Yes'
     }
   })

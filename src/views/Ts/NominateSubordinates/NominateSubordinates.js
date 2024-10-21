@@ -77,7 +77,6 @@ function NominateSubordinates() {
       fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
       await initListUser();
     } catch (error) {
-      console.error("Error unnominating user:", error);
       fireSwalError(error, 2000);
     }
   }

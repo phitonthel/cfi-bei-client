@@ -52,8 +52,8 @@ const CfiTypeSelection = () => {
       <Row className="w-100 justify-content-center mb-4">
         <Col md={4} className="mb-3">
           <CustomCard
-            title="Staff Evaluation"
-            description="Evaluate staff performance and provide feedback."
+            title="Team Evaluation"
+            description="Evaluate team performance and provide feedback."
             icon={faUsers}
             link="/admin/cfi/staff-evaluation"
             disabled={isDisabled('Staff Evaluation')}
@@ -73,7 +73,7 @@ const CfiTypeSelection = () => {
         <Col md={4} className="mb-3">
           <CustomCard
             title="Technical Assessments"
-            description="Take the assessment."
+            description="Take self assessment."
             icon={faClipboardCheck}
             link="/admin/cfi/assessment/technical"
             progressBarLabel={`${data.progress.cfiTechnicalCompleted} / ${data.progress.cfiTechnicalTotal}`}
@@ -85,7 +85,7 @@ const CfiTypeSelection = () => {
         <Col md={4} className="mb-3">
           <CustomCard
             title="Behavioural Assessments"
-            description="Take the assessment."
+            description="Take self assessment."
             icon={faClipboardCheck}
             link="/admin/cfi/assessment/behavioural"
             progressBarLabel={`${data.progress.cfiBehaviouralCompleted} / ${data.progress.cfiBehaviouralTotal}`}

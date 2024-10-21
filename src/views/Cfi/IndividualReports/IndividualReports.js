@@ -20,26 +20,31 @@ const columns = [
     selector: row => row.fullname,
     width: '300px',
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Division</h4>,
     selector: row => row.division,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Unit</h4>,
     selector: row => row.unit,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Position</h4>,
     selector: row => row.positionName,
     sortable: true,
+    wrap: true,
   },
   {
-    name: <h4>CFI Position</h4>,
+    name: <h4>Competency Mapping</h4>,
     selector: row => row.cfiRole,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Actions</h4>,

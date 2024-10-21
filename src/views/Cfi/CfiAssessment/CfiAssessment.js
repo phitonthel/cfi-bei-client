@@ -28,6 +28,86 @@ const CfiAssessment = (type) => {
 
   const history = useHistory()
 
+  const handleScroll = (elementId) => {
+    const element = document.getElementById(elementId);
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const resetErrorMessage = () => {
+    assessments.forEach(assessment => {
+      assessment.errorMessage = null
+    });
+    setAssessments([...assessments])
+  }
+
+
+  const isSubmissionValid = () => {
+    const reviewerAssessments = assessments.map(assessment => {
+      return {
+        parentId: assessment.id,
+        ...assessment.reviewerAssessment
+      }
+    })
+
+    const filledScoreAssessments = reviewerAssessments.filter(review => review.score !== null)
+    for (const filledScoreAssessment of filledScoreAssessments) {
+      if (!filledScoreAssessment.justification) {
+        handleScroll(filledScoreAssessment.parentId)
+
+        assessments.forEach(assessment => {
+          if (assessment.id === filledScoreAssessment.parentId) {
+            assessment.errorMessage = "Both score and justification are required!";
+          }
+        });
+        setAssessments([...assessments])
+
+        return false
+      }
+    }
+
+    const filledJustificationAssessments = reviewerAssessments.filter(review => !!review.justification)
+    for (const filledJustificationAssessment of filledJustificationAssessments) {
+      if (!filledJustificationAssessment.score) {
+        handleScroll(filledJustificationAssessment.parentId)
+
+        assessments.forEach(assessment => {
+          if (assessment.id === filledJustificationAssessment.parentId) {
+            assessment.errorMessage = "Both score and justification are required!";
+          }
+        });
+        setAssessments([...assessments])
+
+        return false
+      }
+    }
+
+    return true
+  }
+
+  const awaitConfirmation = async () => {
+    const reviewerAssessments = assessments.map(assessment => assessment.reviewerAssessment)
+    const completedReviewerAssessments = reviewerAssessments.filter(review => review.score !== null)
+
+    if (completedReviewerAssessments.length !== reviewerAssessments.length) {
+      const result = await Swal.fire({
+        title: `${completedReviewerAssessments.length}/${reviewerAssessments.length} Assessment!`,
+        text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: `Yes, submit and continue later`,
+        cancelButtonText: `Cancel`,
+      })
+
+      if (!result.isConfirmed) {
+        return false
+      }
+    }
+
+    return true
+  }
+
   const submit = async () => {
     try {
       setIsSubmitting(true)
@@ -70,25 +150,17 @@ const CfiAssessment = (type) => {
     },
     // send request to server
     submitConfirmation: async () => {
-      const reviewerAssessments = assessments.map(assessment => assessment.reviewerAssessment)
-      const completedReviewerAssessments = reviewerAssessments.filter(review => review.score !== null)
+      resetErrorMessage()
 
-      if (completedReviewerAssessments.length !== reviewerAssessments.length) {
-        const result = await Swal.fire({
-          title: `${completedReviewerAssessments.length}/${reviewerAssessments.length} Assessment!`,
-          text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: `Yes, submit and continue later`,
-          cancelButtonText: `Cancel`,
-        })
-
-        if (!result.isConfirmed) {
-          return
-        }
+      if (!isSubmissionValid()) {
+        return
       }
+
+      const isSubmit = await awaitConfirmation()
+      if (!isSubmit) {
+        return
+      }
+
       await submit()
 
       if (cfiAssessment.isSelfReview) {
@@ -107,7 +179,13 @@ const CfiAssessment = (type) => {
         revieweeId: cfiAssessment.revieweeId,
         reviewerId: cfiAssessment.reviewerId,
       })
-      setAssessments(data)
+
+      setAssessments(data.map(e => {
+        return {
+          ...e,
+          errorMessage: null
+        }
+      }))
     } catch (error) {
       fireSwalError(error)
     }
@@ -134,7 +212,6 @@ const CfiAssessment = (type) => {
   const completedCorrespondingReviews = flattenedCfiReviews.filter(review => review.score !== null)
   const assessmentsPercentage = `${completedCorrespondingReviews.length}/${flattenedCfiReviews.length}`
   const buttonText = `Submit ${assessmentsPercentage} Assessments`
-
   return (
     <>
       <div className='col-10'>

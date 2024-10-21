@@ -28,7 +28,7 @@ export const AssessmentCard = ({ assessment, handlers, type, isSelfReview }) => 
   const descriptionClassName = isSelfReview ? "col-9 text-left" : "col-6 text-left"
 
   return (
-    <div className="card mx-6">
+    <div id={assessment.id} className="card mx-6">
       <div className="card-header text-left mx-2">
         <h3>{assessment.reviewerAssessment.competencyRole.Competency.category}</h3>
       </div>

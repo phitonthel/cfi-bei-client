@@ -25,41 +25,49 @@ const columns = [
     name: <h4>NIK</h4>,
     selector: row => row.nik,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Name</h4>,
     selector: row => row.fullname,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Email</h4>,
     selector: row => row.email,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Division</h4>,
     selector: row => row.division,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Unit</h4>,
     selector: row => row.unit,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Position</h4>,
     selector: row => row.positionName,
     sortable: true,
+    wrap: true,
   },
   {
-    name: <h4>CFI Position</h4>,
-    selector: row => row.cfiRole,
+    name: <h4>Competency Mapping</h4>,
+    selector: row => row.role,
     sortable: true,
+    wrap: true,
   },
   {
     name: <h4>Password</h4>,
     selector: row => row.password,
     sortable: true,
+    wrap: true,
   },
 ];
 
