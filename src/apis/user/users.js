@@ -23,7 +23,6 @@ export const fetchUsersForSuperadmin = async () => {
       location: user.location,
       positionName: user.positionName,
       role: user.role,
-      isActive: 'Yes'
     }
   })
 }

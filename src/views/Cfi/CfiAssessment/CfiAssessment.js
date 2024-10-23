@@ -67,7 +67,7 @@ const CfiAssessment = (type) => {
 
     const filledJustificationAssessments = reviewerAssessments.filter(review => !!review.justification)
     for (const filledJustificationAssessment of filledJustificationAssessments) {
-      if (!filledJustificationAssessment.score) {
+      if (filledJustificationAssessment.score === null) {
         handleScroll(filledJustificationAssessment.parentId)
 
         assessments.forEach(assessment => {
