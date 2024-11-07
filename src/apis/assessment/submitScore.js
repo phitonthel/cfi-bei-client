@@ -29,6 +29,7 @@ export const submitScore = async ({
 export const submitTsScore = async ({
   tsAssessmentId,
   score,
+  justification,
 }) => {
   const response = await axios({
     method: 'PUT',
@@ -39,6 +40,7 @@ export const submitTsScore = async ({
     data: {
       tsAssessmentId,
       score,
+      justification,
     }
   });
   return response

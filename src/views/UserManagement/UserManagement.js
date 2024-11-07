@@ -58,6 +58,12 @@ const columns = [
     wrap: true,
   },
   {
+    name: <h4>Level</h4>,
+    selector: row => row.level,
+    sortable: true,
+    wrap: true,
+  },
+  {
     name: <h4>Competency Mapping</h4>,
     selector: row => row.role,
     sortable: true,
@@ -124,7 +130,7 @@ function UserManagement() {
       < FilteredDataTable
         columns={columns}
         data={users}
-        filterKeys={['nik','email','fullname', 'division', 'unit', 'position']}
+        filterKeys={['nik', 'email', 'fullname', 'division', 'unit', 'position', 'level', 'role']}
       />
     </>
   );

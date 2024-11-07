@@ -1,4 +1,7 @@
 import { useSelector } from 'react-redux';
+import { useQuery } from 'react-query';
+import { fetchTsInstructions } from '../../../apis/tsAssessment/fetchInstructions';
+import { fireSwalError } from '../../../apis/fireSwal';
 
 const createText = (authUser) => {
   if (authUser.level === 'Kepala Divisi') {
@@ -21,11 +24,22 @@ const createText = (authUser) => {
       'Prioritise picking members from your unit first before others.'
     ]
   }
+
+  return []
 }
 
 const Instructions = () => {
   const authUser = useSelector(state => state.auth.user);
   const texts = createText(authUser)
+
+  const { data, error, isLoading } = useQuery(
+    'fetchTsInstructions',
+    () => fetchTsInstructions({ nominationType: 'PEER' }),
+    {
+      onError: fireSwalError,
+    }
+  );
+
 
   return (
     <div>
@@ -34,8 +48,11 @@ const Instructions = () => {
           <h5 className="mb-2">Instructions:</h5>
         </div>
         <div className="card-body bg-light"> {/* Light background for the body */}
-          {
+          {/* {
             texts.map((text, i) => <p className="card-text p-0 m-0">{`${i + 1}. ${text}`}</p>)
+          } */}
+          {
+            data?.split('\n').map((text, i) => <p className="card-text p-0 m-0">{`${i + 1}. ${text}`}</p>)
           }
         </div>
       </div>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
+import { useHistory } from "react-router-dom";
 
 
 import OpenFeedbackForm from './OpenFeedbackForm';
@@ -54,6 +55,8 @@ const calculateAssessmentPercentage = ({
 
 
 const FeedbackForm = () => {
+  const history = useHistory()
+
   const authUser = useSelector(state => state.auth.user);
   const appReports = useSelector(state => state.app.reports);
 
@@ -75,14 +78,78 @@ const FeedbackForm = () => {
     tsEssayAssessments,
   })
 
+  const handleScroll = (elementId) => {
+    const element = document.getElementById(elementId);
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const resetErrorMessage = () => {
+    tsAssessments.forEach(assessment => {
+      assessment.errorMessage = null
+    });
+    setTsAssessments([...tsAssessments])
+  }
+
+  const awaitConfirmation = async () => {
+    if (totalAssessmentCompleted !== totalAssessment) {
+      const result = await Swal.fire({
+        title: `${totalAssessmentCompleted}/${totalAssessment} Assessment!`,
+        text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: `Yes, submit and continue later`,
+        cancelButtonText: `Cancel`,
+      })
+
+      if (!result.isConfirmed) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  const isSubmissionValid = () => {
+    for (const tsA of tsAssessments) {
+      if (tsA.score === null && tsA.justification !== null) {
+        tsA.errorMessage = "Both score and justification are required!";
+        setTsAssessments([...tsAssessments])
+        handleScroll(tsA.id)
+        return false
+      }
+
+      if (tsA.score !== null && tsA.justification === null) {
+        tsA.errorMessage = "Both score and justification are required!";
+        setTsAssessments([...tsAssessments])
+        handleScroll(tsA.id)
+        return false
+      }
+    }
+    return true
+  }
+
   const submit = async () => {
     try {
       setIsSubmitting(true)
 
+      resetErrorMessage()
+
+      if (!isSubmissionValid()) {
+        return
+      }
+
+      const isSubmit = await awaitConfirmation()
+      if (!isSubmit) {
+        return
+      }
+
       const tsAssessmentPromises = tsAssessments.map(tsA => {
         return submitTsScore({
           tsAssessmentId: tsA.id,
-          score: tsA.score
+          score: tsA.score,
+          justification: tsA.justification,
         })
       })
 
@@ -93,35 +160,13 @@ const FeedbackForm = () => {
         })
       })
 
-      if (totalAssessmentCompleted !== totalAssessment) {
-        const result = await Swal.fire({
-          title: `${totalAssessmentCompleted}/${totalAssessment} Assessment!`,
-          text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: `Yes, submit and continue later`,
-          cancelButtonText: `Cancel`,
-        })
-
-        if (result.isConfirmed) {
-          await Promise.all([
-            ...tsAssessmentPromises,
-            ...tsEssayAssessmentsPromises,
-          ])
-
-          fireSwalSuccess('Your work has been submitted!')
-        }
-        return
-      }
-
       await Promise.all([
         ...tsAssessmentPromises,
         ...tsEssayAssessmentsPromises,
       ])
 
       fireSwalSuccess('Your work has been submitted!')
+      history.push('/admin/ts/feedback-forms');
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -136,8 +181,18 @@ const FeedbackForm = () => {
         revieweeId: appReports.feedbackFormUser.id,
       })
 
-      setTsAssessments(response.data.tsAssessments)
-      setTsEssayAssessments(response.data.tsEssayAssessments)
+      const {
+        tsAssessments,
+        tsEssayAssessments,
+      } = response.data
+
+      setTsAssessments(tsAssessments.map(tsA => {
+        return {
+          ...tsA,
+          errorMessage: null,
+        }
+      }))
+      setTsEssayAssessments(tsEssayAssessments)
 
       const revieweeName = appReports.feedbackFormUser.fullname
 

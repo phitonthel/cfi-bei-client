@@ -7,6 +7,7 @@ import IndividualReports from "../views/Ts/IndividualReport/IndividualReports.js
 import NominatePeers from "../views/Ts/NominatePeers/index.js";
 import NominateSubordinates from "../views/Ts/NominateSubordinates/index.js";
 import ReviewNomination from "../views/Ts/ReviewNominations/ReviewNominations.js";
+import FeedbackCompletion from '../views/Ts/FeedbackCompletion/page.js';
 
 export const tsRoutes = {
   path: "/360",
@@ -27,6 +28,9 @@ export const tsRoutes = {
         ACCESS_LEVEL.KEPALA_UNIT,
         ACCESS_LEVEL.KEPALA_KANTOR,
         ACCESS_LEVEL.KEPALA_DIVISI,
+        ACCESS_LEVEL.ADVISOR,
+        ACCESS_LEVEL.EXPERT,
+        ACCESS_LEVEL.SPESIALIS,
       ],
       hidden: false,
       visibilityByAppSetting: APP_SETTINGS["360 - Nominate Peers"],
@@ -41,6 +45,9 @@ export const tsRoutes = {
         ACCESS_LEVEL.KEPALA_UNIT,
         ACCESS_LEVEL.KEPALA_KANTOR,
         ACCESS_LEVEL.KEPALA_DIVISI,
+        ACCESS_LEVEL.ADVISOR,
+        ACCESS_LEVEL.EXPERT,
+        ACCESS_LEVEL.SPESIALIS,
       ],
       hidden: false,
       visibilityByAppSetting: APP_SETTINGS["360 - Nominate Peers"],
@@ -50,6 +57,17 @@ export const tsRoutes = {
       name: "Review Nominations",
       icon: "nc-icon nc-fav-remove",
       component: ReviewNomination,
+      layout: "/admin",
+      access: [
+        ACCESS_LEVEL.SUPERADMIN,
+      ],
+      hidden: false,
+    },
+    {
+      path: "/ts/feedback-completion",
+      name: "Feedback Completion",
+      icon: "nc-icon nc-notes",
+      component: FeedbackCompletion,
       layout: "/admin",
       access: [
         ACCESS_LEVEL.SUPERADMIN,
@@ -115,7 +133,7 @@ export const tsRoutes = {
       component: FeedbackForm,
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL)
-      .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
+        .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
       hidden: true,
     },
   ]

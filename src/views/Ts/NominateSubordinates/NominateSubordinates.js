@@ -35,7 +35,7 @@ const columns = [
   },
   {
     name: <h4>Status</h4>,
-    selector: 'status',
+    selector: row => row.status,
     cell: row => (
       <span style={{ color: row.status ? 'navy' : 'darkred' }}>
         {row.status ? 'Nominated' : 'Unnominated'}
@@ -156,7 +156,7 @@ function NominateSubordinates() {
       <div className="d-flex justify-content-end m-2">
         <NominateUserModal
           modalTitle={'Nominate Subordinates'}
-          buttonText={'Nominate Subordinates From Other Division'}
+          buttonText={'Nominate Other Subordinates'}
           fetchUserOptions={fetchAllTsSubordinates}
           onFormSubmit={() => {
             initListUser()

@@ -36,6 +36,12 @@ export const columns = [
     sortable: true,
   },
   {
+    name: <h4>Feedback Completed</h4>,
+    width: '150px',
+    selector: row => row.feedbackCompleted,
+    sortable: true,
+  },
+  {
     name: <h4>Nomination</h4>,
     width: '150px',
     selector: row => row.isNominatedByReviewee,
@@ -57,10 +63,5 @@ export const columns = [
       </span>
     ),
     sortable: true,
-  },
-  {
-    name: <h4>Actions</h4>,
-    width: '300px',
-    cell: row => row.actions,
   },
 ];

@@ -24,7 +24,7 @@ export const cfiRoutes = [
   // },
   {
     path: "/cfi/staff-evaluation",
-    name: "Staff Evaluation",
+    name: "Team Evaluation",
     icon: "nc-icon nc-chart-pie-35",
     component: StaffEvaluation,
     layout: "/admin",

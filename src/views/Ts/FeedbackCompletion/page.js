@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 
-import ApproveAllNominationButton from './ApproveAllNominationButton';
-import { handleApprovalUser, handleUnapprovalUser } from './utils';
 import { columns } from './vars';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
@@ -29,7 +27,7 @@ const createCsv = (data) => {
     rowBuilder.push(row.reviewerFullname)
     rowBuilder.push(row.reviewerDivision)
     rowBuilder.push(row.reviewerLevel)
-    // rowBuilder.push(row.feedbackCompleted)
+    rowBuilder.push(row.feedbackCompleted)
     rowBuilder.push(row.isNominatedByReviewee)
     rowBuilder.push(row.isApproved)
 
@@ -39,53 +37,15 @@ const createCsv = (data) => {
   return csvs
 }
 
-function ReviewNomination() {
+function FeedbackCompletion() {
   const history = useHistory()
 
   const [nominations, setNominations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const Actions = ({
-    reviewer,
-    reviewee,
-  }) => {
-    return (
-      <div>
-        <span
-          className="badge badge-danger mx-1"
-          style={{ cursor: 'pointer ' }}
-          onClick={(e) => {
-            e.preventDefault();
-            handleUnapprovalUser({
-              reviewer,
-              reviewee,
-              initNominations,
-            });
-          }}
-        >
-          Un-approve
-        </span>
-        <span
-          className="badge badge-primary mx-1"
-          style={{ cursor: 'pointer ' }}
-          onClick={(e) => {
-            e.preventDefault();
-            handleApprovalUser({
-              reviewer,
-              reviewee,
-              initNominations,
-            });
-          }}
-        >
-          Approve
-        </span>
-      </div>
-    )
-  }
-
   const initNominations = async () => {
     try {
-      const { data } = await fetchReviewNomination()
+      const { data } = await fetchReviewNomination(true)
 
       if (data.message) {
         return Swal.fire({
@@ -108,10 +68,6 @@ function ReviewNomination() {
           feedbackCompleted: nomination.feedbackCompleted,
           isNominatedByReviewee: nomination.isNominatedByReviewee,
           isApproved: nomination.isApproved,
-          actions: Actions({
-            reviewee: nomination?.Reviewee,
-            reviewer: nomination?.Reviewer,
-          })
         }
       }));
     } catch (error) {
@@ -140,23 +96,6 @@ function ReviewNomination() {
           data={createCsv(nominations)}
           filename={`reviewnominations_${new Date().getTime()}.csv`}
         />
-
-        <ApproveAllNominationButton
-          buttonText={'Approve All'}
-          onFormSubmit={() => {
-            initNominations()
-          }}
-        />
-
-        <NominateUserModal
-          modalTitle={'Create Nomination'}
-          buttonText={'Create Nomination'}
-          isSuperadmin={true}
-          fetchUserOptions={fetchAllUsers}
-          onFormSubmit={() => {
-            initNominations()
-          }}
-        />
       </div>
 
       <FilteredDataTable
@@ -168,4 +107,4 @@ function ReviewNomination() {
   );
 };
 
-export default ReviewNomination
+export default FeedbackCompletion

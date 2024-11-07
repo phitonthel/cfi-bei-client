@@ -64,9 +64,11 @@ function IndividualReports() {
   const Actions = (user) => {
     const { level } = user
     const {
+      SUPERADMIN,
+      DIREKTUR,
       KEPALA_DIVISI,
       KEPALA_UNIT,
-      KEPALA_KANTOR
+      KEPALA_KANTOR,
     } = ACCESS_LEVEL
 
     return (
@@ -91,7 +93,7 @@ function IndividualReports() {
 
 
         {
-          [KEPALA_DIVISI, KEPALA_UNIT, KEPALA_KANTOR].includes(level) &&
+          [SUPERADMIN, DIREKTUR, KEPALA_DIVISI, KEPALA_UNIT, KEPALA_KANTOR].includes(level) &&
           <span
             className="badge badge-secondary mx-1"
             style={{ fontSize: '11px', cursor: 'pointer' }}

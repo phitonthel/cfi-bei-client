@@ -34,7 +34,7 @@ const columns = [
   },
   {
     name: <h4>Status</h4>,
-    selector: 'status',
+    selector: row => row.status,
     cell: row => (
       <span style={{ color: row.status ? 'navy' : 'darkred' }}>
         {row.status ? 'Nominated' : 'Unnominated'}

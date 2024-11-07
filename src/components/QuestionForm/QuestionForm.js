@@ -1,5 +1,21 @@
 // QuestionForm.jsx
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+
+const StyledTextarea = styled.textarea`
+  background-color: white;
+  color: black;
+  opacity: 1;
+  // cursor: ${(props) => (props.disabled ? 'not-allowed' : 'auto')};
+  // pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+  resize: none;
+
+  &:disabled {
+    // background-color: #e8e8e8;
+    background-color: white;
+    color: black;
+  }
+`;
 
 const QuestionForm = ({
   initialQuestions,
@@ -14,6 +30,14 @@ const QuestionForm = ({
     setTsAssessments(newQuestions)
   };
 
+  const handleJustificationChange = (index, justification) => {
+    console.log('justification', justification);
+    const newQuestions = [...questions];
+    newQuestions[index].justification = justification;
+    setQuestions(newQuestions);
+    setTsAssessments(newQuestions)
+  }
+
   useEffect(() => {
     setQuestions(initialQuestions);
   }, [initialQuestions]);
@@ -21,7 +45,7 @@ const QuestionForm = ({
   return (
     <div>
       {questions.map((question, index) => (
-        <div key={question.id} className="card mb-4">
+        <div id={question.id} key={question.id} className="card mb-4">
           <div className="card-body">
             <div className="row">
               <div className="col-md-8">
@@ -53,22 +77,43 @@ const QuestionForm = ({
 
 
               </div>
-              <div className="col-md-4 d-flex align-items-center justify-content-center">
-                {[1, 2, 3, 4, 5].map(score => (
-                  <button
-                    key={score}
-                    style={{
-                      margin: '5px',
-                      backgroundColor: questions[index].score === score ? '#007BFF' : '', // Highlight selected score
-                      color: questions[index].score === score ? 'white' : ''
-                    }}
-                    className="btn btn-outline-primary"
-                    onClick={() => handleScoreChange(index, score)}
-                  >
-                    {score}
-                  </button>
-                ))}
+              <div className="col-md-4 d-flex flex-column align-items-center justify-content-center">
+
+                <span>Score:</span>
+                <div className="d-flex w-100 justify-content-between mb-2">
+                  {[1, 2, 3, 4, 5].map(score => (
+                    <button
+                      key={score}
+                      style={{
+                        backgroundColor: questions[index].score === score ? '#007BFF' : '', // Highlight selected score
+                        color: questions[index].score === score ? 'white' : ''
+                      }}
+                      className="btn btn-outline-primary flex-grow-1 mx-1"
+                      onClick={() => handleScoreChange(index, score)}
+                    >
+                      {score}
+                    </button>
+                  ))}
+                </div>
+
+                <span style={{ marginTop: '10%' }}>Justification:</span>
+                <StyledTextarea
+                  // value={question.id}
+                  value={question.justification}
+                  className="form-control mt-1"
+                  placeholder="(Required) Describe the factors that led to this score"
+                  rows="4"
+                  onChange={(e) => handleJustificationChange(index, e.target.value)}
+                />
+
+                {question.errorMessage && (
+                  <div className="text-danger mt-2">
+                    {question.errorMessage}
+                  </div>
+                )}
               </div>
+
+
             </div>
           </div>
         </div>

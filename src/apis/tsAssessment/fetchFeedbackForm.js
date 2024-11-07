@@ -16,18 +16,4 @@ export const fetchFeedbackForm = async ({
   })
 
   return response
-
-  return response.data.map(assessment => {
-    return {
-      id: assessment.id,
-      assignedScore: assessment.assignedScore,
-      reviewerScore: assessment.reviewerScore,
-      expectedScore: assessment.CompetencyRole.expectedScore,
-      category: assessment.CompetencyRole?.Competency?.category,
-      title: assessment.CompetencyRole?.Competency?.title,
-      description: assessment.CompetencyRole?.Competency?.description,
-      options: assessment.CompetencyRole?.Competency?.options,
-      shouldShowCriterias: false
-    }
-  })
 }
