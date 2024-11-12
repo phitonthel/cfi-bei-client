@@ -40,7 +40,13 @@ export const fetchSelfAssessment = async (queryParams) => {
       access_token: localStorage.getItem('access_token')
     }
   })
-  return data
+  
+  return data.map(e => {
+    return {
+      ...e,
+      errorMessage: null
+    }
+  })
 }
 
 // export const fetchSelfAssessment = async (queryParams) => {

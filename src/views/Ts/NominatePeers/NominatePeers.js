@@ -151,7 +151,7 @@ function NominatePeers() {
       <div className="d-flex justify-content-end m-2">
         <NominatePeersModal
           modalTitle={'Nominate Peers'}
-          buttonText={'Nominate Peers From Other Division'}
+          buttonText={'Nominate Other Peers'}
           fetchUserOptions={fetchAllTsPeers}
           onFormSubmit={() => {
             initListUser()

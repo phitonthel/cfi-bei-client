@@ -11,11 +11,12 @@ import Swal from 'sweetalert2';
 import { InstructionsBehav } from './InstructionsBehav'
 import { InstructionsTech } from './InstructionsTech'
 import { fetchSelfAssessment } from '../../../apis/assessment/fetchSelf'
-import { submitScore } from '../../../apis/assessment/submitScore';
+import { submitCfiScore } from '../../../apis/assessment/submitScore';
 import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
 import { AssessmentCard } from '../../../components/Cfi/AssessmentCardV2'
 import { FloatingMessage } from '../../../components/FloatingMessage'
 import { SubmitButton } from '../../../components/SubmitButton';
+import { track } from '../../../apis/track';
 
 const CfiAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
@@ -111,22 +112,45 @@ const CfiAssessment = (type) => {
   const submit = async () => {
     try {
       setIsSubmitting(true)
-      const assessmentPromises = assessments.map(assessment => {
+      const assessmentPayload = assessments.map(assessment => {
         const reviewerAssessment = assessment.reviewerAssessment
-        return submitScore({
+        return {
           id: reviewerAssessment.id,
           score: reviewerAssessment.score,
           justification: reviewerAssessment.justification
-        })
+        }
       })
-      await Promise.all(assessmentPromises)
+      await submitCfiScore(assessmentPayload)
 
+      removeFromLocalStorage()
       fireSwalSuccess('Your work has been submitted!')
     } catch (error) {
       fireSwalError(error)
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const setToLocalStorage = () => {
+    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
+    const value = JSON.stringify(assessments)
+    localStorage.setItem(key, value)
+  }
+
+  const getFromLocalStorage = () => {
+    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
+    const value = localStorage.getItem(key)
+    return JSON.parse(value)
+  }
+
+  const removeFromLocalStorage = () => {
+    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
+    localStorage.removeItem(key)
+  }
+
+  const isLocalStorageAvailable = () => {
+    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
+    return !!localStorage.getItem(key)
   }
 
   // handlers for assessment
@@ -138,6 +162,16 @@ const CfiAssessment = (type) => {
           assessment.reviewerAssessment.score = score;
         }
       });
+      setToLocalStorage()
+      track({
+        event: 'click',
+        target: 'cfi-assessment',
+        action: 'button',
+        data: {
+          assessmentId: assessmentId,
+          score: score
+        }
+      })
       setAssessments([...assessments])
     },
     justification: (assessmentId, newValue) => {
@@ -146,6 +180,7 @@ const CfiAssessment = (type) => {
           assessment.reviewerAssessment.justification = newValue;
         }
       });
+      setToLocalStorage()
       setAssessments([...assessments])
     },
     // send request to server
@@ -173,19 +208,19 @@ const CfiAssessment = (type) => {
 
   useEffect(async () => {
     try {
-      const data = await fetchSelfAssessment({
-        type,
-        cfiTypeAssessmentId: cfiTypeAssessment.id,
-        revieweeId: cfiAssessment.revieweeId,
-        reviewerId: cfiAssessment.reviewerId,
-      })
+      let data = null
+      if (isLocalStorageAvailable()) {
+        data = getFromLocalStorage()
+      } else {
+        data = await fetchSelfAssessment({
+          type: type,
+          cfiTypeAssessmentId: cfiTypeAssessment.id,
+          revieweeId: cfiAssessment.revieweeId,
+          reviewerId: cfiAssessment.reviewerId
+        })
+      }
 
-      setAssessments(data.map(e => {
-        return {
-          ...e,
-          errorMessage: null
-        }
-      }))
+      setAssessments(data)
     } catch (error) {
       fireSwalError(error)
     }
