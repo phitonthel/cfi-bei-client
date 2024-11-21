@@ -253,6 +253,7 @@ const CfiAssessment = (type) => {
         <FloatingMessage
           title={`Progress`}
           text={`${assessmentsPercentage} Assessment`}
+          secondaryText={isLocalStorageAvailable() ? 'You have unsaved changes!' : null}
         />
         <Card className="mb-3">
           <Card.Body className="d-flex align-items-center">

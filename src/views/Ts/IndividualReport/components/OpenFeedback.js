@@ -10,7 +10,7 @@ const OpenFeedback = ({
     <>
       <div className="row mb-4 p-4">
         <div className="col-md-12">
-          <h2>{title}</h2>
+          <h3>{title}</h3>
           
           {strengths.length > 0 && (
             <>

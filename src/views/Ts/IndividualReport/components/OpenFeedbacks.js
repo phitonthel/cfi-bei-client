@@ -1,5 +1,6 @@
 import OpenFeedback from "./OpenFeedback";
 import PageBreakPrint from "../../../../components/Reports/PageBreakPrint";
+import Justifications from "./Justifications";
 
 const OpenFeedbacks = ({
   essayReports,
@@ -11,18 +12,19 @@ const OpenFeedbacks = ({
 
   return (
     <>
-      <OpenFeedback essayReports={supervisorFeedbacks} title={`Feedback from Supervisor`}/>
+      <h2>Feedback Reflection</h2>
+      <OpenFeedback essayReports={supervisorFeedbacks} title={`Feedback from Supervisor`} />
       <hr></hr>
       <PageBreakPrint />
-      <OpenFeedback essayReports={peerFeedbacks} title={`Feedback from Peers`}/>
-      <hr></hr>
-      <PageBreakPrint />
-
-      <OpenFeedback essayReports={selfFeedbacks} title={`Feedback from Self`}/>
+      <OpenFeedback essayReports={peerFeedbacks} title={`Feedback from Peers`} />
       <hr></hr>
       <PageBreakPrint />
 
-      <OpenFeedback essayReports={subordinateFeedbacks} title={`Feedback from Subordinates`}/>
+      <OpenFeedback essayReports={selfFeedbacks} title={`Feedback from Self`} />
+      <hr></hr>
+      <PageBreakPrint />
+
+      <OpenFeedback essayReports={subordinateFeedbacks} title={`Feedback from Subordinates`} />
     </>
   )
 }

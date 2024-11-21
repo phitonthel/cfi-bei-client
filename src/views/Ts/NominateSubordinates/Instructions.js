@@ -40,8 +40,6 @@ const Instructions = () => {
     }
   );
 
-  console.log({ data })
-
   return (
     <div>
       <div className="card mb-4 border-secondary"> {/* Custom border color */}

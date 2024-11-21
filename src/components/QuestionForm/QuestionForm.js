@@ -1,4 +1,5 @@
 // QuestionForm.jsx
+import { track } from '../../apis/track';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -28,10 +29,18 @@ const QuestionForm = ({
     newQuestions[index].score = score;
     setQuestions(newQuestions);
     setTsAssessments(newQuestions)
+    track({
+      event: 'click',
+      target: 'ts-assessment',
+      action: 'button',
+      data: {
+        tsaId: newQuestions[index].id,
+        tsaScore: score,
+      }
+    })
   };
 
   const handleJustificationChange = (index, justification) => {
-    console.log('justification', justification);
     const newQuestions = [...questions];
     newQuestions[index].justification = justification;
     setQuestions(newQuestions);

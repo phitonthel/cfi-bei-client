@@ -15,6 +15,7 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import Profile from '../../../components/Reports/UserProfile';
 import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
+import Justifications from './components/Justifications';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -95,6 +96,9 @@ function IndividualReport() {
           <PageBreakPrint />
 
           <OpenFeedbacks essayReports={essayReports} />
+          <PageBreakPrint />
+
+          <Justifications reports={reports} />
         </div>
       </div>
       <DownloadPdfButton

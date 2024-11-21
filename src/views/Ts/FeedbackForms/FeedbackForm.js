@@ -166,6 +166,7 @@ const FeedbackForm = () => {
       ])
 
       fireSwalSuccess('Your work has been submitted!')
+      removeFromLocalStorage()
       history.push('/admin/ts/feedback-forms');
     } catch (error) {
       fireSwalError(error)
@@ -174,17 +175,56 @@ const FeedbackForm = () => {
     }
   }
 
+  const handleTsAssessmentChange = (newValue) => {
+    setTsAssessments(newValue)
+    setToLocalStorage()
+  }
+
+  const handleTsEssayAssessmentChange = (newValue) => {
+    setTsEssayAssessments(newValue)
+    setToLocalStorage()
+  }
+
+  const localStorageKey = `ts-assessment:${authUser.id}:${appReports.feedbackFormUser.id}`
+  const setToLocalStorage = () => {
+    const value = JSON.stringify({
+      tsAssessments,
+      tsEssayAssessments,
+    })
+    localStorage.setItem(localStorageKey, value)
+  }
+
+  const getFromLocalStorage = () => {
+    const value = localStorage.getItem(localStorageKey)
+    return JSON.parse(value)
+  }
+
+  const removeFromLocalStorage = () => {
+    localStorage.removeItem(localStorageKey)
+  }
+
+  const isLocalStorageAvailable = () => {
+    return !!localStorage.getItem(localStorageKey)
+  }
+
   useEffect(async () => {
     try {
-      const response = await fetchFeedbackForm({
-        reviewerId: authUser.id,
-        revieweeId: appReports.feedbackFormUser.id,
-      })
+      let tsAssessments = null
+      let tsEssayAssessments = null
 
-      const {
-        tsAssessments,
-        tsEssayAssessments,
-      } = response.data
+      if (isLocalStorageAvailable()) {
+        const assessments = getFromLocalStorage()
+        tsAssessments = assessments.tsAssessments
+        tsEssayAssessments = assessments.tsEssayAssessments
+      } else {
+        const data = await fetchFeedbackForm({
+          reviewerId: authUser.id,
+          revieweeId: appReports.feedbackFormUser.id,
+        })
+
+        tsAssessments = data.tsAssessments
+        tsEssayAssessments = data.tsEssayAssessments
+      }
 
       setTsAssessments(tsAssessments.map(tsA => {
         return {
@@ -236,16 +276,17 @@ const FeedbackForm = () => {
         <FloatingMessage
           title={`Progress`}
           text={`${assessmentPercentage} Assessment`}
+          secondaryText={isLocalStorageAvailable() ? 'You have unsaved changes!' : null}
         />
 
         <QuestionForm
           initialQuestions={tsAssessments}
-          setTsAssessments={setTsAssessments}
+          setTsAssessments={handleTsAssessmentChange}
         />
 
         <OpenFeedbackForm
           initialTsEssayAssessments={tsEssayAssessments}
-          setTsEssayAssessments={setTsEssayAssessments}
+          setTsEssayAssessments={handleTsEssayAssessmentChange}
         />
 
         <div className="d-flex flex-row-reverse">

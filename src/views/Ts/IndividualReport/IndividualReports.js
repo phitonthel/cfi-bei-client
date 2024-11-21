@@ -44,12 +44,15 @@ function IndividualReports() {
   const [users, setUsers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const Actions = (user) => {
+  const Actions = (user, link) => {
     return (
       <div>
         <span
-          className="badge badge-primary mx-1"
-          style={{ cursor: 'pointer' }}
+          className="badge badge-primary mx-2"
+          style={{
+            cursor: 'pointer',
+            // fontSize: '0.75rem', // Increase font size
+          }}
           onClick={() => {
             dispatch(setAppReport({
               selectedUserReport: {
@@ -60,8 +63,22 @@ function IndividualReports() {
             history.push('/admin/ts/individual-report')
           }}
         >
-          See Report
+          See Report 2024
         </span>
+        {link && (
+          <span
+            className="badge badge-secondary mx-2"
+            style={{
+              cursor: 'pointer',
+              // fontSize: '0.75rem', // Increase font size
+            }}
+            onClick={() => {
+              window.open(link)
+            }}
+          >
+            See Report 2023
+          </span>
+        )}
       </div>
     )
   }
@@ -76,7 +93,7 @@ function IndividualReports() {
           fullname: user.fullname,
           division: user.division,
           level: user.level,
-          actions: Actions(user)
+          actions: Actions(user, user.link)
         }
       })
 
