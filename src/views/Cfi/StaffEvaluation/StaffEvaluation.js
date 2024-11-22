@@ -181,7 +181,7 @@ function StaffEvaluation() {
     let headers = `Name,Division,Position,Self Review,Supervisor Review,Total Assessment\n`
 
     staffs.forEach(staff => {
-      headers += staff.fullname + ','
+      headers += staff.fullnameTxt + ','
       headers += staff.division + ','
       headers += `"${staff.positionName}"` + ','
       headers += staff.selfReviewProgress.split(' / ')[0] + ','
@@ -201,6 +201,7 @@ function StaffEvaluation() {
     reviewerLastUpdated: convertISODateToDDMMYYYY(user.reviewerLastUpdated),
     selfReviewProgress: user.selfReviewProgress,
     reviewerReviewProgress: user.reviewerReviewProgress,
+    fullnameTxt: user.fullname,
     actions: Actions(user)
   })).filter(user => user.id !== authUser.id) : [];
 

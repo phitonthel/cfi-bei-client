@@ -29,8 +29,8 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
+    name: <h4>Position</h4>,
+    selector: row => row.positionName,
     sortable: true,
   },
   {
@@ -98,6 +98,7 @@ function NominateSubordinates() {
         fullname: user.fullname,
         division: user.division,
         level: user.level,
+        positionName: user.positionName,
         status: user.isNominatedByReviewee,
         actions: Actions(user)
       })));

@@ -17,7 +17,7 @@ import NominateUserModal from '../../../components/Modal/NominateUserModal';
 const createCsv = (data) => {
   if (data.length === 0) return ''
 
-  const headers = `Ratee,Ratee Division,Ratee Level,Rater,Rater Division,Rater Level,Feedback Completed, Nomination,Approval\n`
+  const headers = `Ratee,Ratee Division,Ratee Level,Rater,Rater Division,Rater Level, Nomination,Approval\n`
   let csvs = headers
 
   let rowBuilder = []
@@ -29,7 +29,6 @@ const createCsv = (data) => {
     rowBuilder.push(row.reviewerFullname)
     rowBuilder.push(row.reviewerDivision)
     rowBuilder.push(row.reviewerLevel)
-    // rowBuilder.push(row.feedbackCompleted)
     rowBuilder.push(row.isNominatedByReviewee)
     rowBuilder.push(row.isApproved)
 

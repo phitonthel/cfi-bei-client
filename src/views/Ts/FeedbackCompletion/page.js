@@ -94,7 +94,7 @@ function FeedbackCompletion() {
       <div className="d-flex justify-content-end m-2">
         <DownloadCsvButton
           data={createCsv(nominations)}
-          filename={`reviewnominations_${new Date().getTime()}.csv`}
+          filename={`feedbackcompletion_${new Date().getTime()}.csv`}
         />
       </div>
 
