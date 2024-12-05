@@ -59,6 +59,17 @@ export const columns = [
     sortable: true,
   },
   {
+    name: <h4>Auto Nominated</h4>,
+    width: '150px',
+    selector: row => row.isAutoNominated,
+    cell: row => (
+      <span style={{ color: row.isAutoNominated ? 'navy' : 'darkred' }}>
+        {row.isAutoNominated ? 'Yes' : 'No'}
+      </span>
+    ),
+    sortable: true,
+  },
+  {
     name: <h4>Actions</h4>,
     width: '300px',
     cell: row => row.actions,

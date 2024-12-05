@@ -41,27 +41,26 @@ export const columns = [
     selector: row => row.feedbackCompleted,
     sortable: true,
   },
-  {
-    name: <h4>Nomination</h4>,
-    width: '150px',
-    selector: row => row.isNominatedByReviewee,
-    cell: row => (
-      <span style={{ color: row.isNominatedByReviewee ? 'navy' : 'darkred' }}>
-        {row.isNominatedByReviewee ? 'Nominated' : 'Unnominated'}
-      </span>
-    ),
-    sortable: true,
-  },
-  {
-    name: <h4>Approval</h4>,
-    width: '150px',
-    // selector: 'isApproved',
-    selector: row => row.isApproved,
-    cell: row => (
-      <span style={{ color: row.isApproved ? 'navy' : 'darkred' }}>
-        {row.isApproved ? 'Approved' : 'Unnapproved'}
-      </span>
-    ),
-    sortable: true,
-  },
+  // {
+  //   name: <h4>Nomination</h4>,
+  //   width: '150px',
+  //   selector: row => row.isNominatedByReviewee,
+  //   cell: row => (
+  //     <span style={{ color: row.isNominatedByReviewee ? 'navy' : 'darkred' }}>
+  //       {row.isNominatedByReviewee ? 'Nominated' : 'Unnominated'}
+  //     </span>
+  //   ),
+  //   sortable: true,
+  // },
+  // {
+  //   name: <h4>Approval</h4>,
+  //   width: '150px',
+  //   selector: row => row.isApproved,
+  //   cell: row => (
+  //     <span style={{ color: row.isApproved ? 'navy' : 'darkred' }}>
+  //       {row.isApproved ? 'Approved' : 'Unnapproved'}
+  //     </span>
+  //   ),
+  //   sortable: true,
+  // },
 ];

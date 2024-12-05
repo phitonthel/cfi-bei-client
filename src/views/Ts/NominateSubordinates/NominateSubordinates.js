@@ -37,8 +37,8 @@ const columns = [
     name: <h4>Status</h4>,
     selector: row => row.status,
     cell: row => (
-      <span style={{ color: row.status ? 'navy' : 'darkred' }}>
-        {row.status ? 'Nominated' : 'Unnominated'}
+      <span style={{ color: row.status === "Unnominated" ? 'darkred' : 'navy' }}>
+        {row.status}
       </span>
     ),
     sortable: true,
@@ -81,6 +81,17 @@ function NominateSubordinates() {
     }
   }
 
+  const getStatus = (user) => {
+    if (user.isNominatedByReviewee) {
+      return 'Nominated';
+    }
+
+    if (user.isAutoNominated) {
+      return 'Auto Nominated';
+    }
+
+    return 'Unnominated';
+  }
 
   const initListUser = async () => {
     try {
@@ -99,7 +110,7 @@ function NominateSubordinates() {
         division: user.division,
         level: user.level,
         positionName: user.positionName,
-        status: user.isNominatedByReviewee,
+        status: getStatus(user),
         actions: Actions(user)
       })));
     } catch (error) {

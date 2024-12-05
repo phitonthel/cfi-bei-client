@@ -104,9 +104,9 @@ function ReviewNomination() {
           reviewerFullname: nomination.Reviewer?.fullname,
           reviewerDivision: nomination.Reviewer?.division,
           reviewerLevel: nomination.Reviewer?.level,
-          feedbackCompleted: nomination.feedbackCompleted,
           isNominatedByReviewee: nomination.isNominatedByReviewee,
           isApproved: nomination.isApproved,
+          isAutoNominated: nomination.isAutoNominated,
           actions: Actions({
             reviewee: nomination?.Reviewee,
             reviewer: nomination?.Reviewer,
