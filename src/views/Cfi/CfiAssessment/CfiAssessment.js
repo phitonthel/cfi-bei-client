@@ -131,26 +131,23 @@ const CfiAssessment = (type) => {
     }
   }
 
+  const localStorageKey = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
   const setToLocalStorage = () => {
-    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
     const value = JSON.stringify(assessments)
-    localStorage.setItem(key, value)
+    localStorage.setItem(localStorageKey, value)
   }
 
   const getFromLocalStorage = () => {
-    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
-    const value = localStorage.getItem(key)
+    const value = localStorage.getItem(localStorageKey)
     return JSON.parse(value)
   }
 
   const removeFromLocalStorage = () => {
-    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
-    localStorage.removeItem(key)
+    localStorage.removeItem(localStorageKey)
   }
 
   const isLocalStorageAvailable = () => {
-    const key = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
-    return !!localStorage.getItem(key)
+    return !!localStorage.getItem(localStorageKey)
   }
 
   // handlers for assessment
@@ -206,7 +203,7 @@ const CfiAssessment = (type) => {
     }
   }
 
-  useEffect(async () => {
+  const init = async () => {
     try {
       let data = null
       if (isLocalStorageAvailable()) {
@@ -224,6 +221,10 @@ const CfiAssessment = (type) => {
     } catch (error) {
       fireSwalError(error)
     }
+  }
+
+  useEffect(async () => {
+    init()
   }, [])
 
   if (!hasAgreed && cfiAssessment.isSelfReview) {
@@ -254,6 +255,10 @@ const CfiAssessment = (type) => {
           title={`Progress`}
           text={`${assessmentsPercentage} Assessment`}
           secondaryText={isLocalStorageAvailable() ? 'You have unsaved changes!' : null}
+          onDiscard={() => {
+            removeFromLocalStorage()
+            init()
+          }}
         />
         <Card className="mb-3">
           <Card.Body className="d-flex align-items-center">

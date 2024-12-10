@@ -113,14 +113,14 @@ const FeedbackForm = () => {
 
   const isSubmissionValid = () => {
     for (const tsA of tsAssessments) {
-      if (tsA.score === null && tsA.justification !== null) {
+      if (tsA.score === null && tsA.justification) {
         tsA.errorMessage = "Both score and justification are required!";
         setTsAssessments([...tsAssessments])
         handleScroll(tsA.id)
         return false
       }
 
-      if (tsA.score !== null && tsA.justification === null) {
+      if (tsA.score !== null && !tsA.justification) {
         tsA.errorMessage = "Both score and justification are required!";
         setTsAssessments([...tsAssessments])
         handleScroll(tsA.id)
@@ -207,7 +207,7 @@ const FeedbackForm = () => {
     return !!localStorage.getItem(localStorageKey)
   }
 
-  useEffect(async () => {
+  const init = async () => {
     try {
       let tsAssessments = null
       let tsEssayAssessments = null
@@ -243,6 +243,10 @@ const FeedbackForm = () => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  useEffect(async () => {
+    init()
   }, [])
 
   if (!hasAgreed) {
@@ -277,6 +281,10 @@ const FeedbackForm = () => {
           title={`Progress`}
           text={`${assessmentPercentage} Assessment`}
           secondaryText={isLocalStorageAvailable() ? 'You have unsaved changes!' : null}
+          onDiscard={() => {
+            removeFromLocalStorage()
+            init()
+          }}
         />
 
         <QuestionForm

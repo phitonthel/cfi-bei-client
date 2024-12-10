@@ -107,8 +107,7 @@ const QuestionForm = ({
 
                 <span style={{ marginTop: '10%' }}>Justification:</span>
                 <StyledTextarea
-                  // value={question.id}
-                  value={question.justification}
+                  value={question.justification ?? ""}
                   className="form-control mt-1"
                   placeholder="(Required) Describe the factors that led to this score"
                   rows="4"

@@ -4,7 +4,8 @@ import { Toast } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
 
 const FloatingToast = styled.div`
   position: fixed;
@@ -13,8 +14,27 @@ const FloatingToast = styled.div`
   z-index: 9999;
 `;
 
-export const FloatingMessage = ({ title, text, secondaryText }) => {
+export const FloatingMessage = ({ title, text, secondaryText, onDiscard }) => {
   const [showToast, setShowToast] = useState(true);
+
+  const handleDiscard = async () => {
+    const result = await Swal.fire({
+      title: `Discard Changes?`,
+      text: `Your form will return to its previous state, and any local changes will be discarded. Proceed?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: `Yes`,
+      cancelButtonText: `Cancel`,
+    })
+
+    if (!result.isConfirmed) {
+      return false
+    }
+
+    onDiscard();
+  };
 
   return (
     <FloatingToast>
@@ -27,17 +47,7 @@ export const FloatingMessage = ({ title, text, secondaryText }) => {
           {secondaryText && (
             <div style={{ fontSize: '0.8rem', color: 'gray', marginTop: '5px' }}>
               {secondaryText}
-              <FontAwesomeIcon icon={faInfoCircle} className="ml-2" />
-              {/* <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="tooltip">
-                    Click submit to save your changes.
-                  </Tooltip>
-                }
-              >
-                <FontAwesomeIcon icon={faInfoCircle} className="ml-2" style={{ cursor: 'pointer' }} />
-              </OverlayTrigger> */}
+              <FontAwesomeIcon icon={faTrash} onClick={handleDiscard} style={{ marginLeft: "0.5rem", cursor: 'pointer' }} />
             </div>
           )}
         </Toast.Body>
