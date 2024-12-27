@@ -8,6 +8,7 @@ import NominatePeers from "../views/Ts/NominatePeers/index.js";
 import NominateSubordinates from "../views/Ts/NominateSubordinates/index.js";
 import ReviewNomination from "../views/Ts/ReviewNominations/ReviewNominations.js";
 import FeedbackCompletion from '../views/Ts/FeedbackCompletion/page.js';
+import TeamReport from "../views/Ts/TeamReport/page.js"
 
 export const tsRoutes = {
   path: "/360",
@@ -109,6 +110,15 @@ export const tsRoutes = {
       name: "Individual Reports",
       icon: "nc-icon nc-chart-bar-32",
       component: IndividualReport,
+      layout: "/admin",
+      access: Object.values(ACCESS_LEVEL),
+      hidden: true,
+    },
+    {
+      path: "/ts/team-report",
+      name: "Team Reports",
+      icon: "nc-icon nc-chart-bar-32",
+      component: TeamReport,
       layout: "/admin",
       access: Object.values(ACCESS_LEVEL),
       hidden: true,

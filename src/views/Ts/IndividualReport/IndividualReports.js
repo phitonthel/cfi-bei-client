@@ -1,119 +1,68 @@
 import React, { useState, useEffect } from 'react';
-
-import axios from 'axios';
-import DataTable from 'react-data-table-component';
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
-import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
+import { fireSwalError } from '../../../apis/fireSwal';
 import { fetchTsIndividualReportTable } from '../../../apis/report/fetchTsIndividualReportTable';
-import { ExpandableInstructions } from '../../../components/ExpandableInstructions';
 import FilteredDataTable from '../../../components/FilteredDataTable';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { setAppAnnouncements, setAppReport } from '../../../redux/appSlice';
-import BaseInstructions from '../BaseInstructions';
+import Actions from './components/Actions';
 
-const columns = [
-  {
-    name: <h4>Name</h4>,
-    selector: row => row.fullname,
-    width: '300px',
-    sortable: true,
-  },
-  {
-    name: <h4>Division</h4>,
-    selector: row => row.division,
-    sortable: true,
-  },
-  {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
-    sortable: true,
-  },
-  {
-    name: <h4>Actions</h4>,
-    cell: row => row.actions,
-  },
-];
+const IndividualReports = () => {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-function IndividualReports() {
-  const history = useHistory()
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchTsIndividualReportTable();
 
-  const [users, setUsers] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+        const users = data.map((user) => ({
+          ...user,
+        }));
 
-  const Actions = (user, link) => {
-    return (
-      <div>
-        <span
-          className="badge badge-primary mx-2"
-          style={{
-            cursor: 'pointer',
-            // fontSize: '0.75rem', // Increase font size
-          }}
-          onClick={() => {
-            dispatch(setAppReport({
-              selectedUserReport: {
-                id: user.id,
-                fullname: user.fullname,
-              }
-            }));
-            history.push('/admin/ts/individual-report')
-          }}
-        >
-          See Report 2024
-        </span>
-        {link && (
-          <span
-            className="badge badge-secondary mx-2"
-            style={{
-              cursor: 'pointer',
-              // fontSize: '0.75rem', // Increase font size
-            }}
-            onClick={() => {
-              window.open(link)
-            }}
-          >
-            See Report 2023
-          </span>
-        )}
-      </div>
-    )
-  }
+        setUsers(users);
+      } catch (error) {
+        fireSwalError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  useEffect(async () => {
-    try {
-      let data = await fetchTsIndividualReportTable()
+    fetchData();
+  }, []);
 
-      const users = data.map((user, idx) => {
-        return {
-          id: user.id,
-          fullname: user.fullname,
-          division: user.division,
-          level: user.level,
-          actions: Actions(user, user.link)
-        }
-      })
-
-      setUsers(users)
-    } catch (error) {
-      fireSwalError(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
+  const columns = [
+    {
+      name: <h4>Name</h4>,
+      selector: (row) => row.fullname,
+      width: '300px',
+      sortable: true,
+    },
+    {
+      name: <h4>Division</h4>,
+      selector: (row) => row.division,
+      sortable: true,
+    },
+    {
+      name: <h4>Level</h4>,
+      selector: (row) => row.level,
+      sortable: true,
+    },
+    {
+      name: <h4>Actions</h4>,
+      cell: (row) => <Actions user={row} link={row.link} />,
+    },
+  ];
 
   if (isLoading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   return (
     <>
-      <div className='m-4'>
-      </div>
+      <div className='m-4' />
       <FilteredDataTable
         columns={columns}
         data={users}
@@ -123,4 +72,4 @@ function IndividualReports() {
   );
 };
 
-export default IndividualReports
+export default IndividualReports;
