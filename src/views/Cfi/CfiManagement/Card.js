@@ -37,7 +37,7 @@ const CustomCard = ({ id, name, config, competencyRoleType, createdAt, updatedAt
         competencyRoleType,
       }
     }));
-    history.push(`/admin/cfi-assignee-management`)
+    history.push(`/hr/cfi-assignee-management`)
   }
 
   return (

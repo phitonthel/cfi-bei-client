@@ -196,9 +196,9 @@ const CfiAssessment = (type) => {
       await submit()
 
       if (cfiAssessment.isSelfReview) {
-        history.push('/admin/cfi-route-selections');
+        history.push('/hr/cfi-route-selections');
       } else {
-        history.push('/admin/cfi/staff-evaluation');
+        history.push('/hr/cfi/staff-evaluation');
       }
     }
   }

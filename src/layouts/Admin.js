@@ -95,7 +95,7 @@ const getRoutes = (routes, level) => {
   return flatRoutes.map((prop, key) => {
     // condition for rendering access level goes here
     // this is only for routes, not for Sidebar
-    const isLayoutValid = prop.layout === "/admin"
+    const isLayoutValid = prop.layout === "/hr"
     if (
       isLayoutValid
     ) {

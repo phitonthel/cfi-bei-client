@@ -83,7 +83,7 @@ function IndividualReports() {
                 fullname: user.fullname,
               }
             }));
-            history.push('/admin/cfi/individual-report')
+            history.push('/hr/cfi/individual-report')
           }}
         >
           {/* <FontAwesomeIcon icon={faUserTie} />  */}
@@ -104,7 +104,7 @@ function IndividualReports() {
                   fullname: user.fullname,
                 }
               }));
-              history.push('/admin/cfi/graph-report')
+              history.push('/hr/cfi/graph-report')
             }}
           >
             Graph Report

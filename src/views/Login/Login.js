@@ -32,7 +32,7 @@ function Login() {
       setIsSubmitting(true)
       const auth = await login({ nik, password })
       dispatch(setAuth(auth));
-      history.push('/admin/cfi/assessment/selections')
+      history.push('/hr/cfi/assessment/selections')
     } catch (error) {
       fireSwalError(error)
     } finally {

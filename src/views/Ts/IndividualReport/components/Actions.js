@@ -21,7 +21,7 @@ const Actions = ({ user, link }) => {
   const actionsConfig = [
     user.level !== "Direktur" && {
       label: 'Report 2024',
-      onClick: () => handleNavigation('/admin/ts/individual-report'),
+      onClick: () => handleNavigation('/hr/ts/individual-report'),
     },
     user.level !== "Direktur" && link && {
       label: 'Report 2023',
@@ -29,7 +29,7 @@ const Actions = ({ user, link }) => {
     },
     ["Kepala Divisi", "Direktur"].includes(user.level) && {
       label: 'Team Report 2024',
-      onClick: () => handleNavigation('/admin/ts/team-report'),
+      onClick: () => handleNavigation('/hr/ts/team-report'),
     },
   ].filter(Boolean);
 

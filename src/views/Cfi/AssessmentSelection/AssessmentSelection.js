@@ -40,7 +40,7 @@ function AssessmentSelection() {
         competencyRoleType: item.competencyRoleType,
       }
     }));
-    history.push('/admin/cfi-route-selections')
+    history.push('/hr/cfi-route-selections')
   };
 
   if (isLoading) {

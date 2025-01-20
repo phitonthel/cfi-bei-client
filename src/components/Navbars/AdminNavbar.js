@@ -197,7 +197,7 @@ function Header() {
                 onClick={(e) => {
                   e.preventDefault()
                   logout()
-                  history.push('/admin/home');
+                  history.push('/hr/home');
                 }}
               >
                 <span className="no-icon">Log out</span>
@@ -210,7 +210,7 @@ function Header() {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault()
-                  history.push('/admin/user');
+                  history.push('/hr/user');
                 }}
               >
                 {/* <span className="no-icon">BARTOLOMEUS DELPHITO</span> */}

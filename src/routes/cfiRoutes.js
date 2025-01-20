@@ -16,7 +16,7 @@ export const cfiRoutes = [
   //   path: "/cfi",
   //   name: "C. Fit Index",
   //   icon: "nc-icon nc-bullet-list-67",
-  //   layout: "/admin",
+  //   layout: "/hr",
   //   access: Object.values(ACCESS_LEVEL),
   //   hidden: false,
   //   visibilityByAppSetting: APP_SETTINGS["CFI"],
@@ -27,7 +27,7 @@ export const cfiRoutes = [
     name: "Team Evaluation",
     icon: "nc-icon nc-chart-pie-35",
     component: StaffEvaluation,
-    layout: "/admin",
+    layout: "/hr",
     access: Object.values(ACCESS_LEVEL),
     hidden: true,
     visibilityByAppSetting: APP_SETTINGS["CFI - Subordinates"]
@@ -37,7 +37,7 @@ export const cfiRoutes = [
     name: "Behavioural Asm.",
     icon: "nc-icon nc-paper-2",
     component: Behavioural,
-    layout: "/admin",
+    layout: "/hr",
     access: Object.values(ACCESS_LEVEL)
       .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
     hidden: true,
@@ -48,7 +48,7 @@ export const cfiRoutes = [
     name: "Technical Asm.",
     icon: "nc-icon nc-paper-2",
     component: Technical,
-    layout: "/admin",
+    layout: "/hr",
     access: Object.values(ACCESS_LEVEL)
       .filter(level => level !== ACCESS_LEVEL.SUPERADMIN),
     hidden: true,
@@ -59,7 +59,7 @@ export const cfiRoutes = [
     name: "Reports",
     icon: "nc-icon nc-notes",
     component: IndividualReports,
-    layout: "/admin",
+    layout: "/hr",
     access: Object.values(ACCESS_LEVEL),
     hidden: true,
     visibilityByAppSetting: APP_SETTINGS["CFI - Team Reports"],
@@ -69,7 +69,7 @@ export const cfiRoutes = [
   //   name: "CSV Reports",
   //   icon: "nc-icon nc-notes",
   //   component: GroupReport,
-  //   layout: "/admin",
+  //   layout: "/hr",
   //   access: [ACCESS_LEVEL.SUPERADMIN],
   //   hidden: false,
   //   visibilityByAppSetting: APP_SETTINGS["CFI - CSV Reports"],
@@ -79,7 +79,7 @@ export const cfiRoutes = [
   //   name: "Reports (SA)",
   //   icon: "nc-icon nc-notes",
   //   component: Reports,
-  //   layout: "/admin",
+  //   layout: "/hr",
   //   access: [
   //     ACCESS_LEVEL.SUPERADMIN
   //   ],
@@ -90,7 +90,7 @@ export const cfiRoutes = [
     name: "Graph Reports",
     icon: "nc-icon nc-notes",
     component: GraphReport,
-    layout: "/admin",
+    layout: "/hr",
     access: [
       ACCESS_LEVEL.SUPERADMIN,
       ACCESS_LEVEL.KEPALA_DIVISI,
@@ -105,7 +105,7 @@ export const cfiRoutes = [
   //   name: "CFI Assessment Review",
   //   icon: "nc-icon nc-paper-2",
   //   component: PeerAssessmentTable,
-  //   layout: "/admin",
+  //   layout: "/hr",
   //   access: [
   //     ACCESS_LEVEL.KEPALA_UNIT,
   //     ACCESS_LEVEL.KEPALA_KANTOR,
@@ -120,7 +120,7 @@ export const cfiRoutes = [
     name: "Individual Report",
     icon: "nc-icon nc-chart-bar-32",
     component: IndividualReport,
-    layout: "/admin",
+    layout: "/hr",
     access: Object.values(ACCESS_LEVEL),
     hidden: true,
     visibilityByAppSetting: APP_SETTINGS["CFI - Individual Report"],
@@ -130,7 +130,7 @@ export const cfiRoutes = [
     name: "CFI CSV Reports",
     icon: "nc-icon nc-notes",
     component: UserReport,
-    layout: "/admin",
+    layout: "/hr",
     access: [
       ACCESS_LEVEL.SUPERADMIN,
     ],

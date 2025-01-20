@@ -4,39 +4,12 @@ import { DownloadCsvButton } from '../../../components/Buttons/DownloadButtons';
 import { filterData, FilterSearchBar } from '../../../components/FilterSearchBar';
 import { getPaginatedData, Pagination } from '../../../components/Table/Pagination';
 import { downloadTxtFile } from '../utils';
+import { usersHeaders, summaryHeaders, subCompetencyHeaders, createCsv, createCsvHeaders } from './utils';
+import SearchableDropdown from '../../../components/SearchableDropdown';
 
 // import { data } from './data'
 
-const usersHeaders = {
-  nik: 'NIK',
-  fullname: 'Name',
-  directorate: 'Directorate',
-  division: 'Division',
-  unit: 'Unit',
-  positionName: 'Position',
-  level: 'Level',
-  location: 'Location',
-}
-
-const summaryHeaders = {
-  'Number of Technical Meet': 'Number of Technical Meet',
-  'Number of Technical Need Development': 'Number of Technical Need Development',
-  'Percentage of Technical Meet': 'Percentage of Technical Meet',
-  'Percentage of Technical Need Development': 'Percentage of Technical Need Development',
-  'Number of Behavioural Meet': 'Number of Behavioural Meet',
-  'Number of Behavioural Need Development': 'Number of Behavioural Need Development',
-  'Percentage of Behavioural Meet': 'Percentage of Behavioural Meet',
-  'Percentage of Behavioural Need Development': 'Percentage of Behavioural Need Development',
-}
-
-const subCompetencyHeaders = {
-  'Expected Score': 'Expected Score',
-  'Validated Score': 'Validated Score',
-  'Gap': 'Gap',
-  'Status': 'Status',
-}
-
-const Table = ({ reports }) => {
+const Table = ({ reports, orgHierarchies, onUrlChange }) => {
   const {
     behaHeadersHtml,
     techHeadersHtml,
@@ -48,6 +21,20 @@ const Table = ({ reports }) => {
 
   const [filterText, setFilterText] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedFilter, setSelectedFilter] = useState(null);
+
+  const filterOptions = [
+    ...orgHierarchies.directorates.map(d => ({ name: d, type: 'directorate', value: d })),
+    ...orgHierarchies.divisions.map(d => ({ name: `Divisi ${d}`, type: 'division', value: d })),
+    ...orgHierarchies.units.map(u => ({ name: `Unit ${u}`, type: 'unit', value: u })),
+  ]
+
+  // button
+  const handleFilterChange = (selectedValue) => {
+    setSelectedFilter(selectedValue);
+    onUrlChange(selectedValue);
+    console.log('Selected Filter:', selectedValue);
+  };
 
   const handleFilter = event => {
     const { value } = event.target;
@@ -138,79 +125,30 @@ const Table = ({ reports }) => {
     )
   }
 
-  const createCsvHeaders = () => {
-    const COL_PER_COMPETENCY = 4
-    const MAIN_COL = Object.values(usersHeaders).length + Object.values(summaryHeaders).length
-
-    const firstHeaders = `,`.repeat(MAIN_COL)
-      + `Behavioural` + `,`.repeat(behaHeadersCsv.length * COL_PER_COMPETENCY)
-      + `Technical` + `,`.repeat(techHeadersCsv.length * COL_PER_COMPETENCY)
-
-    const secondHeaders = `,`.repeat(MAIN_COL)
-      + behaHeadersCsv.map(header => {
-        if (header) return header + `,`.repeat(COL_PER_COMPETENCY)
-        return `,`.repeat(COL_PER_COMPETENCY)
-      }).join('')
-
-    const thirdHeader = `,`.repeat(MAIN_COL)
-      + competencies.map(c => {
-        return c.title + `,`.repeat(COL_PER_COMPETENCY)
-      }).join('')
-
-    const fourthHeader = [
-      ...Object.values(usersHeaders),
-      ...Object.values(summaryHeaders),
-      ...competencies.map(c => {
-        return Object.values(subCompetencyHeaders)
-      })
-    ].join(',') + ','
-
-    return [
-      firstHeaders,
-      secondHeaders,
-      thirdHeader,
-      fourthHeader,
-    ].join('\n') + '\n'
-  }
-
-  const createCsv = () => {
-    let csv = createCsvHeaders()
-
-    rowsValues.forEach(rowValues => {
-      csv += rowValues
-        .map(e => e || e === 0 ? `"${e}"` : "")
-        .join(',') + '\n'
-    });
-
-    csv += [
-      ...Object.values(usersHeaders).map(i => ''),
-      calculateCsvSum(rowsValues, 8),
-      calculateCsvSum(rowsValues, 9),
-      (calculateCsvSum(rowsValues, 10) / rowsValues.length).toFixed(2),
-      (calculateCsvSum(rowsValues, 11) / rowsValues.length).toFixed(2),
-      calculateCsvSum(rowsValues, 12),
-      calculateCsvSum(rowsValues, 13),
-      (calculateCsvSum(rowsValues, 14) / rowsValues.length).toFixed(2),
-      (calculateCsvSum(rowsValues, 15) / rowsValues.length).toFixed(2),
-    ].join(',') + '\n'
-
-    return csv
-  }
-
-  const calculateCsvSum = (rows, colIndex) => {
-    return rows.reduce((acc, row) => {
-      return acc + parseFloat(row[colIndex])
-    }, 0)
-  }
-
   useEffect(async () => {
   }, [])
 
   return (
     <>
       <div className="d-flex justify-content-end m-2">
+        <SearchableDropdown
+          items={filterOptions}
+          field="name"
+          onChange={handleFilterChange}
+          selected={selectedFilter || {}}
+          buttonText="Filter Hierarchy"
+          size="sm"
+        />
         <DownloadCsvButton
-          data={createCsv()}
+          // data={createCsv()}
+          data={createCsv(
+            createCsvHeaders(
+              behaHeadersCsv,
+              techHeadersCsv,
+              competencies
+            ),
+            rowsValues
+          )}
           filename={`reports_users_${new Date().getTime()}.csv`}
         />
       </div>

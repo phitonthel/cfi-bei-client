@@ -55,7 +55,7 @@ const CfiTypeSelection = () => {
             title="Team Evaluation"
             description="Evaluate team performance and provide feedback."
             icon={faUsers}
-            link="/admin/cfi/staff-evaluation"
+            link="/hr/cfi/staff-evaluation"
             disabled={isDisabled('Staff Evaluation')}
           />
         </Col>
@@ -64,7 +64,7 @@ const CfiTypeSelection = () => {
             title="Reports"
             description="Generate and view detailed reports."
             icon={faChartBar}
-            link="/admin/cfi/individual-reports"
+            link="/hr/cfi/individual-reports"
             disabled={isDisabled('Reports')}
           />
         </Col>
@@ -75,7 +75,7 @@ const CfiTypeSelection = () => {
             title="Technical Assessments"
             description="Take self assessment."
             icon={faClipboardCheck}
-            link="/admin/cfi/assessment/technical"
+            link="/hr/cfi/assessment/technical"
             progressBarLabel={`${data.progress.cfiTechnicalCompleted} / ${data.progress.cfiTechnicalTotal}`}
             progressBarValue={data.progress.cfiTechnicalCompleted / data.progress.cfiTechnicalTotal}
             assessmentType="TECHNICAL"
@@ -87,7 +87,7 @@ const CfiTypeSelection = () => {
             title="Behavioural Assessments"
             description="Take self assessment."
             icon={faClipboardCheck}
-            link="/admin/cfi/assessment/behavioural"
+            link="/hr/cfi/assessment/behavioural"
             progressBarLabel={`${data.progress.cfiBehaviouralCompleted} / ${data.progress.cfiBehaviouralTotal}`}
             progressBarValue={data.progress.cfiBehaviouralCompleted / data.progress.cfiBehaviouralTotal}
             assessmentType="BEHAVIOURAL"
@@ -102,7 +102,7 @@ const CfiTypeSelection = () => {
               title="Reports (SA)"
               description="See individual CSV reports."
               icon={faChartBar}
-              link="/admin/cfi/reports/csv/individual"
+              link="/hr/cfi/reports/csv/individual"
             />
           </Col>
         </Row>

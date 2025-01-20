@@ -167,7 +167,7 @@ const FeedbackForm = () => {
 
       fireSwalSuccess('Your work has been submitted!')
       removeFromLocalStorage()
-      history.push('/admin/ts/feedback-forms');
+      history.push('/hr/ts/feedback-forms');
     } catch (error) {
       fireSwalError(error)
     } finally {

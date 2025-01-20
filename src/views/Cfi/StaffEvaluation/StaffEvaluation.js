@@ -134,7 +134,7 @@ function StaffEvaluation() {
         <span className="badge badge-primary p-1 m-1" style={{ width: '120px', cursor: 'pointer' }}
           onClick={() => {
             // localStorage.setItem('peer_id', user.id)
-            // history.push('/admin/cfi/peer-assessment-table')
+            // history.push('/hr/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
                 // userId: user.id,
@@ -147,7 +147,7 @@ function StaffEvaluation() {
                 reviewerFullname: authUser.fullname,
               }
             }));
-            history.push(`/admin/cfi/assessment/technical`);
+            history.push(`/hr/cfi/assessment/technical`);
           }}
         >
           Assess Technical
@@ -155,7 +155,7 @@ function StaffEvaluation() {
         <span className="badge badge-secondary p-1 m-1" style={{ width: '120px', cursor: 'pointer' }}
           onClick={() => {
             // localStorage.setItem('peer_id', user.id)
-            // history.push('/admin/cfi/peer-assessment-table')
+            // history.push('/hr/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
                 // userId: user.id,
@@ -168,7 +168,7 @@ function StaffEvaluation() {
                 reviewerFullname: authUser.fullname,
               }
             }));
-            history.push(`/admin/cfi/assessment/behavioural`);
+            history.push(`/hr/cfi/assessment/behavioural`);
           }}
         >
           Assess Behavioural
