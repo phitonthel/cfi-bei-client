@@ -1,4 +1,4 @@
-import { CustomizedTable } from "./Table";
+import { CustomizedTable } from "../../atomics/Table";
 
 const rows = [
   ['Expected Score', 'Competency level required for your role'],
@@ -28,7 +28,7 @@ const CompetencyInfoLegend = () => {
       <div className="col-md-12">
         <h3>Competency Assessment Legend</h3>
 
-        <CustomizedTable 
+        <CustomizedTable
           headers={[
             { text: 'Category', className: 'col-4' },
             { text: 'Description', className: 'col-8' }
@@ -36,7 +36,7 @@ const CompetencyInfoLegend = () => {
           rows={rows}
         />
 
-        <CustomizedTable 
+        <CustomizedTable
           headers={[
             { text: 'Score of Technical', className: 'col-4' },
             { text: 'Level of Technical', className: 'col-8' }
@@ -44,7 +44,7 @@ const CompetencyInfoLegend = () => {
           rows={rowsTechnical}
         />
 
-        <CustomizedTable 
+        <CustomizedTable
           headers={[
             { text: 'Score of Behavioural', className: 'col-4' },
             { text: 'Level of Behavioural', className: 'col-8' }

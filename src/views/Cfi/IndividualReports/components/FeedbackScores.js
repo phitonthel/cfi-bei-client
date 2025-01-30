@@ -2,7 +2,8 @@ import React from 'react';
 
 import DataTable from 'react-data-table-component';
 
-import { CustomizedTable } from './Table';
+import { CustomizedTable } from '../../atomics/Table';
+import TechnicalBehaviouralSummaryTable from '../../atomics/TechnicalBehaviouralSummary';
 
 const columns = [
   {
@@ -63,17 +64,7 @@ const FeedbackScores = ({ reports, reportsSummary }) => {
     <div className="row mb-4 p-4">
       <div className="col-md-12">
         <h3>CFI Result</h3>
-        <CustomizedTable 
-          headers={[
-            { text: 'Competency'},
-            { text: 'Meet'},
-            { text: 'Percentage'},
-          ]}
-          rows={[
-            ['Technical', `${reportsSummary.technical.meet} / ${reportsSummary.technical.total}`, reportsSummary.technical.percentage],
-            ['Behavioural', `${reportsSummary.behavioural.meet} / ${reportsSummary.behavioural.total}`, reportsSummary.behavioural.percentage],
-          ]}
-        />
+        <TechnicalBehaviouralSummaryTable reportsSummary={reportsSummary} />
         <DataTable
           columns={columns}
           data={reports}

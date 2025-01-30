@@ -9,6 +9,7 @@ import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import TeamProfile from '../../../components/Reports/TeamProfile';
+import TechnicalBehaviouralSummaryTable from '../atomics/TechnicalBehaviouralSummary';
 
 const GraphReport = () => {
   const appReports = useSelector(state => state.app.reports);
@@ -19,6 +20,7 @@ const GraphReport = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState([])
   const [users, setUsers] = useState([])
+  const [summaryTechnicalBehavioural, setSummaryTechnicalBehavioural] = useState([])
   const [topTechnicals, setTopTechnicals] = useState([])
   const [bottomTechnicals, setBottomTechnicals] = useState([])
   const [topBehaviourals, setTopBehaviourals] = useState([])
@@ -29,6 +31,7 @@ const GraphReport = () => {
       const {
         user,
         users,
+        summaryTechnicalBehavioural,
         topTechnicals,
         bottomTechnicals,
         topBehaviourals,
@@ -41,6 +44,7 @@ const GraphReport = () => {
 
       setUser(user)
       setUsers(users)
+      setSummaryTechnicalBehavioural(summaryTechnicalBehavioural)
       setTopTechnicals(topTechnicals)
       setBottomTechnicals(bottomTechnicals)
       setTopBehaviourals(topBehaviourals)
@@ -78,6 +82,15 @@ const GraphReport = () => {
 
                 This report presents an analysis of the strengths and areas for improvement within your team, focusing on both technical and behavioral competencies. It identifies key competencies shared by the team, highlighting those possessed by at least 75% of team members. This report is designed to help you understand the collective strengths and areas for development within your team, and to support you in making informed decisions about training and development opportunities.
               </div>
+            </div>
+          </div>
+          <PageBreakPrint />
+
+          <hr></hr>
+          <div className="row mb-4 p-4">
+            <div className="col-md-12">
+              <h4>Technical Behavioural Summary</h4>
+              <TechnicalBehaviouralSummaryTable reportsSummary={summaryTechnicalBehavioural} />
             </div>
           </div>
           <PageBreakPrint />
