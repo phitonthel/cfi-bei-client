@@ -9,7 +9,7 @@ import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import TeamProfile from '../../../components/Reports/TeamProfile';
-import TechnicalBehaviouralSummaryTable from '../atomics/TechnicalBehaviouralSummary';
+import TechnicalBehaviouralGroupSummary from '../atomics/TechnicalBehaviouralGroupSummaryTable';
 
 const GraphReport = () => {
   const appReports = useSelector(state => state.app.reports);
@@ -20,7 +20,7 @@ const GraphReport = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState([])
   const [users, setUsers] = useState([])
-  const [summaryTechnicalBehavioural, setSummaryTechnicalBehavioural] = useState([])
+  const [totalPercentage, setTotalPercentage] = useState([])
   const [topTechnicals, setTopTechnicals] = useState([])
   const [bottomTechnicals, setBottomTechnicals] = useState([])
   const [topBehaviourals, setTopBehaviourals] = useState([])
@@ -31,12 +31,11 @@ const GraphReport = () => {
       const {
         user,
         users,
-        summaryTechnicalBehavioural,
+        totalPercentage,
         topTechnicals,
         bottomTechnicals,
         topBehaviourals,
         bottomBehaviourals,
-        // } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
       } = await fetchCfiSummaryReport({
         userId: appReports.selectedUserReport.id,
         cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id,
@@ -44,7 +43,7 @@ const GraphReport = () => {
 
       setUser(user)
       setUsers(users)
-      setSummaryTechnicalBehavioural(summaryTechnicalBehavioural)
+      setTotalPercentage(totalPercentage)
       setTopTechnicals(topTechnicals)
       setBottomTechnicals(bottomTechnicals)
       setTopBehaviourals(topBehaviourals)
@@ -90,7 +89,7 @@ const GraphReport = () => {
           <div className="row mb-4 p-4">
             <div className="col-md-12">
               <h4>Technical Behavioural Summary</h4>
-              <TechnicalBehaviouralSummaryTable reportsSummary={summaryTechnicalBehavioural} />
+              <TechnicalBehaviouralGroupSummary totalPercentage={totalPercentage} />
             </div>
           </div>
           <PageBreakPrint />

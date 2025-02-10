@@ -1,10 +1,8 @@
 import React from 'react';
 
-import DataTable from 'react-data-table-component';
-
 import { CustomizedTable } from './Table';
 
-const TechnicalBehaviouralSummaryTable = ({ reportsSummary }) => {
+const TechnicalBehaviouralIndividualSummaryTable = ({ reportsSummary }) => {
 
   return (
     <CustomizedTable
@@ -21,4 +19,4 @@ const TechnicalBehaviouralSummaryTable = ({ reportsSummary }) => {
   );
 }
 
-export default TechnicalBehaviouralSummaryTable;
+export default TechnicalBehaviouralIndividualSummaryTable;
