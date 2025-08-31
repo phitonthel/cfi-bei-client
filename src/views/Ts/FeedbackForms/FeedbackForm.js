@@ -15,6 +15,9 @@ import { fetchFeedbackForm } from '../../../apis/tsAssessment/fetchFeedbackForm'
 import { FloatingMessage } from '../../../components/FloatingMessage';
 import QuestionForm from '../../../components/QuestionForm/QuestionForm';
 import { SubmitButton } from '../../../components/SubmitButton';
+import { UserBanner } from 'views/Cfi/CfiAssessment/components/UserBanner';
+import { fetchCfiAssessments } from '../../../apis/assessment/fetchSelf';
+import { mergeCfiToTs } from '../../../utils/importAssessments';
 
 
 const arrText = [
@@ -65,7 +68,8 @@ const FeedbackForm = () => {
   const [tsAssessments, setTsAssessments] = useState([])
   const [tsEssayAssessments, setTsEssayAssessments] = useState([])
 
-  const [peerName, setPeerName] = useState('')
+  // const [peerName, setPeerName] = useState('')
+  const [reviewee, setReviewee] = useState(null)
   const [hasAgreed, setHasAgreed] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -234,9 +238,8 @@ const FeedbackForm = () => {
       }))
       setTsEssayAssessments(tsEssayAssessments)
 
-      const revieweeName = appReports.feedbackFormUser.fullname
-
-      setPeerName(revieweeName)
+      // setPeerName(revieweeName)
+      setReviewee(appReports.feedbackFormUser)
 
     } catch (error) {
       fireSwalError(error)
@@ -244,6 +247,32 @@ const FeedbackForm = () => {
       setIsLoading(false)
     }
   }
+
+  const handleImportFromPrevious = async ({ selectedItem }) => {
+    try {
+      // Prefer id from the selection if BE provides it:
+      const sourceCfiTypeAssessmentId =
+        selectedItem?.cfiTypeAssessmentId ?? cfiTypeAssessment.id;
+
+      // 1) Fetch the "from" assessments (the chosen previous CFI)
+      const fromCfiAssessments = await fetchCfiAssessments({
+        type: "BEHAVIOURAL",
+        cfiTypeAssessmentId: sourceCfiTypeAssessmentId,
+        revieweeId: reviewee.id,
+        reviewerId: authUser.id,
+      });
+
+      // 2) Merge into current "to" assessments (copy score & justification)
+      const merged = mergeCfiToTs(fromCfiAssessments, tsAssessments);
+
+      // 3) Persist & update UI
+      setTsAssessments(merged);
+
+      fireSwalSuccess({ text: 'Imported answers applied.' });
+    } catch (error) {
+      fireSwalError(error);
+    }
+  };
 
   useEffect(async () => {
     init()
@@ -266,9 +295,16 @@ const FeedbackForm = () => {
   return (
     <>
       <div className='col-10'>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h2 style={{ margin: 0 }}>{peerName}</h2>
-        </div><hr></hr>
+        </div><hr></hr> */}
+        <UserBanner
+          cfiTypeAssessmentId={null}
+          reviewerId={authUser.id}
+          revieweeId={reviewee?.id}
+          revieweeFullname={reviewee?.fullname}
+          onImportSelected={handleImportFromPrevious}
+        />
 
         < ScoringLegend
           title={title}

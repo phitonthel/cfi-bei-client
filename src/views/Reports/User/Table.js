@@ -33,7 +33,6 @@ const Table = ({ reports, orgHierarchies, onUrlChange }) => {
   const handleFilterChange = (selectedValue) => {
     setSelectedFilter(selectedValue);
     onUrlChange(selectedValue);
-    console.log('Selected Filter:', selectedValue);
   };
 
   const handleFilter = event => {

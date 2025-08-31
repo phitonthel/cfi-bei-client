@@ -10,14 +10,37 @@ import Swal from 'sweetalert2';
 
 import { InstructionsBehav } from './InstructionsBehav'
 import { InstructionsTech } from './InstructionsTech'
-import { fetchSelfAssessment } from '../../../apis/assessment/fetchSelf'
+import { fetchCfiAssessments } from '../../../apis/assessment/fetchSelf'
 import { submitCfiScore } from '../../../apis/assessment/submitScore';
 import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
 import { AssessmentCard } from '../../../components/Cfi/AssessmentCardV2'
 import { FloatingMessage } from '../../../components/FloatingMessage'
 import { SubmitButton } from '../../../components/SubmitButton';
 import { track } from '../../../apis/track';
+import { UserBanner } from "./components/UserBanner"
+import { mergeCfiToCfi } from 'utils/importAssessments';
 
+// type = "TECHNICAL" | "BEHAVIOURAL"
+// assessments: {
+//   id: string,
+//   reviewerAssessments: {
+//     id: string,
+//     score: number | null,
+//     justification: string | null
+//     competencyRole: {..., Competency: {...}}
+//     ...
+//   },
+//   revieweeAssessments: {...}
+//   errorMessage: string | null
+// }
+// cfiAssessment: {
+//     "type": "TECHNICAL",
+//     "isSelfReview"
+//     "revieweeId"
+//     "reviewerId"
+//     "revieweeFullname":
+//     "reviewerFullname"
+// }
 const CfiAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
   const [hasAgreed, setHasAgreed] = useState(false)
@@ -40,7 +63,6 @@ const CfiAssessment = (type) => {
     });
     setAssessments([...assessments])
   }
-
 
   const isSubmissionValid = () => {
     const reviewerAssessments = assessments.map(assessment => {
@@ -131,6 +153,32 @@ const CfiAssessment = (type) => {
     }
   }
 
+  const handleImportFromPrevious = async ({ selectedItem }) => {
+    try {
+      // Prefer id from the selection if BE provides it:
+      const sourceCfiTypeAssessmentId =
+        selectedItem?.cfiTypeAssessmentId ?? cfiTypeAssessment.id;
+
+      // 1) Fetch the "from" assessments (the chosen previous CFI)
+      const fromCfiAssessments = await fetchCfiAssessments({
+        type: type,
+        cfiTypeAssessmentId: sourceCfiTypeAssessmentId,
+        revieweeId: cfiAssessment.revieweeId,
+        reviewerId: cfiAssessment.reviewerId,
+      });
+
+      // 2) Merge into current "to" assessments (copy score & justification)
+      const merged = mergeCfiToCfi(fromCfiAssessments, assessments);
+
+      // 3) Persist & update UI
+      setAssessments(merged);
+
+      fireSwalSuccess({ text: 'Imported answers applied.' });
+    } catch (error) {
+      fireSwalError(error);
+    }
+  };
+
   const localStorageKey = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
   const setToLocalStorage = () => {
     const value = JSON.stringify(assessments)
@@ -159,7 +207,6 @@ const CfiAssessment = (type) => {
           assessment.reviewerAssessment.score = score;
         }
       });
-      setToLocalStorage()
       track({
         event: 'click',
         target: 'cfi-assessment',
@@ -177,7 +224,6 @@ const CfiAssessment = (type) => {
           assessment.reviewerAssessment.justification = newValue;
         }
       });
-      setToLocalStorage()
       setAssessments([...assessments])
     },
     // send request to server
@@ -209,7 +255,7 @@ const CfiAssessment = (type) => {
       if (isLocalStorageAvailable()) {
         data = getFromLocalStorage()
       } else {
-        data = await fetchSelfAssessment({
+        data = await fetchCfiAssessments({
           type: type,
           cfiTypeAssessmentId: cfiTypeAssessment.id,
           revieweeId: cfiAssessment.revieweeId,
@@ -226,6 +272,14 @@ const CfiAssessment = (type) => {
   useEffect(async () => {
     init()
   }, [])
+
+  // Runs every time `assessments` changes
+  useEffect(() => {
+    if (assessments.length) {
+      setToLocalStorage();
+    }
+  }, [assessments]);
+
 
   if (!hasAgreed && cfiAssessment.isSelfReview) {
     if (type === 'TECHNICAL') {
@@ -260,12 +314,15 @@ const CfiAssessment = (type) => {
             init()
           }}
         />
-        <Card className="mb-3">
-          <Card.Body className="d-flex align-items-center">
-            <FontAwesomeIcon icon={faUser} className="mr-4" size="lg" />
-            <Card.Title as="h4" className="mb-0">{cfiAssessment.revieweeFullname}</Card.Title>
-          </Card.Body>
-        </Card>
+
+        <UserBanner
+          cfiTypeAssessmentId={cfiTypeAssessment.id}
+          reviewerId={cfiAssessment.reviewerId}
+          revieweeId={cfiAssessment.revieweeId}
+          revieweeFullname={cfiAssessment.revieweeFullname}
+          onImportSelected={handleImportFromPrevious}
+        />
+
         {
           assessments.map(assessment =>
             <AssessmentCard
