@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Modal, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2';
@@ -11,6 +9,7 @@ import { SubmitButton } from '../../components/SubmitButton';
 import { setAuth } from "../../redux/authSlice";
 
 import MfaOtpModal from "./MfaOtpModal"
+import ForgotPasswordModal from "./ForgotPasswordModal"
 
 function Login() {
   const history = useHistory();
@@ -19,7 +18,7 @@ function Login() {
   const [nik, setNik] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   // MFA state
@@ -63,8 +62,8 @@ function Login() {
     }
   };
 
-  const handleForgotPassword = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  const handleForgotPassword = () => setShowForgotPasswordModal(true);
+  const handleCloseForgotPasswordModal = () => setShowForgotPasswordModal(false);
 
   // MFA success -> store auth + redirect
   const handleOtpVerified = (authPayload) => {
@@ -144,23 +143,10 @@ function Login() {
                       />
 
                       {/* Forgot Password Modal */}
-                      <Modal show={showModal} onHide={handleCloseModal}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Forgot Password</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          If you have never changed your password before, please use
-                          this <a href="https://bit.ly/ReqPassword-CFI" target="_blank" rel="noreferrer">link</a> to request a new password.<br />
-                          If you have already changed the password, please contact the
-                          Person In Charge at SDM (Amalia Maulida/ Carinna Andiva) for
-                          assistance with the password.
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={handleCloseModal}>
-                            Close
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
+                      <ForgotPasswordModal
+                        show={showForgotPasswordModal}
+                        onHide={handleCloseForgotPasswordModal}
+                      />
                     </form>
                   </div>
                 </div>

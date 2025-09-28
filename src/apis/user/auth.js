@@ -47,3 +47,16 @@ export const logout = async () => {
     timer: 1000
   });
 };
+
+export const forgotPassword = async (email) => {
+  const { data } = await axios.post(`${config.baseUrl}/user/forgot-password`, { email });
+  return data;
+};
+
+export const resetPassword = async ({ token, newPassword }) => {
+  const { data } = await axios.post(`${config.baseUrl}/user/reset-password`, {
+    token,
+    newPassword
+  });
+  return data;
+};

@@ -21,6 +21,7 @@ import Typography from "../views/Typography.js";
 import Upgrade from "../views/Upgrade.js";
 import UserManagement from "../views/UserManagement/UserManagement.js";
 import UserProfile from "../views/UserProfile.js";
+import ResetPassword from "../views/Login/ResetPassword.js";
 
 export const guestRoutes = [
   {
@@ -37,6 +38,15 @@ export const guestRoutes = [
     name: "Login",
     icon: "nc-icon nc-bell-55",
     component: Login,
+    layout: "/hr",
+    access: null,
+    hidden: true,
+  },
+  {
+    path: "/reset-password",
+    name: "Reset Password",
+    icon: "nc-icon nc-key-25",
+    component: ResetPassword,
     layout: "/hr",
     access: null,
     hidden: true,
