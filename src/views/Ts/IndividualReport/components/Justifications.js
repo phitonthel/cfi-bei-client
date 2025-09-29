@@ -42,45 +42,6 @@ const Justifications = ({
     ];
   }
 
-  const arrays = [
-    {
-      competencyTitle: 'Building Trust',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Integrity',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Strive for Excellence',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Customer Focus',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Faciliate Change',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Aligning Performance for Success',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Building Parnerships',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Decision Making',
-      tsAssessments: createTsAssessmentDummy()
-    },
-    {
-      competencyTitle: 'Planning & Organizing',
-      tsAssessments: createTsAssessmentDummy()
-    }
-  ];
-
   return (
     <div className="row p-4">
       <div className="col-md-12">
