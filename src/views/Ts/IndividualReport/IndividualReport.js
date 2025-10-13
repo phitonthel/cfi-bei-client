@@ -17,6 +17,7 @@ import Profile from '../../../components/Reports/UserProfile';
 import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
 import Justifications from './components/Justifications';
 import BulkDownloadButtonV3 from './components/BulkDownloadButtonV3';
+import BulkDownloadButtonV4 from './components/BulkDownloadButtonV4';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -110,7 +111,7 @@ function IndividualReport() {
           <Justifications reports={reports} />
         </div>
       </div>
-      
+
       <DownloadPdfButton
         reportRef={reportRef}
         filename={`360_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
@@ -120,6 +121,8 @@ function IndividualReport() {
         reportRef={reportRef}
         onDataUpdate={handleDataUpdate}
       />
+
+      <BulkDownloadButtonV4 />
     </>
   );
 }
