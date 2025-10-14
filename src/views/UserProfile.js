@@ -21,16 +21,13 @@ function User() {
     (async () => {
       try {
         const data = await fetchSelfDetail();
-        // If the API returns { user: {...} }, prefer nested; fallback to flat
         const u = data?.user ?? data ?? {};
         setUser({
           nik: u.nik,
           division: u.division,
           positionName: u.positionName,
           email: u.email,
-          isMfaEnabled: u.isMfaEnabled,
         });
-        setIsMfaEnabled(!!u.isMfaEnabled); // ⬅️ read from user.isMfaEnabled
       } catch (error) {
         fireSwalError(error);
       }
@@ -42,10 +39,8 @@ function User() {
     try {
       setSaving(true);
       await updateProfile({
-        email: input.email,           // still sent if your BE uses it later
         oldPassword: input.oldPassword,
         newPassword: input.newPassword,
-        isMfaEnabled,                 // ⬅️ send current toggle state
       });
       fireSwalSuccess({ text: 'Profile updated successfully' });
     } catch (error) {
@@ -130,27 +125,6 @@ function User() {
                         type="password"
                         name="newPassword"
                       />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                {/* MFA Toggle (reads/writes user.isMfaEnabled) */}
-                <Row className="mb-3">
-                  <Col className="pr-1" md="10">
-                    <Form.Group>
-                      <Form.Check
-                        type="switch"
-                        id="mfa-switch"
-                        label="Enable Multi-Factor Authentication (Email OTP)"
-                        checked={isMfaEnabled}
-                        onChange={(e) => setIsMfaEnabled(e.target.checked)}
-                        disabled={!user.email} // require email to exist
-                      />
-                      {!user.email && (
-                        <small className="text-danger">
-                          Set an email first before enabling MFA.
-                        </small>
-                      )}
                     </Form.Group>
                   </Col>
                 </Row>
