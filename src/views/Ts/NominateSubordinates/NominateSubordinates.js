@@ -29,16 +29,16 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
+    name: <h4>Position</h4>,
+    selector: row => row.positionName,
     sortable: true,
   },
   {
     name: <h4>Status</h4>,
-    selector: 'status',
+    selector: row => row.status,
     cell: row => (
-      <span style={{ color: row.status ? 'navy' : 'darkred' }}>
-        {row.status ? 'Nominated' : 'Unnominated'}
+      <span style={{ color: row.status === "Unnominated" ? 'darkred' : 'navy' }}>
+        {row.status}
       </span>
     ),
     sortable: true,
@@ -77,11 +77,21 @@ function NominateSubordinates() {
       fireSwalSuccess({ text: 'User Un-nominated Successfully!' });
       await initListUser();
     } catch (error) {
-      console.error("Error unnominating user:", error);
       fireSwalError(error, 2000);
     }
   }
 
+  const getStatus = (user) => {
+    if (user.isNominatedByReviewee) {
+      return 'Nominated';
+    }
+
+    if (user.isAutoNominated) {
+      return 'Auto Nominated';
+    }
+
+    return 'Unnominated';
+  }
 
   const initListUser = async () => {
     try {
@@ -97,9 +107,10 @@ function NominateSubordinates() {
       setListUser(data.map(user => ({
         id: user.id,
         fullname: user.fullname,
-        division: user.Division?.name,
+        division: user.division,
         level: user.level,
-        status: user.isNominatedByReviewee,
+        positionName: user.positionName,
+        status: getStatus(user),
         actions: Actions(user)
       })));
     } catch (error) {
@@ -157,7 +168,7 @@ function NominateSubordinates() {
       <div className="d-flex justify-content-end m-2">
         <NominateUserModal
           modalTitle={'Nominate Subordinates'}
-          buttonText={'Nominate Subordinates From Other Division'}
+          buttonText={'Nominate Other Subordinates'}
           fetchUserOptions={fetchAllTsSubordinates}
           onFormSubmit={() => {
             initListUser()

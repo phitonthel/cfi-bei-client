@@ -13,7 +13,7 @@ function LandingPage() {
 
   const login = (e) => {
     e.preventDefault();
-    history.push("/admin/login");
+    history.push("/hr/login");
   };
 
   return (

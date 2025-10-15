@@ -130,7 +130,7 @@ function GroupReport() {
       <FilteredDataTable
         columns={createColumns(reports)}
         data={reports}
-        filterKeys={['fullname', 'division', 'rater']}
+        filterKeys={['fullname', 'division', 'rater', 'level']}
       />
     </>
   );

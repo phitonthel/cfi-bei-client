@@ -36,12 +36,6 @@ export const columns = [
     sortable: true,
   },
   {
-    name: <h4>Feedback Completed</h4>,
-    width: '150px',
-    selector: row => row.feedbackCompleted,
-    sortable: true,
-  },
-  {
     name: <h4>Nomination</h4>,
     width: '150px',
     selector: row => row.isNominatedByReviewee,
@@ -60,6 +54,17 @@ export const columns = [
     cell: row => (
       <span style={{ color: row.isApproved ? 'navy' : 'darkred' }}>
         {row.isApproved ? 'Approved' : 'Unnapproved'}
+      </span>
+    ),
+    sortable: true,
+  },
+  {
+    name: <h4>Auto Nominated</h4>,
+    width: '150px',
+    selector: row => row.isAutoNominated,
+    cell: row => (
+      <span style={{ color: row.isAutoNominated ? 'navy' : 'darkred' }}>
+        {row.isAutoNominated ? 'Yes' : 'No'}
       </span>
     ),
     sortable: true,

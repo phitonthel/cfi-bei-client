@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-
 import { Dropdown, FormControl } from 'react-bootstrap';
 
-const SearchableDropdown = ({ users, onChange, selected }) => {
+const SearchableDropdown = ({ items, field, onChange, selected, size, buttonText }) => {
   const [search, setSearch] = useState('');
-  const [displayedUsers, setDisplayedUsers] = useState(users);
+  const [displayedItems, setDisplayedItems] = useState(items);
 
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearch(value);
 
-    const filteredUsers = users.filter(user =>
-      user.fullname.toLowerCase().includes(value.toLowerCase())
-    ).slice(0, 15);
+    const filteredItems = items
+      .filter((item) => item[field].toLowerCase().includes(value.toLowerCase()))
+      .slice(0, 15);
 
-    setDisplayedUsers(filteredUsers);
+    setDisplayedItems(filteredItems);
   };
 
   const handleSelect = (selectedValue) => {
@@ -23,8 +22,8 @@ const SearchableDropdown = ({ users, onChange, selected }) => {
 
   return (
     <Dropdown>
-      <Dropdown.Toggle variant="primary" id="dropdown-basic">
-        {selected.fullname || 'Select User'}
+      <Dropdown.Toggle variant="primary" id="dropdown-basic" size={size || undefined}>
+        {selected[field] || buttonText || 'Select Item'}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
@@ -35,15 +34,11 @@ const SearchableDropdown = ({ users, onChange, selected }) => {
           onChange={handleSearch}
           value={search}
         />
-        {
-          displayedUsers
-            .slice(0, 15)
-            .map((user, index) => (
-              <Dropdown.Item key={index} onClick={() => handleSelect(user)}>
-                {`${user.fullname}`}
-              </Dropdown.Item>
-            ))
-        }
+        {displayedItems.slice(0, 15).map((user, index) => (
+          <Dropdown.Item key={index} onClick={() => handleSelect(user)}>
+            {`${user[field]}`}
+          </Dropdown.Item>
+        ))}
       </Dropdown.Menu>
     </Dropdown>
   );

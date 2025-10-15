@@ -134,7 +134,7 @@ function SelfAssessment() {
 
       {state.type === REPORT_TYPE.DIVISION_SUMMARY && <DivisionReport />}
       {state.type === REPORT_TYPE.DIVISION_SINGLE && <DivisionSingleReport divisionType={state.divisionName} />}
-      {state.type === REPORT_TYPE.INDIVIDUAL && <UserReport type={state.type} name={determineName()} />}
+      {state.type === REPORT_TYPE.INDIVIDUAL && <UserReport />}
     </>
   );
 };

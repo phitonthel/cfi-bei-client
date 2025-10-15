@@ -5,7 +5,7 @@ import Instructions from 'components/Instructions';
 import { Card as BootstrapCard, Container, Row, Col } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import { useQuery } from 'react-query';
-import { useSelector , useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
@@ -21,7 +21,7 @@ import { setAppAnnouncements, setUtilities } from '../../../redux/appSlice';
 
 function AssessmentSelection() {
   const { data, error, isLoading } = useQuery(
-    'cfiTypeAssessment',
+    'fetchCfiTypeAssessments',
     fetchCfiTypeAssessments,
     {
       onError: fireSwalError,
@@ -32,15 +32,15 @@ function AssessmentSelection() {
   const history = useHistory()
 
   const handleClick = (item) => {
-    console.log(`Name: ${item.name}, Date: ${item.date}`);
     dispatch(setUtilities({
       cfiTypeAssessment: {
         id: item.id,
         name: item.name,
         config: item.config,
+        competencyRoleType: item.competencyRoleType,
       }
     }));
-    history.push('/admin/cfi-route-selections')
+    history.push('/hr/cfi-route-selections')
   };
 
   if (isLoading) {

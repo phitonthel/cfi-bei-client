@@ -17,11 +17,11 @@ const TeamProfile = ({
             <tbody>
               <tr>
                 <td>Directorate</td>
-                <td>{user.directorate}</td>
+                <td>{user.directorate || '-'}</td>
               </tr>
               <tr>
                 <td>Division</td>
-                <td>{user.Division?.name}</td>
+                <td>{user.division || '-'}</td>
               </tr>
               <tr>
                 <td>Unit</td>

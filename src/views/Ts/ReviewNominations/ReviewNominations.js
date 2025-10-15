@@ -17,7 +17,7 @@ import NominateUserModal from '../../../components/Modal/NominateUserModal';
 const createCsv = (data) => {
   if (data.length === 0) return ''
 
-  const headers = `Ratee,Ratee Division,Ratee Level,Rater,Rater Division,Rater Level,Feedback Completed, Nomination,Approval\n`
+  const headers = `Ratee,Ratee Division,Ratee Level,Rater,Rater Division,Rater Level, Nomination,Approval\n`
   let csvs = headers
 
   let rowBuilder = []
@@ -29,7 +29,6 @@ const createCsv = (data) => {
     rowBuilder.push(row.reviewerFullname)
     rowBuilder.push(row.reviewerDivision)
     rowBuilder.push(row.reviewerLevel)
-    rowBuilder.push(row.feedbackCompleted)
     rowBuilder.push(row.isNominatedByReviewee)
     rowBuilder.push(row.isApproved)
 
@@ -100,14 +99,14 @@ function ReviewNomination() {
         return {
           id: nomination.id,
           revieweeFullname: nomination.Reviewee?.fullname,
-          revieweeDivision: nomination.Reviewee?.Division.name,
+          revieweeDivision: nomination.Reviewee?.division,
           revieweeLevel: nomination.Reviewee?.level,
           reviewerFullname: nomination.Reviewer?.fullname,
-          reviewerDivision: nomination.Reviewer?.Division.name,
+          reviewerDivision: nomination.Reviewer?.division,
           reviewerLevel: nomination.Reviewer?.level,
-          feedbackCompleted: nomination.feedbackCompleted,
           isNominatedByReviewee: nomination.isNominatedByReviewee,
           isApproved: nomination.isApproved,
+          isAutoNominated: nomination.isAutoNominated,
           actions: Actions({
             reviewee: nomination?.Reviewee,
             reviewer: nomination?.Reviewer,
@@ -124,10 +123,6 @@ function ReviewNomination() {
   useEffect(async () => {
     await initNominations()
   }, [])
-
-  const instructions = [
-    'Anda diminta untuk memilih...',
-  ]
 
   if (isLoading) {
     return <LoadingSpinner />

@@ -1,57 +1,89 @@
 import React, { useState } from 'react';
-
-import axios from 'axios';
-import { Modal, Button } from 'react-bootstrap'; // Importing necessary components from react-bootstrap
-import DataTable from 'react-data-table-component';
 import { useDispatch } from 'react-redux';
-import { useLocation, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 import { fireSwalError } from '../../apis/fireSwal';
-import { login } from '../../apis/user/auth';
+import { login, persistAuth } from '../../apis/user/auth';
 import { SubmitButton } from '../../components/SubmitButton';
 import { setAuth } from "../../redux/authSlice";
 
+import MfaOtpModal from "./MfaOtpModal"
+import ForgotPasswordModal from "./ForgotPasswordModal"
+
 function Login() {
-  const history = useHistory()
+  const history = useHistory();
   const dispatch = useDispatch();
 
-  const [nik, setNik] = useState('')
-  const [password, setPassword] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showModal, setShowModal] = useState(false);
+  const [nik, setNik] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  // MFA state
+  const [showOtp, setShowOtp] = useState(false);
+  const [challengeId, setChallengeId] = useState(null);
+  const [delivery, setDelivery] = useState(null);
+  const [expiresAt, setExpiresAt] = useState(null);
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleChange = async (event) => {
-    event.preventDefault()
-
+    event.preventDefault();
     try {
-      setIsSubmitting(true)
-      const auth = await login({ nik, password })
-      dispatch(setAuth(auth));
-      history.push('/admin/cfi/assessment/selections')
+      setIsSubmitting(true);
+      const res = await login({ nik, password });
+
+      // If BE returns MFA challenge
+      if (res?.mfaRequired) {
+        setChallengeId(res.challengeId);
+        setDelivery(res.delivery);
+        setExpiresAt(res.expiresAt);
+        setShowOtp(true);
+        return; // stop here; wait for OTP verify
+      }
+
+      // Normal login (no MFA)
+      dispatch(setAuth(res));
+      persistAuth(res);
+      Swal.fire({
+        position: 'top',
+        icon: 'success',
+        text: `Welcome, ${res.fullname}`,
+        showConfirmButton: false,
+        timer: 1000
+      });
+      history.push('/hr/cfi/assessment/selections');
     } catch (error) {
-      fireSwalError(error)
+      fireSwalError(error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
-  const handleForgotPassword = () => {
-    setShowModal(true);
-  }
+  const handleForgotPassword = () => setShowForgotPasswordModal(true);
+  const handleCloseForgotPasswordModal = () => setShowForgotPasswordModal(false);
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  }
+  // MFA success -> store auth + redirect
+  const handleOtpVerified = (authPayload) => {
+    dispatch(setAuth(authPayload));
+    persistAuth(authPayload);
+    Swal.fire({
+      position: 'top',
+      icon: 'success',
+      text: `Welcome, ${authPayload.fullname}`,
+      showConfirmButton: false,
+      timer: 1000
+    });
+    setShowOtp(false);
+    history.push('/hr/cfi/assessment/selections');
+  };
 
   return (
     <>
       <section className="">
-        <div className="px-4 py-5 px-md-5 text-center text-lg-start" style={{ "backgroundColor": "hsl(0, 0%, 96%)" }}>
+        <div className="px-4 py-5 px-md-5 text-center text-lg-start" style={{ backgroundColor: "hsl(0, 0%, 96%)" }}>
           <div className="container">
             <div className="row gx-lg-5 align-items-center">
               <div className="col-lg-3 mb-5 mb-lg-0"></div>
@@ -68,7 +100,7 @@ function Login() {
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="form3Example3">NIK</label>
                         <input
-                          type="username"
+                          type="text"
                           id="form3Example3"
                           className="form-control"
                           value={nik}
@@ -98,7 +130,6 @@ function Login() {
                         </div>
                       </div>
 
-                      {/* Forgot Password Text */}
                       <div className="text-end mb-4">
                         <span className="text-danger" style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={handleForgotPassword}>
                           Forgot Password?
@@ -107,28 +138,15 @@ function Login() {
 
                       <SubmitButton
                         text={'Sign In'}
-                        onClick={event => handleChange(event)}
+                        onClick={handleChange}
                         isSubmitting={isSubmitting}
                       />
 
                       {/* Forgot Password Modal */}
-                      <Modal show={showModal} onHide={handleCloseModal}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Forgot Password</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          If you have never changed your password before, please use
-                          this <a href="https://bit.ly/ReqPassword-CFI" target="_blank" rel="noreferrer">link</a> to request a new password.<br></br>
-                          If you have already changed the password, please contact the
-                          Person In Charge at SDM (Amalia Maulida/ Carinna Andiva) for
-                          assistance with the password.
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={handleCloseModal}>
-                            Close
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
+                      <ForgotPasswordModal
+                        show={showForgotPasswordModal}
+                        onHide={handleCloseForgotPasswordModal}
+                      />
                     </form>
                   </div>
                 </div>
@@ -137,8 +155,18 @@ function Login() {
           </div>
         </div>
       </section>
+
+      {/* MFA OTP Modal */}
+      <MfaOtpModal
+        show={showOtp}
+        onHide={() => setShowOtp(false)}
+        challengeId={challengeId}
+        delivery={delivery}
+        expiresAt={expiresAt}
+        onVerified={handleOtpVerified}
+      />
     </>
-  )
-};
+  );
+}
 
 export default Login;

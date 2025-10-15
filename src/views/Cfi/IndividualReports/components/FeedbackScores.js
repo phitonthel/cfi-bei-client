@@ -2,7 +2,8 @@ import React from 'react';
 
 import DataTable from 'react-data-table-component';
 
-import { CustomizedTable } from './Table';
+import { CustomizedTable } from '../../atomics/Table';
+import TechnicalBehaviouralIndividualSummaryTable from '../../atomics/TechnicalBehaviouralIndividualSummaryTable';
 
 const columns = [
   {
@@ -20,31 +21,31 @@ const columns = [
   {
     name: <b>Expected Score</b>,
     selector: row => row.expectedScore,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Self Score</b>,
     selector: row => row.selfScore,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Average Validated Score</b>,
     selector: row => row.actualScore,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Gap</b>,
     selector: row => row.gap,
-    width: '100px',
+    width: '90px',
     sortable: true,
   },
   {
     name: <b>Competency Status</b>,
     selector: row => row.status,
-    width: '150px',
+    width: '180px',
     sortable: true,
   },
 ];
@@ -63,17 +64,7 @@ const FeedbackScores = ({ reports, reportsSummary }) => {
     <div className="row mb-4 p-4">
       <div className="col-md-12">
         <h3>CFI Result</h3>
-        <CustomizedTable 
-          headers={[
-            { text: 'Competency'},
-            { text: 'Meet'},
-            { text: 'Percentage'},
-          ]}
-          rows={[
-            ['Technical', `${reportsSummary.technical.meet} / ${reportsSummary.technical.total}`, reportsSummary.technical.percentage],
-            ['Behavioural', `${reportsSummary.behavioural.meet} / ${reportsSummary.behavioural.total}`, reportsSummary.behavioural.percentage],
-          ]}
-        />
+        <TechnicalBehaviouralIndividualSummaryTable reportsSummary={reportsSummary} />
         <DataTable
           columns={columns}
           data={reports}

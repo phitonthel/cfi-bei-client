@@ -5,12 +5,15 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
-export const fetchCfiIndividualReportTable = async () => {
+export const fetchCfiIndividualReportTable = async (cfiTypeAssessmentId) => {
   const { data } = await axios.get(`${config.baseUrl}/user/list-individual-report-table`, {
     headers: {
       access_token: localStorage.getItem('access_token')
+    },
+    params: {
+      cfiTypeAssessmentId
     }
   })
-  
+
   return data
 }

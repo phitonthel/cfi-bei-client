@@ -21,6 +21,7 @@ const initialState = {
       id: '',
       name: '',
       config: {},
+      competencyRoleType: '',
     },
     // cfi assessment
     cfiAssessment: {

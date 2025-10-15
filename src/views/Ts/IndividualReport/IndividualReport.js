@@ -15,6 +15,9 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import Profile from '../../../components/Reports/UserProfile';
 import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
+import Justifications from './components/Justifications';
+import BulkDownloadButtonV3 from './components/BulkDownloadButtonV3';
+import BulkDownloadButtonV4 from './components/BulkDownloadButtonV4';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -48,6 +51,14 @@ function IndividualReport() {
       setIsLoading(false)
     }
   }, []);
+
+  // Callback function for bulk download to update page data
+  const handleDataUpdate = (newData) => {
+    setReviewee(newData.reviewee);
+    setReports(newData.reports);
+    setEssayReports(newData.essayReports);
+    setIsLoading(newData.isLoading);
+  };
 
   if (isLoading) {
     return < LoadingSpinner />
@@ -95,12 +106,23 @@ function IndividualReport() {
           <PageBreakPrint />
 
           <OpenFeedbacks essayReports={essayReports} />
+          <PageBreakPrint />
+
+          <Justifications reports={reports} />
         </div>
       </div>
+
       <DownloadPdfButton
         reportRef={reportRef}
         filename={`360_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
       />
+
+      {/* <BulkDownloadButtonV3
+        reportRef={reportRef}
+        onDataUpdate={handleDataUpdate}
+      /> */}
+
+      <BulkDownloadButtonV4 />
     </>
   );
 }

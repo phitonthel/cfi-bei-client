@@ -3,14 +3,8 @@ import Swal from 'sweetalert2';
 
 import { config } from '../../env';
 
-/**
- * Can be used to submit reviewerScore or assignedScore
- */
-export const submitScore = async ({
-  id,
-  justification,
-  score,
-}) => {
+// payload is an array with keys: id, score, justification
+export const submitCfiScore = async (payload) => {
   const response = await axios({
     method: 'PUT',
     url: `${config.baseUrl}/cfi/assessment/score`,
@@ -18,9 +12,7 @@ export const submitScore = async ({
       access_token: localStorage.getItem('access_token')
     },
     data: {
-      id,
-      justification,
-      score,
+      payload
     }
   });
   return response
@@ -29,6 +21,7 @@ export const submitScore = async ({
 export const submitTsScore = async ({
   tsAssessmentId,
   score,
+  justification,
 }) => {
   const response = await axios({
     method: 'PUT',
@@ -39,6 +32,7 @@ export const submitTsScore = async ({
     data: {
       tsAssessmentId,
       score,
+      justification,
     }
   });
   return response

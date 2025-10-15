@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Text, ReferenceLine } from 'recharts';
 
 const CustomAxisTick = (props) => {
@@ -15,12 +14,16 @@ const CustomAxisTick = (props) => {
 const yTicks = [0, 3, 5];
 
 const Graph = ({ reports }) => {
-  // Define a custom payload for the Legend with the desired text
+  const formattedReports = reports.map(report => ({
+    ...report,
+    totalAvgScore: parseFloat(report.totalAvgScore).toFixed(3)
+  }));
+
   const legendPayload = [
     { 
       id: 'totalAvgScore', 
       type: 'line', 
-      value: 'Total Average Score', // Custom legend text
+      value: 'Total Average Score',
       color: 'navy' 
     }
   ];
@@ -31,16 +34,13 @@ const Graph = ({ reports }) => {
         <div className="col-md-6">
           <h2>Feedback Summary</h2>
           <div style={{ height: '400px' }}>
-            <BarChart width={900} height={400} data={reports}>
+            <BarChart width={900} height={400} data={formattedReports}>
               <CartesianGrid strokeDasharray="3 3" />
-              {/* <XAxis dataKey="title" /> */}
               <XAxis dataKey="title" height={120} interval={0} tick={<CustomAxisTick />} />
-              {/* <YAxis domain={[0, 6]} /> */}
               <YAxis domain={[0, 'dataMax']} ticks={yTicks} allowDecimals={false} />
               <Tooltip />
               <Legend payload={legendPayload} />
               <Bar dataKey="totalAvgScore" fill="navy" name="Score" />
-              {/* <ReferenceLine y={5} strokeWidth={1} label="max" /> */}
             </BarChart>
           </div>
         </div>

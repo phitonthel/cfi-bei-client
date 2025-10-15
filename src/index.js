@@ -23,8 +23,8 @@ ReactDOM.render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <Switch>
-          <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-          <Redirect from="/" to="/admin/home" />
+          <Route path="/hr" render={(props) => <AdminLayout {...props} />} />
+          <Redirect from="/" to="/hr/home" />
         </Switch>
       </QueryClientProvider>
     </Provider>
