@@ -117,10 +117,10 @@ function IndividualReport() {
         filename={`360_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
       />
 
-      <BulkDownloadButtonV3
+      {/* <BulkDownloadButtonV3
         reportRef={reportRef}
         onDataUpdate={handleDataUpdate}
-      />
+      /> */}
 
       <BulkDownloadButtonV4 />
     </>

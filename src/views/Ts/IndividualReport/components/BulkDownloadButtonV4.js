@@ -592,7 +592,8 @@ const BulkDownloadButtonV4 = () => {
       const users = Object.values(userData).map(user => ({
         id: user.id,
         fullname: user.fullname
-      })).slice(5, 6); // Limit to first 2 users for demo purposes
+      }))
+      // .slice(5, 6); // Limit to first 2 users for demo purposes
 
       if (users.length === 0) {
         Swal.fire({
