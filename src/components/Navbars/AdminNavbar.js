@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 import { flattenRoutes } from "layouts/Admin";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
-import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from "react-router-dom";
 
 import { logout } from "../../apis/user/auth";
@@ -11,7 +10,6 @@ import { baseRoutes } from '../../routes/routes'
 function Header() {
   const history = useHistory()
   const location = useLocation();
-  const dispatch = useDispatch();
 
   // const appRedux = useSelector(state => state.app);
 
@@ -199,7 +197,7 @@ function Header() {
                 onClick={(e) => {
                   e.preventDefault()
                   logout()
-                  history.push('/admin/home');
+                  history.push('/hr/home');
                 }}
               >
                 <span className="no-icon">Log out</span>
@@ -212,7 +210,7 @@ function Header() {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault()
-                  history.push('/admin/user');
+                  history.push('/hr/user');
                 }}
               >
                 {/* <span className="no-icon">BARTOLOMEUS DELPHITO</span> */}

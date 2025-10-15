@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "idx-competencyfeedback"
-  }
+    "default": "idx-competencyfeedback",
+    "prod": "idx-competencyfeedback",
+    "deprecated": "idx-cfi"
+  },
+  "targets": {},
+  "etags": {}
 }

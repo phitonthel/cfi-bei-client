@@ -26,8 +26,8 @@ const columns = [
     sortable: true,
   },
   {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
+    name: <h4>Position</h4>,
+    selector: row => row.positionName,
     sortable: true,
   },
   {
@@ -62,7 +62,7 @@ function FeedbackForms() {
               }
             }));
 
-            history.push('/admin/ts/feedback-form')
+            history.push('/hr/ts/feedback-form')
           }}
         >
           Review
@@ -88,8 +88,9 @@ function FeedbackForms() {
         return {
           id: user.id,
           fullname: user.fullname,
-          division: user.Division?.name,
+          division: user.division,
           level: user.level,
+          positionName: user.positionName,
           feedbackCompleted: user.feedbackCompleted,
           actions: Actions(user)
         }

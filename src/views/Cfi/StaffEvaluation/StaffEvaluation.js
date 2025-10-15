@@ -26,37 +26,44 @@ const columns = [
     selector: row => row.fullname,
     width: '300px',
     sortable: true,
+    wrap: true,
   },
   {
     name: <b>Division</b>,
     selector: row => row.division,
     sortable: true,
+    wrap: true,
   },
   {
     name: <b>Position</b>,
     selector: row => row.positionName,
     width: '300px',
     sortable: true,
+    wrap: true,
   },
   {
-    name: <b>Staff Last Updated</b>,
+    name: <b>Self Assessment Last Update</b>,
     selector: row => row.selfLastUpdated,
     sortable: true,
+    wrap: true,
   },
   {
-    name: <b>Reviewer Last Updated</b>,
+    name: <b>Reviewer Last Update</b>,
     selector: row => row.reviewerLastUpdated,
     sortable: true,
+    wrap: true,
   },
   {
-    name: <b>Staff Review</b>,
+    name: <b>Self Assessment</b>,
     selector: row => row.selfReviewProgress,
     sortable: true,
+    wrap: true,
   },
   {
-    name: <b>Supervisor Review</b>,
+    name: <b>Reviewed by Supervisor</b>,
     selector: row => row.reviewerReviewProgress,
     sortable: true,
+    wrap: true,
   },
   {
     name: <b>Actions</b>,
@@ -71,7 +78,7 @@ const UserFullname = ({ subordinate, authUser }) => {
   const renderTooltip = () => {
     return (
       <Tooltip id="tooltip">
-        Required as this user is your direct subordinate
+        This user might be your direct subordinate.
       </Tooltip>
     );
   };
@@ -127,7 +134,7 @@ function StaffEvaluation() {
         <span className="badge badge-primary p-1 m-1" style={{ width: '120px', cursor: 'pointer' }}
           onClick={() => {
             // localStorage.setItem('peer_id', user.id)
-            // history.push('/admin/cfi/peer-assessment-table')
+            // history.push('/hr/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
                 // userId: user.id,
@@ -140,7 +147,7 @@ function StaffEvaluation() {
                 reviewerFullname: authUser.fullname,
               }
             }));
-            history.push(`/admin/cfi/assessment/technical`);
+            history.push(`/hr/cfi/assessment/technical`);
           }}
         >
           Assess Technical
@@ -148,7 +155,7 @@ function StaffEvaluation() {
         <span className="badge badge-secondary p-1 m-1" style={{ width: '120px', cursor: 'pointer' }}
           onClick={() => {
             // localStorage.setItem('peer_id', user.id)
-            // history.push('/admin/cfi/peer-assessment-table')
+            // history.push('/hr/cfi/peer-assessment-table')
             dispatch(setUtilities({
               cfiAssessment: {
                 // userId: user.id,
@@ -161,7 +168,7 @@ function StaffEvaluation() {
                 reviewerFullname: authUser.fullname,
               }
             }));
-            history.push(`/admin/cfi/assessment/behavioural`);
+            history.push(`/hr/cfi/assessment/behavioural`);
           }}
         >
           Assess Behavioural
@@ -174,7 +181,7 @@ function StaffEvaluation() {
     let headers = `Name,Division,Position,Self Review,Supervisor Review,Total Assessment\n`
 
     staffs.forEach(staff => {
-      headers += staff.fullname + ','
+      headers += staff.fullnameTxt + ','
       headers += staff.division + ','
       headers += `"${staff.positionName}"` + ','
       headers += staff.selfReviewProgress.split(' / ')[0] + ','
@@ -188,12 +195,13 @@ function StaffEvaluation() {
   const staffs = data ? data.map(user => ({
     id: user.id,
     fullname: <UserFullname subordinate={user} authUser={authUser} />,
-    division: user.Division?.name,
+    division: user.division,
     positionName: user.positionName,
     selfLastUpdated: convertISODateToDDMMYYYY(user.selfLastUpdated),
     reviewerLastUpdated: convertISODateToDDMMYYYY(user.reviewerLastUpdated),
     selfReviewProgress: user.selfReviewProgress,
     reviewerReviewProgress: user.reviewerReviewProgress,
+    fullnameTxt: user.fullname,
     actions: Actions(user)
   })).filter(user => user.id !== authUser.id) : [];
 

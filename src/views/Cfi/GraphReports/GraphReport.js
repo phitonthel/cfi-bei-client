@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import UserProfile from 'components/Reports/UserProfile';
 import { useSelector } from 'react-redux';
 
 import { CustomBarChart } from './BarChart';
@@ -10,6 +9,7 @@ import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import TeamProfile from '../../../components/Reports/TeamProfile';
+import TechnicalBehaviouralGroupSummary from '../atomics/TechnicalBehaviouralGroupSummaryTable';
 
 const GraphReport = () => {
   const appReports = useSelector(state => state.app.reports);
@@ -20,6 +20,7 @@ const GraphReport = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState([])
   const [users, setUsers] = useState([])
+  const [totalPercentage, setTotalPercentage] = useState([])
   const [topTechnicals, setTopTechnicals] = useState([])
   const [bottomTechnicals, setBottomTechnicals] = useState([])
   const [topBehaviourals, setTopBehaviourals] = useState([])
@@ -30,11 +31,11 @@ const GraphReport = () => {
       const {
         user,
         users,
+        totalPercentage,
         topTechnicals,
         bottomTechnicals,
         topBehaviourals,
         bottomBehaviourals,
-        // } = await fetchCfiSummaryReport({ query: `userId=${appReports.selectedUserReport.id}` })
       } = await fetchCfiSummaryReport({
         userId: appReports.selectedUserReport.id,
         cfiTypeAssessmentId: appUtilities.cfiTypeAssessment.id,
@@ -42,6 +43,7 @@ const GraphReport = () => {
 
       setUser(user)
       setUsers(users)
+      setTotalPercentage(totalPercentage)
       setTopTechnicals(topTechnicals)
       setBottomTechnicals(bottomTechnicals)
       setTopBehaviourals(topBehaviourals)
@@ -86,6 +88,15 @@ const GraphReport = () => {
           <hr></hr>
           <div className="row mb-4 p-4">
             <div className="col-md-12">
+              <h4>Technical Behavioural Summary</h4>
+              <TechnicalBehaviouralGroupSummary totalPercentage={totalPercentage} />
+            </div>
+          </div>
+          <PageBreakPrint />
+
+          <hr></hr>
+          <div className="row mb-4 p-4">
+            <div className="col-md-12">
               <h4>Meet Requirements Behavioral</h4>
               < CustomBarChart reports={topBehaviourals} colors={['#4F6F52', '#739072']} />
             </div>
@@ -123,7 +134,7 @@ const GraphReport = () => {
       {/* PDF Download Button */}
       <DownloadPdfButton
         reportRef={reportRef}
-        filename={`cfi_graph_report_${user.Division?.name.toLowerCase().replaceAll(' ', '_')}` + `_${(user.unit ?? '-').toLowerCase().replaceAll(' ', '_')}`}
+        filename={`cfi_graph_report_${user.division.toLowerCase().replaceAll(' ', '_')}` + `_${(user.unit ?? '-').toLowerCase().replaceAll(' ', '_')}`}
       />
     </>
   );

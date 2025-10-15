@@ -30,13 +30,12 @@ const FilteredDataTable = ({
     <div>
       <FilterSearchBar onFilter={handleFilter} filterText={filterText} />
       <DataTable
-        columns={columns} // define your columns here
+        columns={columns}
         data={filteredData}
         highlightOnHover
         pagination
         paginationPerPage={10}
         {...otherProps}
-        // ... other props
       />
     </div>
   );

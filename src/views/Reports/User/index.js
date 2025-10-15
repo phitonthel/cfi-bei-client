@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-
-import axios from 'axios';
-import Swal from 'sweetalert2';
-
-import Table from './Table'
-import { useFetch } from '../../../apis/useFetch'
+import { useSelector } from 'react-redux';
+import { useFetch } from '../../../apis/useFetch';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import Table from './Table';
 
-const UserReport = ({
-  type,
-  name
-}) => {
-  // const query = `?type=${type}&name=${name}`
+const UserReport = () => {
+  const appUtilities = useSelector((state) => state.app.utilities);
 
-  const { 
-    isLoading,
-    data: reports,
-   } = useFetch(`/report/user`)
+  const [filterType, setFilterType] = useState('');
+  const [filterName, setFilterName] = useState('');
+
+  const queryKey = `/cfi/report/csv/users?cfiTypeAssessmentId=${appUtilities.cfiTypeAssessment.id}&filterType=${filterType}&filterName=${filterName}`;
+
+  const { isLoading, data: reports } = useFetch(queryKey);
+  const { data: orgHierarchies } = useFetch(`/options`);
+
+  const handleUrlChange = (value) => {
+    setFilterType(value.type || '');
+    setFilterName(value.value || '');
+  };
 
   if (isLoading) {
-    return (
-      <LoadingSpinner text={'This may take few minutes'} />
-    )
+    return <LoadingSpinner text="This may take a few minutes" />;
   }
 
   return (
@@ -29,10 +29,12 @@ const UserReport = ({
       <div>
         <Table
           reports={reports}
+          orgHierarchies={orgHierarchies}
+          onUrlChange={handleUrlChange}
         />
       </div>
     </>
   );
 };
 
-export default UserReport
+export default UserReport;

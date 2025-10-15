@@ -70,18 +70,20 @@ const NominateUserModal = ({
             <Form.Group controlId="input1">
               <Form.Label>Ratee</Form.Label>
               <SearchableDropdown
-                users={users}
+                items={users}
                 onChange={(selectedValue) => setReviewee(selectedValue)}
                 selected={reviewee}
+                field={`fullname`}
               />
             </Form.Group>
 
             <Form.Group controlId="input2">
               <Form.Label>Rater</Form.Label>
               <SearchableDropdown
-                users={users}
+                items={users}
                 onChange={(selectedValue) => setReviewer(selectedValue)}
                 selected={reviewer}
+                field={`fullname`}
               />
             </Form.Group>
 

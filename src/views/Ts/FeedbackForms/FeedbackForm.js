@@ -4,6 +4,7 @@ import axios from 'axios';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { useSelector, useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
+import { useHistory } from "react-router-dom";
 
 
 import OpenFeedbackForm from './OpenFeedbackForm';
@@ -14,6 +15,9 @@ import { fetchFeedbackForm } from '../../../apis/tsAssessment/fetchFeedbackForm'
 import { FloatingMessage } from '../../../components/FloatingMessage';
 import QuestionForm from '../../../components/QuestionForm/QuestionForm';
 import { SubmitButton } from '../../../components/SubmitButton';
+import { UserBanner } from 'views/Cfi/CfiAssessment/components/UserBanner';
+import { fetchCfiAssessments } from '../../../apis/assessment/fetchSelf';
+import { mergeCfiToTs } from '../../../utils/importAssessments';
 
 
 const arrText = [
@@ -54,6 +58,8 @@ const calculateAssessmentPercentage = ({
 
 
 const FeedbackForm = () => {
+  const history = useHistory()
+
   const authUser = useSelector(state => state.auth.user);
   const appReports = useSelector(state => state.app.reports);
 
@@ -62,7 +68,8 @@ const FeedbackForm = () => {
   const [tsAssessments, setTsAssessments] = useState([])
   const [tsEssayAssessments, setTsEssayAssessments] = useState([])
 
-  const [peerName, setPeerName] = useState('')
+  // const [peerName, setPeerName] = useState('')
+  const [reviewee, setReviewee] = useState(null)
   const [hasAgreed, setHasAgreed] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -75,14 +82,78 @@ const FeedbackForm = () => {
     tsEssayAssessments,
   })
 
+  const handleScroll = (elementId) => {
+    const element = document.getElementById(elementId);
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const resetErrorMessage = () => {
+    tsAssessments.forEach(assessment => {
+      assessment.errorMessage = null
+    });
+    setTsAssessments([...tsAssessments])
+  }
+
+  const awaitConfirmation = async () => {
+    if (totalAssessmentCompleted !== totalAssessment) {
+      const result = await Swal.fire({
+        title: `${totalAssessmentCompleted}/${totalAssessment} Assessment!`,
+        text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: `Yes, submit and continue later`,
+        cancelButtonText: `Cancel`,
+      })
+
+      if (!result.isConfirmed) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  const isSubmissionValid = () => {
+    for (const tsA of tsAssessments) {
+      if (tsA.score === null && tsA.justification) {
+        tsA.errorMessage = "Both score and justification are required!";
+        setTsAssessments([...tsAssessments])
+        handleScroll(tsA.id)
+        return false
+      }
+
+      if (tsA.score !== null && !tsA.justification) {
+        tsA.errorMessage = "Both score and justification are required!";
+        setTsAssessments([...tsAssessments])
+        handleScroll(tsA.id)
+        return false
+      }
+    }
+    return true
+  }
+
   const submit = async () => {
     try {
       setIsSubmitting(true)
 
+      resetErrorMessage()
+
+      if (!isSubmissionValid()) {
+        return
+      }
+
+      const isSubmit = await awaitConfirmation()
+      if (!isSubmit) {
+        return
+      }
+
       const tsAssessmentPromises = tsAssessments.map(tsA => {
         return submitTsScore({
           tsAssessmentId: tsA.id,
-          score: tsA.score
+          score: tsA.score,
+          justification: tsA.justification,
         })
       })
 
@@ -93,35 +164,14 @@ const FeedbackForm = () => {
         })
       })
 
-      if (totalAssessmentCompleted !== totalAssessment) {
-        const result = await Swal.fire({
-          title: `${totalAssessmentCompleted}/${totalAssessment} Assessment!`,
-          text: `You haven't filled all the assessment! Are you sure you want to continue? You can still submit and continue later.`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: `Yes, submit and continue later`,
-          cancelButtonText: `Cancel`,
-        })
-
-        if (result.isConfirmed) {
-          await Promise.all([
-            ...tsAssessmentPromises,
-            ...tsEssayAssessmentsPromises,
-          ])
-
-          fireSwalSuccess('Your work has been submitted!')
-        }
-        return
-      }
-
       await Promise.all([
         ...tsAssessmentPromises,
         ...tsEssayAssessmentsPromises,
       ])
 
       fireSwalSuccess('Your work has been submitted!')
+      removeFromLocalStorage()
+      history.push('/hr/ts/feedback-forms');
     } catch (error) {
       fireSwalError(error)
     } finally {
@@ -129,25 +179,103 @@ const FeedbackForm = () => {
     }
   }
 
-  useEffect(async () => {
+  const handleTsAssessmentChange = (newValue) => {
+    setTsAssessments(newValue)
+    setToLocalStorage()
+  }
+
+  const handleTsEssayAssessmentChange = (newValue) => {
+    setTsEssayAssessments(newValue)
+    setToLocalStorage()
+  }
+
+  const localStorageKey = `ts-assessment:${authUser.id}:${appReports.feedbackFormUser.id}`
+  const setToLocalStorage = () => {
+    const value = JSON.stringify({
+      tsAssessments,
+      tsEssayAssessments,
+    })
+    localStorage.setItem(localStorageKey, value)
+  }
+
+  const getFromLocalStorage = () => {
+    const value = localStorage.getItem(localStorageKey)
+    return JSON.parse(value)
+  }
+
+  const removeFromLocalStorage = () => {
+    localStorage.removeItem(localStorageKey)
+  }
+
+  const isLocalStorageAvailable = () => {
+    return !!localStorage.getItem(localStorageKey)
+  }
+
+  const init = async () => {
     try {
-      const response = await fetchFeedbackForm({
-        reviewerId: authUser.id,
-        revieweeId: appReports.feedbackFormUser.id,
-      })
+      let tsAssessments = null
+      let tsEssayAssessments = null
 
-      setTsAssessments(response.data.tsAssessments)
-      setTsEssayAssessments(response.data.tsEssayAssessments)
+      if (isLocalStorageAvailable()) {
+        const assessments = getFromLocalStorage()
+        tsAssessments = assessments.tsAssessments
+        tsEssayAssessments = assessments.tsEssayAssessments
+      } else {
+        const data = await fetchFeedbackForm({
+          reviewerId: authUser.id,
+          revieweeId: appReports.feedbackFormUser.id,
+        })
 
-      const revieweeName = appReports.feedbackFormUser.fullname
+        tsAssessments = data.tsAssessments
+        tsEssayAssessments = data.tsEssayAssessments
+      }
 
-      setPeerName(revieweeName)
+      setTsAssessments(tsAssessments.map(tsA => {
+        return {
+          ...tsA,
+          errorMessage: null,
+        }
+      }))
+      setTsEssayAssessments(tsEssayAssessments)
+
+      // setPeerName(revieweeName)
+      setReviewee(appReports.feedbackFormUser)
 
     } catch (error) {
       fireSwalError(error)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleImportFromPrevious = async ({ selectedItem }) => {
+    try {
+      // Prefer id from the selection if BE provides it:
+      const sourceCfiTypeAssessmentId =
+        selectedItem?.cfiTypeAssessmentId ?? cfiTypeAssessment.id;
+
+      // 1) Fetch the "from" assessments (the chosen previous CFI)
+      const fromCfiAssessments = await fetchCfiAssessments({
+        type: "BEHAVIOURAL",
+        cfiTypeAssessmentId: sourceCfiTypeAssessmentId,
+        revieweeId: reviewee.id,
+        reviewerId: authUser.id,
+      });
+
+      // 2) Merge into current "to" assessments (copy score & justification)
+      const merged = mergeCfiToTs(fromCfiAssessments, tsAssessments);
+
+      // 3) Persist & update UI
+      setTsAssessments(merged);
+
+      fireSwalSuccess({ text: 'Imported answers applied.' });
+    } catch (error) {
+      fireSwalError(error);
+    }
+  };
+
+  useEffect(async () => {
+    init()
   }, [])
 
   if (!hasAgreed) {
@@ -167,9 +295,16 @@ const FeedbackForm = () => {
   return (
     <>
       <div className='col-10'>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <h2 style={{ margin: 0 }}>{peerName}</h2>
-        </div><hr></hr>
+        </div><hr></hr> */}
+        <UserBanner
+          cfiTypeAssessmentId={null}
+          reviewerId={authUser.id}
+          revieweeId={reviewee?.id}
+          revieweeFullname={reviewee?.fullname}
+          onImportSelected={handleImportFromPrevious}
+        />
 
         < ScoringLegend
           title={title}
@@ -181,16 +316,21 @@ const FeedbackForm = () => {
         <FloatingMessage
           title={`Progress`}
           text={`${assessmentPercentage} Assessment`}
+          secondaryText={isLocalStorageAvailable() ? 'You have unsaved changes!' : null}
+          onDiscard={() => {
+            removeFromLocalStorage()
+            init()
+          }}
         />
 
         <QuestionForm
           initialQuestions={tsAssessments}
-          setTsAssessments={setTsAssessments}
+          setTsAssessments={handleTsAssessmentChange}
         />
 
         <OpenFeedbackForm
           initialTsEssayAssessments={tsEssayAssessments}
-          setTsEssayAssessments={setTsEssayAssessments}
+          setTsEssayAssessments={handleTsEssayAssessmentChange}
         />
 
         <div className="d-flex flex-row-reverse">

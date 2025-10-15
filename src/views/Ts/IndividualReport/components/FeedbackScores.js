@@ -1,5 +1,4 @@
 import React from 'react';
-
 import DataTable from 'react-data-table-component';
 
 const columns = [
@@ -37,6 +36,15 @@ const customStyles = {
   },
 };
 
+const conditionalRowStyles = [
+  {
+    when: row => row.title === "Total Average by Rater",
+    style: {
+      backgroundColor: '#fff9c4',
+    },
+  },
+];
+
 const FeedbackScores = ({ reports }) => {
   return (
     <>
@@ -45,6 +53,7 @@ const FeedbackScores = ({ reports }) => {
         data={reports}
         highlightOnHover
         customStyles={customStyles}
+        conditionalRowStyles={conditionalRowStyles}
       />
     </>
   );

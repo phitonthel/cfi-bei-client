@@ -2,10 +2,11 @@ import React, { useState, Component } from "react";
 
 import _ from "lodash";
 import { useSelector } from 'react-redux';
-import { useLocation, Route, Switch } from "react-router-dom";
+import { useLocation, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import Login from "views/Login";
 
 import { fetchAppSettings } from "../apis/applicationSetting/fetchAppSettings";
+import { setupAutoLogoutOnTabClose, setupAdvancedAutoLogout, isAuthenticated, requireAuth } from "../apis/user/auth";
 import sidebarImage from '../assets/img/sidebar-7.jpg';
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin.js";
 import Footer from '../components/Footer/Footer';
@@ -95,7 +96,7 @@ const getRoutes = (routes, level) => {
   return flatRoutes.map((prop, key) => {
     // condition for rendering access level goes here
     // this is only for routes, not for Sidebar
-    const isLayoutValid = prop.layout === "/admin"
+    const isLayoutValid = prop.layout === "/hr"
     if (
       isLayoutValid
     ) {
@@ -115,8 +116,6 @@ const getRoutes = (routes, level) => {
 };
 
 function Admin() {
-  // console.log('Running in:', process.env.NODE_ENV)
-
   const [image, setImage] = React.useState(sidebarImage);
   const [color, setColor] = React.useState("black");
   const [hasImage, setHasImage] = React.useState(true);
@@ -128,9 +127,19 @@ function Admin() {
   const clonedBaseRoutes = _.cloneDeep(baseRoutes);
 
   const authUser = useSelector(state => state.auth.user);
+  const history = useHistory();
 
   const location = useLocation();
   const mainPanel = React.useRef(null);
+
+  // Check if user has access token - if not, show guest routes (login, forgot password, etc.)
+  const userIsAuthenticated = isAuthenticated();
+
+  // Check for access token and redirect to login if not present
+  React.useEffect(() => {
+    // Use the requireAuth function to handle authentication check and redirect
+    requireAuth(location.pathname);
+  }, [location.pathname]);
 
   const routesByAppSettings = hideRoutesByAppSettings({
     routes: clonedBaseRoutes,
@@ -165,6 +174,26 @@ function Admin() {
     }
   }, [location]);
 
+  // Initialize auto-logout on tab close functionality
+  React.useEffect(() => {
+    // Only setup auto-logout if user is authenticated
+    if (userIsAuthenticated && authUser && authUser.access_token) {
+      // Option 1: Simple auto-logout on tab close
+      // const cleanup = setupAutoLogoutOnTabClose();
+
+      // Option 2: Advanced auto-logout with more control
+      const cleanup = setupAdvancedAutoLogout({
+        logoutOnTabClose: true,     // Logout when tab/browser is closed
+        logoutOnRefresh: false,     // Don't logout on page refresh
+        logoutOnTabSwitch: false,   // Don't logout when switching tabs
+        excludePaths: ['/hr/login', '/hr/forgot-password', '/hr/reset-password'] // Paths to exclude
+      });
+
+      // Cleanup function to remove event listeners when component unmounts
+      return cleanup;
+    }
+  }, [userIsAuthenticated, authUser]); // Re-run when auth status changes
+
   if (isLoading) {
     return (
       <>
@@ -182,7 +211,7 @@ function Admin() {
     )
   }
 
-  if (!localStorage.getItem('access_token')) {
+  if (!userIsAuthenticated) {
     return (
       <>
         <div className="wrapper">

@@ -28,7 +28,7 @@ const UserProfile = ({
               </tr>
               <tr>
                 <td>Division</td>
-                <td>{user.Division?.name}</td>
+                <td>{user.division}</td>
               </tr>
               <tr>
                 <td>Position</td>
@@ -38,6 +38,13 @@ const UserProfile = ({
                 <td>Email</td>
                 <td>{user.email}</td>
               </tr>
+              {/* FOR CFI ONLY */}
+              {user.cfiRole &&
+                <tr>
+                  <td>Competency Mapping</td>
+                  <td>{user.cfiRole}</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>
