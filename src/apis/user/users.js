@@ -12,6 +12,7 @@ export const fetchUsersForSuperadmin = async () => {
 
   return response.data.map(user => {
     return {
+      id: user.id,
       nik: user.nik,
       fullname: user.fullname,
       email: user.email,
@@ -23,6 +24,7 @@ export const fetchUsersForSuperadmin = async () => {
       location: user.location,
       positionName: user.positionName,
       role: user.role,
+      isMfaEnabled: user.isMfaEnabled,
     }
   })
 }

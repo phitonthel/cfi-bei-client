@@ -4,7 +4,7 @@ import {
 } from "react-bootstrap";
 import { fireSwalError, fireSwalSuccess } from '../apis/fireSwal';
 import { fetchSelfDetail } from '../apis/user/fetchSelfDetail';
-import { updateProfile } from '../apis/user/updateProfile';
+import { updateUserMe } from '../apis/user/updateProfile';
 
 function User() {
   const [user, setUser] = useState({});
@@ -38,7 +38,7 @@ function User() {
     event.preventDefault();
     try {
       setSaving(true);
-      await updateProfile({
+      await updateUserMe({
         oldPassword: input.oldPassword,
         newPassword: input.newPassword,
       });

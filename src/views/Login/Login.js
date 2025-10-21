@@ -54,7 +54,7 @@ function Login() {
         showConfirmButton: false,
         timer: 1000
       });
-      history.push('/hr/cfi/assessment/selections');
+      history.push('/hr/announcement');
     } catch (error) {
       fireSwalError(error);
     } finally {
@@ -77,7 +77,7 @@ function Login() {
       timer: 1000
     });
     setShowOtp(false);
-    history.push('/hr/cfi/assessment/selections');
+    history.push('/hr/announcement');
   };
 
   return (

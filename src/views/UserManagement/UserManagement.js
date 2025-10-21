@@ -8,77 +8,24 @@ import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 import 'tippy.js/dist/tippy.css';
 import DataTable from 'react-data-table-component';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 import { fireSwalError, fireSwalSuccess } from '../../apis/fireSwal';
 import { fetchSubordinates } from '../../apis/user/fetchSubordinates';
 import { ExpandableInstructions } from '../../components/ExpandableInstructions';
 import FilteredDataTable from '../../components/FilteredDataTable';
 import AddUserModal from '../../components/Modal/AddUserModal'
+import EditUserModal from '../../components/Modal/EditUserModal'
 import { downloadTxtFile } from '../Reports/utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { fetchUsersForSuperadmin } from '../../apis/user/users';
 import { GenericDownloadCsvButton } from '../../components/Buttons/DownloadButtons';
 
-const columns = [
-  {
-    name: <h4>NIK</h4>,
-    selector: row => row.nik,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Name</h4>,
-    selector: row => row.fullname,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Email</h4>,
-    selector: row => row.email,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Division</h4>,
-    selector: row => row.division,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Unit</h4>,
-    selector: row => row.unit,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Position</h4>,
-    selector: row => row.positionName,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Level</h4>,
-    selector: row => row.level,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Competency Mapping</h4>,
-    selector: row => row.role,
-    sortable: true,
-    wrap: true,
-  },
-  {
-    name: <h4>Password</h4>,
-    selector: row => row.password,
-    sortable: true,
-    wrap: true,
-  },
-];
+// Columns are defined per-render inside the component (columnsInside)
 
 function UserManagement() {
   const history = useHistory()
+  const queryClient = useQueryClient()
 
   const { data: users, error, isLoading } = useQuery(
     'fetchUsersForSuperadmin',
@@ -88,28 +35,77 @@ function UserManagement() {
     }
   );
 
-  const Actions = (user) => {
-    return (
-      <div>
-        <span
-          className="badge badge-primary mx-1"
-          style={{ cursor: 'pointer ' }}
-          onClick={() => {
+  const columnsInside = [
+    {
+      name: <h4>NIK</h4>,
+      selector: row => row.nik,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Name</h4>,
+      selector: row => row.fullname,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Email</h4>,
+      selector: row => row.email,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Division</h4>,
+      selector: row => row.division,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Unit</h4>,
+      selector: row => row.unit,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Level</h4>,
+      selector: row => row.level,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Competency Mapping</h4>,
+      selector: row => row.role,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Password</h4>,
+      selector: row => row.password,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>MFA Enabled</h4>,
+      selector: row => row.isMfaEnabled ? 'Yes' : 'No',
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: <h4>Actions</h4>,
+      cell: row => (
+        <EditUserModal
+          user={row}
+          onSaved={() => {
+            queryClient.invalidateQueries('fetchUsersForSuperadmin')
           }}
-        >
-          Update
-        </span>
-        <span
-          className="badge badge-danger mx-1"
-          style={{ cursor: 'pointer ' }}
-          onClick={() => {
-          }}
-        >
-          Delete
-        </span>
-      </div>
-    )
-  }
+          buttonText={'Update'}
+        />
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -128,7 +124,7 @@ function UserManagement() {
       </div>
 
       < FilteredDataTable
-        columns={columns}
+        columns={columnsInside}
         data={users}
         filterKeys={['nik', 'email', 'fullname', 'division', 'unit', 'position', 'level', 'role']}
       />

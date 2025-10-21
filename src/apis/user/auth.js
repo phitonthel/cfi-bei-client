@@ -29,8 +29,8 @@ export const logout = async () => {
   });
 };
 
-export const forgotPassword = async (email) => {
-  const { data } = await axios.post(`${config.baseUrl}/user/forgot-password`, { email });
+export const forgotPassword = async (nik) => {
+  const { data } = await axios.post(`${config.baseUrl}/user/forgot-password`, { nik });
   return data;
 };
 

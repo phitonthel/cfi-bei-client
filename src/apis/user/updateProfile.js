@@ -1,15 +1,14 @@
 import axios from 'axios';
 import { config } from '../../env';
 
-export const updateProfile = async ({
+export const updateUserMe = async ({
   email,
   oldPassword,
   newPassword,
-  isMfaEnabled,   // ⬅️ include MFA flag
 }) => {
   const response = await axios({
-    method: 'PUT',
-    url: `${config.baseUrl}/user/update-profile`,
+    method: 'PATCH',
+    url: `${config.baseUrl}/users/me`,
     headers: {
       access_token: localStorage.getItem('access_token'),
     },
@@ -17,8 +16,32 @@ export const updateProfile = async ({
       email,
       oldPassword,
       newPassword,
-      isMfaEnabled, // ⬅️ send to BE
     },
   });
   return response;
 };
+
+export const updateUserByAdmin = async ({
+  userId,
+  email,
+  division,
+  unit,
+  positionName,
+  isMfaEnabled,
+}) => {
+  const response = await axios({
+    method: 'PATCH',
+    url: `${config.baseUrl}/admin/users/${userId}`,
+    headers: {
+      access_token: localStorage.getItem('access_token'),
+    },
+    data: {
+      email,
+      division,
+      unit,
+      positionName,
+      isMfaEnabled,
+    },
+  });
+  return response;
+}

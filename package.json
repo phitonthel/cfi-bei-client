@@ -83,6 +83,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^6.4.5",
     "@eslint/js": "^9.5.0",
+    "@types/minimatch": "^5.1.2",
     "babel-preset-react-app": "^10.0.1",
     "esbuild": "^0.25.10",
     "esbuild-loader": "^4.3.0",

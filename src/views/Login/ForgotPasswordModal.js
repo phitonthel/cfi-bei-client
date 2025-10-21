@@ -6,33 +6,33 @@ import { fireSwalError } from '../../apis/fireSwal';
 import { SubmitButton } from '../../components/SubmitButton';
 
 function ForgotPasswordModal({ show, onHide }) {
-  const [email, setEmail] = useState('');
+  const [nik, setNik] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email) {
+    if (!nik) {
       Swal.fire({
         icon: 'warning',
-        title: 'Email Required',
-        text: 'Please enter your email address.',
+        title: 'NIK Required',
+        text: 'Please enter your NIK.',
       });
       return;
     }
 
     try {
       setIsSubmitting(true);
-      await forgotPassword(email);
+      await forgotPassword(nik);
 
       Swal.fire({
         icon: 'success',
-        title: 'Password Reset Email Sent',
-        text: 'Please check your email for password reset instructions.',
+        title: 'Password Reset Requested',
+        text: 'If the NIK is registered, password reset instructions will be sent to the associated email. Please check your inbox or spam folder.',
         confirmButtonText: 'OK'
       });
 
-      setEmail('');
+      setNik('');
       onHide();
     } catch (error) {
       fireSwalError(error);
@@ -42,7 +42,7 @@ function ForgotPasswordModal({ show, onHide }) {
   };
 
   const handleClose = () => {
-    setEmail('');
+    setNik('');
     onHide();
   };
 
@@ -54,16 +54,16 @@ function ForgotPasswordModal({ show, onHide }) {
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Email Address</Form.Label>
+            <Form.Label>NIK</Form.Label>
             <Form.Control
-              type="email"
-              placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              placeholder="Enter your NIK"
+              value={nik}
+              onChange={(e) => setNik(e.target.value)}
               required
             />
             <Form.Text className="text-muted">
-              We'll send you a link to reset your password.
+              We'll send password reset instructions to the email associated with this NIK.
             </Form.Text>
           </Form.Group>
         </Modal.Body>
