@@ -190,6 +190,7 @@ const FeedbackForm = () => {
   }
 
   const localStorageKey = `ts-assessment:${authUser.id}:${appReports.feedbackFormUser.id}`
+  
   const setToLocalStorage = () => {
     const value = JSON.stringify({
       tsAssessments,
@@ -213,6 +214,7 @@ const FeedbackForm = () => {
 
   const init = async () => {
     try {
+      setIsLoading(true)
       let tsAssessments = null
       let tsEssayAssessments = null
 
@@ -250,6 +252,7 @@ const FeedbackForm = () => {
 
   const handleImportFromPrevious = async ({ selectedItem }) => {
     try {
+      setIsLoading(true)
       // Prefer id from the selection if BE provides it:
       const sourceCfiTypeAssessmentId =
         selectedItem?.cfiTypeAssessmentId ?? cfiTypeAssessment.id;
@@ -271,6 +274,8 @@ const FeedbackForm = () => {
       fireSwalSuccess({ text: 'Imported answers applied.' });
     } catch (error) {
       fireSwalError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

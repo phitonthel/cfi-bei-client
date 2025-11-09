@@ -6,41 +6,6 @@ import { Row, Col, Card, Table } from 'react-bootstrap';
 const Justifications = ({
   reports,
 }) => {
-  const createTsAssessmentDummy = () => {
-    return [
-      {
-        type: 'Supervisors',
-        avgScore: 4,
-        justifications: [
-          'Good job',
-        ]
-      },
-      {
-        type: 'Self',
-        avgScore: 4,
-        justifications: [
-          'Good job',
-        ]
-      },
-      {
-        type: 'Peers',
-        avgScore: 3.5,
-        justifications: [
-          'Good job A',
-          'Good job B',
-        ]
-      },
-      {
-        type: 'Subordinates',
-        avgScore: 3.5,
-        justifications: [
-          'Good job C',
-          'Good job D',
-          'Good job E',
-        ]
-      }
-    ];
-  }
 
   return (
     <div className="row p-4">

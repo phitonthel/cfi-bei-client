@@ -33,6 +33,16 @@ function Login() {
     event.preventDefault();
     try {
       setIsSubmitting(true);
+
+      if (nik.length < 10) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid NIK',
+          text: 'NIK must be at least 10 characters long.',
+        });
+        return;
+      }
+
       const res = await login({ nik, password });
 
       // If BE returns MFA challenge
@@ -90,64 +100,62 @@ function Login() {
               <div className="col-lg-6 mb-5 mb-lg-0">
                 <div className="card">
                   <div className="card-body py-5 px-md-5">
-                    <form>
-                      <div className="form-outline mb-4">
-                        <h2 className="text-tiny">
-                          <span className="">Welcome!</span>
-                        </h2>
-                      </div>
+                    <div className="form-outline mb-4">
+                      <h2 className="text-tiny">
+                        <span className="">Welcome!</span>
+                      </h2>
+                    </div>
 
-                      <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="form3Example3">NIK</label>
+                    <div className="form-outline mb-4">
+                      <label className="form-label" htmlFor="form3Example3">NIK</label>
+                      <input
+                        type="text"
+                        id="form3Example3"
+                        className="form-control"
+                        value={nik}
+                        onChange={(e) => setNik(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="form-outline mb-2">
+                      <label className="form-label" htmlFor="form3Example4">Password</label>
+                      <div className="input-group">
                         <input
-                          type="text"
-                          id="form3Example3"
+                          type={showPassword ? "text" : "password"}
+                          id="form3Example4"
                           className="form-control"
-                          value={nik}
-                          onChange={(e) => setNik(e.target.value)}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
-                      </div>
-
-                      <div className="form-outline mb-2">
-                        <label className="form-label" htmlFor="form3Example4">Password</label>
-                        <div className="input-group">
-                          <input
-                            type={showPassword ? "text" : "password"}
-                            id="form3Example4"
-                            className="form-control"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                          />
-                          <div className="input-group-append">
-                            <span
-                              className="input-group-text"
-                              onClick={togglePasswordVisibility}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
-                            </span>
-                          </div>
+                        <div className="input-group-append">
+                          <span
+                            className="input-group-text"
+                            onClick={togglePasswordVisibility}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <i className={showPassword ? "fas fa-eye-slash" : "fas fa-eye"}></i>
+                          </span>
                         </div>
                       </div>
+                    </div>
 
-                      <div className="text-end mb-4">
-                        <span className="text-danger" style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={handleForgotPassword}>
-                          Forgot Password?
-                        </span>
-                      </div>
+                    <div className="text-end mb-4">
+                      <span className="text-danger" style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={handleForgotPassword}>
+                        Forgot Password?
+                      </span>
+                    </div>
 
-                      <SubmitButton
-                        text={'Sign In'}
-                        onClick={handleChange}
-                        isSubmitting={isSubmitting}
-                      />
+                    <SubmitButton
+                      text={'Sign In'}
+                      onClick={handleChange}
+                      isSubmitting={isSubmitting}
+                    />
 
-                      {/* Forgot Password Modal */}
-                      <ForgotPasswordModal
-                        show={showForgotPasswordModal}
-                        onHide={handleCloseForgotPasswordModal}
-                      />
-                    </form>
+                    {/* Forgot Password Modal */}
+                    <ForgotPasswordModal
+                      show={showForgotPasswordModal}
+                      onHide={handleCloseForgotPasswordModal}
+                    />
                   </div>
                 </div>
               </div>

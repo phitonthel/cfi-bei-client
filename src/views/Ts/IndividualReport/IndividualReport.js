@@ -16,8 +16,7 @@ import PageBreakPrint from '../../../components/Reports/PageBreakPrint';
 import Profile from '../../../components/Reports/UserProfile';
 import { handleDownloadPDF } from '../../../utils/handleDownloadPdf';
 import Justifications from './components/Justifications';
-import BulkDownloadButtonV3 from './components/BulkDownloadButtonV3';
-import BulkDownloadButtonV4 from './components/BulkDownloadButtonV4';
+import { BulkDownloadButtonV4, SingleDownloadButton } from './components/BulkDownloadButtonV4';
 
 function IndividualReport() {
   const reportRef = useRef(null);
@@ -112,15 +111,17 @@ function IndividualReport() {
         </div>
       </div>
 
-      <DownloadPdfButton
+      {/* <DownloadPdfButton
         reportRef={reportRef}
         filename={`360_individual_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
-      />
-
-      {/* <BulkDownloadButtonV3
-        reportRef={reportRef}
-        onDataUpdate={handleDataUpdate}
       /> */}
+
+      <SingleDownloadButton
+        userId={appReports.selectedUserReport.id}
+        userFullname={reviewee.fullname}
+        buttonText="Download Individual Report PDF"
+        className="btn btn-primary m-4"
+      />
 
       <BulkDownloadButtonV4 />
     </>

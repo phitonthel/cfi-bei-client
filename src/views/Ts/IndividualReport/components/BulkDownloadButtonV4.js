@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
-import { Document, Page, Text, View, StyleSheet, Image, pdf } from '@react-pdf/renderer';
-import html2canvas from 'html2canvas';
+import { Document, Page, Text, View, StyleSheet, Image, pdf, Svg, Line, Rect, Path } from '@react-pdf/renderer';
 
 // Import APIs
 import { fetchTsIndividualReportTable } from '../../../../apis/report/fetchTsIndividualReportTable';
@@ -249,8 +248,185 @@ const styles = StyleSheet.create({
   }
 });
 
+// Custom Bar Chart Component using React-PDF
+const BarChartPDF = ({ reports }) => {
+  // Filter out the total average row
+  const chartData = reports.filter(r => r.title !== 'Total Average by Rater');
+
+  if (chartData.length === 0) return null;
+
+  // Chart dimensions
+  const chartWidth = 500;
+  const chartHeight = 250;
+  const marginLeft = 60;
+  const marginRight = 20;
+  const marginTop = 30;
+  const marginBottom = 100;
+  const plotWidth = chartWidth - marginLeft - marginRight;
+  const plotHeight = chartHeight - marginTop - marginBottom;
+
+  // Set Y axis maximum to 5 (fixed scale)
+  const yMax = 5;
+  const yScale = plotHeight / yMax;
+
+  // Bar width and spacing
+  const barWidth = plotWidth / chartData.length * 0.7;
+  const spacing = plotWidth / chartData.length;
+
+  return (
+    <View style={{ marginVertical: 10 }}>
+      <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' }}>
+        Feedback Summary Chart
+      </Text>
+      <Svg width={chartWidth} height={chartHeight}>
+        {/* Grid lines */}
+        {[0, 1, 2, 3, 4, 5].map(i => {
+          const y = marginTop + plotHeight - (i * plotHeight / 5);
+          return (
+            <React.Fragment key={i}>
+              <Line
+                x1={marginLeft}
+                y1={y}
+                x2={marginLeft + plotWidth}
+                y2={y}
+                stroke="#E0E0E0"
+                strokeWidth={1}
+              />
+              <Text
+                x={marginLeft - 10}
+                y={y + 3}
+                style={{ fontSize: 8, textAnchor: 'end' }}
+              >
+                {(i * yMax / 5).toFixed(1)}
+              </Text>
+            </React.Fragment>
+          );
+        })}
+
+        {/* Axes */}
+        <Line
+          x1={marginLeft}
+          y1={marginTop}
+          x2={marginLeft}
+          y2={marginTop + plotHeight}
+          stroke="#333333"
+          strokeWidth={2}
+        />
+        <Line
+          x1={marginLeft}
+          y1={marginTop + plotHeight}
+          x2={marginLeft + plotWidth}
+          y2={marginTop + plotHeight}
+          stroke="#333333"
+          strokeWidth={2}
+        />
+
+        {/* Bars and labels */}
+        {chartData.map((report, index) => {
+          const score = parseFloat(report.totalAvgScore) || 0;
+          const barHeight = score * yScale;
+          const x = marginLeft + index * spacing + (spacing - barWidth) / 2;
+          const y = marginTop + plotHeight - barHeight;
+
+          return (
+            <React.Fragment key={index}>
+              {/* Bar */}
+              <Rect
+                x={x}
+                y={y}
+                width={barWidth}
+                height={barHeight}
+                fill="#000080"
+              />
+
+              {/* Score label on top of bar */}
+              <Text
+                x={x + barWidth / 2}
+                y={y - 5}
+                style={{ fontSize: 7, textAnchor: 'middle', fontWeight: 'bold' }}
+              >
+                {score.toFixed(2)}
+              </Text>
+
+              {/* X-axis label (competency name) - split into multiple lines if needed */}
+              {(() => {
+                const title = report.title;
+                const maxCharsPerLine = 15;
+                const lines = [];
+
+                // Split title into words
+                const words = title.split(' ');
+                let currentLine = '';
+
+                words.forEach(word => {
+                  if ((currentLine + ' ' + word).trim().length <= maxCharsPerLine) {
+                    currentLine = (currentLine + ' ' + word).trim();
+                  } else {
+                    if (currentLine) lines.push(currentLine);
+                    currentLine = word;
+                  }
+                });
+                if (currentLine) lines.push(currentLine);
+
+                // Limit to 3 lines max
+                const displayLines = lines.slice(0, 3);
+                if (lines.length > 3) {
+                  displayLines[2] = displayLines[2].substring(0, 12) + '...';
+                }
+
+                return displayLines.map((line, lineIndex) => (
+                  <Text
+                    key={lineIndex}
+                    x={x + barWidth / 2}
+                    y={marginTop + plotHeight + 12 + (lineIndex * 8)}
+                    style={{
+                      fontSize: 5,
+                      textAnchor: 'middle'
+                    }}
+                  >
+                    {line}
+                  </Text>
+                ));
+              })()}
+            </React.Fragment>
+          );
+        })}
+
+        {/* Y-axis label */}
+        <Text
+          x={15}
+          y={marginTop + plotHeight / 2}
+          style={{
+            fontSize: 5,
+            fontWeight: 'bold',
+            textAnchor: 'middle',
+          }}
+        >
+          Avg Score
+        </Text>
+
+        {/* Legend */}
+        <Rect
+          x={marginLeft + plotWidth - 150}
+          y={10}
+          width={12}
+          height={12}
+          fill="#000080"
+        />
+        <Text
+          x={marginLeft + plotWidth - 135}
+          y={18}
+          style={{ fontSize: 9 }}
+        >
+          Total Average Score
+        </Text>
+      </Svg>
+    </View>
+  );
+};
+
 // React-PDF Document Component
-const ReportDocument = ({ reportData, graphImageUrl, authUser }) => (
+const ReportDocument = ({ reportData, authUser }) => (
   <Document>
     {/* Page 1: Overview & Profile */}
     <Page size="A4" style={styles.page}>
@@ -301,19 +477,10 @@ const ReportDocument = ({ reportData, graphImageUrl, authUser }) => (
         </Text>
       </View>
 
-      {/* Graph Section */}
-      {graphImageUrl && (
+      {/* Graph Section - Native React-PDF Chart */}
+      {reportData.reports && reportData.reports.length > 0 && (
         <View style={styles.section} break={true}>
-          <Text style={styles.sectionTitle}>Feedback Summary Chart</Text>
-          <Image
-            src={graphImageUrl}
-            style={{
-              width: '100%',
-              maxHeight: 200,
-              objectFit: 'contain',
-              marginBottom: 10
-            }}
-          />
+          <BarChartPDF reports={reportData.reports} />
         </View>
       )}
 
@@ -401,46 +568,45 @@ const ReportDocument = ({ reportData, graphImageUrl, authUser }) => (
 
           if (groupReports.length === 0) return null;
 
-          return (
-            <View key={groupIndex} style={[styles.section, { marginBottom: 20 }]} break={groupIndex > 0}>
+          // Split feedback into chunks of 3 items
+          const chunks = [];
+          for (let i = 0; i < groupReports.length; i += 3) {
+            chunks.push(groupReports.slice(i, i + 3));
+          }
+
+          // Render each chunk as a separate section with page breaks
+          return chunks.map((chunk, chunkIndex) => (
+            <View
+              key={`${groupIndex}-${chunkIndex}`}
+              style={[styles.section, { marginBottom: 20 }]}
+              break={groupIndex > 0 || chunkIndex > 0}
+            >
               <Text style={[styles.sectionTitle, { fontSize: 18, marginBottom: 8, color: group.color }]}>
-                {group.title}
+                {group.title}{chunkIndex > 0 ? ' (continued)' : ''}
               </Text>
               <Text style={[styles.text, { fontSize: 11, fontStyle: 'italic', marginBottom: 12, color: '#666666' }]}>
                 {group.description}
               </Text>
 
-              {/* Display all feedback items for this type */}
-              {groupReports.map((report, index) => (
-                <View key={index} style={{
-                  backgroundColor: group.bgColor,
-                  padding: 12,
-                  marginBottom: 10,
-                  border: `1pt solid ${group.color}`,
-                  borderRadius: 4
-                }}>
+              {/* Display feedback items in this chunk */}
+              {chunk.map((report, index) => (
+                <View
+                  key={index}
+                  style={{
+                    backgroundColor: group.bgColor,
+                    padding: 12,
+                    marginBottom: 10,
+                    border: `1pt solid ${group.color}`,
+                    borderRadius: 4
+                  }}
+                >
                   <Text style={[styles.text, { fontSize: 11, lineHeight: 1.5 }]}>
                     {report.feedback}
-                  </Text>
-                  {/* Show reviewer type as a small badge */}
-                  <Text style={[styles.text, {
-                    fontSize: 9,
-                    fontStyle: 'italic',
-                    color: '#666666',
-                    marginTop: 5,
-                    textAlign: 'right'
-                  }]}>
-                    —
-                    {
-                      authUser?.level === 'SUPERADMIN'
-                        ? report.reviewerLevelType?.toLowerCase() || 'Anonymous'
-                        : 'Anonymous'
-                    }
                   </Text>
                 </View>
               ))}
             </View>
-          );
+          ));
         })}
       </Page>
     )}
@@ -509,7 +675,94 @@ const ReportDocument = ({ reportData, graphImageUrl, authUser }) => (
   </Document>
 );
 
-const BulkDownloadButtonV4 = () => {
+// Shared function to generate and download a single PDF report
+const generatePdfReport = async (userId, userFullname, authUser, setCurrentUser = null) => {
+  try {
+    console.log(`Generating react-pdf report for ${userFullname}`);
+    if (setCurrentUser) setCurrentUser(userFullname);
+
+    // Fetch the report data for this user
+    const reportData = await fetchTsIndividualReport(userId);
+
+    // Generate filename
+    const filename = `360_individual_report_${userFullname.toLowerCase().replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
+
+    // Create the PDF blob using react-pdf with native chart rendering
+    const blob = await pdf(<ReportDocument
+      reportData={reportData}
+      authUser={authUser}
+    />).toBlob();
+
+    // Create download link and trigger download
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    console.log(`PDF download triggered for: ${filename}`);
+
+    return { success: true, user: userFullname };
+  } catch (error) {
+    console.error(`Failed to download report for ${userFullname}:`, error);
+    return { success: false, user: userFullname, error: error.message };
+  }
+};
+
+// Single User Download Button Component (accessible to everyone)
+export const SingleDownloadButton = ({ userId, userFullname, buttonText = 'Download Report', className = 'btn btn-primary' }) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const authUser = useSelector(state => state.auth.user);
+
+  const handleDownload = async () => {
+    if (isDownloading) return;
+
+    try {
+      setIsDownloading(true);
+      await generatePdfReport(userId, userFullname, authUser);
+
+      await Swal.fire({
+        title: 'Success!',
+        text: 'PDF report has been downloaded successfully.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } catch (error) {
+      console.error('Download failed:', error);
+      fireSwalError(error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  return (
+    <div className="text-center mt-4">
+      <button
+        className={className}
+        onClick={handleDownload}
+        disabled={isDownloading}
+        style={{
+          opacity: isDownloading ? 0.7 : 1,
+          cursor: isDownloading ? 'not-allowed' : 'pointer',
+        }}
+      >
+        <FontAwesomeIcon
+          className="mr-2"
+          icon={isDownloading ? faSpinner : faDownload}
+          spin={isDownloading}
+        />
+        {isDownloading ? 'Generating...' : buttonText}
+      </button>
+    </div>
+  );
+};
+
+// Bulk Download Button Component (SUPERADMIN only)
+export const BulkDownloadButtonV4 = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState({ current: 0, total: 0 });
   const [currentUser, setCurrentUser] = useState('');
@@ -521,63 +774,7 @@ const BulkDownloadButtonV4 = () => {
   }
 
   const downloadSingleReport = async (user) => {
-    try {
-      console.log(`Generating react-pdf report for ${user.fullname}`);
-      setCurrentUser(user.fullname);
-
-      // Fetch the report data for this user
-      const reportData = await fetchTsIndividualReport(user.id);
-
-      // Capture the graph as an image
-      let graphImageUrl = null;
-      try {
-        // Look for the graph container on the page
-        const graphElement = document.querySelector('.recharts-wrapper');
-        if (graphElement) {
-          console.log('Capturing graph image...');
-          const canvas = await html2canvas(graphElement, {
-            backgroundColor: 'white',
-            scale: 2,
-            logging: false,
-            useCORS: true,
-            allowTaint: true,
-          });
-          graphImageUrl = canvas.toDataURL('image/png');
-          console.log('Graph image captured successfully');
-        } else {
-          console.log('Graph element not found on page');
-        }
-      } catch (graphError) {
-        console.error('Failed to capture graph:', graphError);
-      }
-
-      // Generate filename
-      const filename = `360_individual_report_${user.fullname.toLowerCase().replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
-
-      // Create the PDF blob using react-pdf
-      const blob = await pdf(<ReportDocument
-        reportData={reportData}
-        graphImageUrl={graphImageUrl}
-        authUser={authUser}
-      />).toBlob();
-
-      // Create download link and trigger download
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      console.log(`PDF download triggered for: ${filename}`);
-
-      return { success: true, user: user.fullname };
-    } catch (error) {
-      console.error(`Failed to download report for ${user.fullname}:`, error);
-      return { success: false, user: user.fullname, error: error.message };
-    }
+    return await generatePdfReport(user.id, user.fullname, authUser, setCurrentUser);
   };
 
   const handleBulkDownload = async () => {
@@ -591,8 +788,10 @@ const BulkDownloadButtonV4 = () => {
       // Convert object to array and extract id and fullname
       const users = Object.values(userData).map(user => ({
         id: user.id,
-        fullname: user.fullname
+        fullname: user.fullname,
+        level: user.level
       }))
+        .filter(user => user.level !== "Direktur");
       // .slice(5, 6); // Limit to first 2 users for demo purposes
 
       if (users.length === 0) {
@@ -606,8 +805,8 @@ const BulkDownloadButtonV4 = () => {
 
       // Confirm download
       const result = await Swal.fire({
-        title: 'Bulk PDF Download (React-PDF)',
-        text: `Are you sure you want to download ${users.length} PDF reports using React-PDF? Each PDF will be generated programmatically.`,
+        title: 'Bulk PDF Download',
+        text: `Are you sure you want to download ${users.length} PDF reports? Each PDF will include a native chart generated with React-PDF.`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -670,6 +869,12 @@ const BulkDownloadButtonV4 = () => {
         className="btn btn-info"
         onClick={handleBulkDownload}
         disabled={isDownloading}
+        style={{
+          opacity: isDownloading ? 0.7 : 1,
+          cursor: isDownloading ? 'not-allowed' : 'pointer',
+          backgroundColor: isDownloading ? '#17a2b8' : '',
+          borderColor: isDownloading ? '#17a2b8' : '',
+        }}
       >
         <FontAwesomeIcon
           className="mr-2"
@@ -678,7 +883,7 @@ const BulkDownloadButtonV4 = () => {
         />
         {isDownloading
           ? `Generating... (${downloadProgress.current}/${downloadProgress.total})`
-          : 'Bulk Download All Reports (React-PDF)'
+          : 'Bulk Download All Reports'
         }
       </button>
 
@@ -698,14 +903,8 @@ const BulkDownloadButtonV4 = () => {
           <small className="text-muted">
             Currently generating PDF for: <strong>{currentUser}</strong>
           </small>
-          <br />
-          <small className="text-muted">
-            Using React-PDF for programmatic generation
-          </small>
         </div>
       )}
     </div>
   );
 };
-
-export default BulkDownloadButtonV4;

@@ -19,6 +19,7 @@ import { SubmitButton } from '../../../components/SubmitButton';
 import { track } from '../../../apis/track';
 import { UserBanner } from "./components/UserBanner"
 import { mergeCfiToCfi } from 'utils/importAssessments';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 
 // type = "TECHNICAL" | "BEHAVIOURAL"
 // assessments: {
@@ -45,8 +46,8 @@ const CfiAssessment = (type) => {
   const [assessments, setAssessments] = useState([])
   const [hasAgreed, setHasAgreed] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const authUser = useSelector(state => state.auth.user);
   const cfiTypeAssessment = useSelector(state => state.app.utilities.cfiTypeAssessment);
   const cfiAssessment = useSelector(state => state.app.utilities.cfiAssessment);
 
@@ -153,32 +154,6 @@ const CfiAssessment = (type) => {
     }
   }
 
-  const handleImportFromPrevious = async ({ selectedItem }) => {
-    try {
-      // Prefer id from the selection if BE provides it:
-      const sourceCfiTypeAssessmentId =
-        selectedItem?.cfiTypeAssessmentId ?? cfiTypeAssessment.id;
-
-      // 1) Fetch the "from" assessments (the chosen previous CFI)
-      const fromCfiAssessments = await fetchCfiAssessments({
-        type: type,
-        cfiTypeAssessmentId: sourceCfiTypeAssessmentId,
-        revieweeId: cfiAssessment.revieweeId,
-        reviewerId: cfiAssessment.reviewerId,
-      });
-
-      // 2) Merge into current "to" assessments (copy score & justification)
-      const merged = mergeCfiToCfi(fromCfiAssessments, assessments);
-
-      // 3) Persist & update UI
-      setAssessments(merged);
-
-      fireSwalSuccess({ text: 'Imported answers applied.' });
-    } catch (error) {
-      fireSwalError(error);
-    }
-  };
-
   const localStorageKey = `cfi-assessment:${type}:${cfiTypeAssessment.id}:${cfiAssessment.revieweeId}:${cfiAssessment.reviewerId}`
   const setToLocalStorage = () => {
     const value = JSON.stringify(assessments)
@@ -217,6 +192,7 @@ const CfiAssessment = (type) => {
         }
       })
       setAssessments([...assessments])
+      setToLocalStorage();
     },
     justification: (assessmentId, newValue) => {
       assessments.forEach(assessment => {
@@ -225,6 +201,7 @@ const CfiAssessment = (type) => {
         }
       });
       setAssessments([...assessments])
+      setToLocalStorage();
     },
     // send request to server
     submitConfirmation: async () => {
@@ -249,8 +226,39 @@ const CfiAssessment = (type) => {
     }
   }
 
+  const handleImportFromPrevious = async ({ selectedItem }) => {
+    try {
+      setIsLoading(true);
+      // Prefer id from the selection if BE provides it:
+      const sourceCfiTypeAssessmentId =
+        selectedItem?.cfiTypeAssessmentId ?? cfiTypeAssessment.id;
+
+      // 1) Fetch the "from" assessments (the chosen previous CFI)
+      const fromCfiAssessments = await fetchCfiAssessments({
+        type: type,
+        cfiTypeAssessmentId: sourceCfiTypeAssessmentId,
+        revieweeId: cfiAssessment.revieweeId,
+        reviewerId: cfiAssessment.reviewerId,
+      });
+
+      // 2) Merge into current "to" assessments (copy score & justification)
+      const merged = mergeCfiToCfi(fromCfiAssessments, assessments);
+
+      // 3) Persist & update UI
+      setAssessments(merged);
+
+      fireSwalSuccess({ text: 'Imported answers applied.' });
+    } catch (error) {
+      fireSwalError(error);
+    } finally {
+      setToLocalStorage();
+      setIsLoading(false);
+    }
+  };
+
   const init = async () => {
     try {
+      setIsLoading(true)
       let data = null
       if (isLocalStorageAvailable()) {
         data = getFromLocalStorage()
@@ -266,20 +274,14 @@ const CfiAssessment = (type) => {
       setAssessments(data)
     } catch (error) {
       fireSwalError(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   useEffect(async () => {
     init()
   }, [])
-
-  // Runs every time `assessments` changes
-  useEffect(() => {
-    if (assessments.length) {
-      setToLocalStorage();
-    }
-  }, [assessments]);
-
 
   if (!hasAgreed && cfiAssessment.isSelfReview) {
     if (type === 'TECHNICAL') {
@@ -302,6 +304,13 @@ const CfiAssessment = (type) => {
   const completedCorrespondingReviews = flattenedCfiReviews.filter(review => review.score !== null)
   const assessmentsPercentage = `${completedCorrespondingReviews.length}/${flattenedCfiReviews.length}`
   const buttonText = `Submit ${assessmentsPercentage} Assessments`
+
+  if (isLoading) {
+    return (
+      <LoadingSpinner />
+    )
+  }
+
   return (
     <>
       <div className='col-10'>

@@ -21,6 +21,15 @@ function ForgotPasswordModal({ show, onHide }) {
       return;
     }
 
+    if (nik.length < 10) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid NIK',
+        text: 'NIK must be at least 10 characters long.',
+      });
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       await forgotPassword(nik);

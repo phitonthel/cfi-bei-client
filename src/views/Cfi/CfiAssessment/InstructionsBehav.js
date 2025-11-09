@@ -41,7 +41,7 @@ export const InstructionsBehav = (props) => {
                 Anda dapat melihat kembali penilaian self-assessment melalui tab <b>Behavioural Asm. / Technical Asm</b>.
               </li>
               <li className="m-1">
-                Setelah anda melakukan self-assessment, atasan  langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) akan mereview/ menilai / memverifikasi nilai Anda. Nilai final adalah nilai yang telah diverifikasi atasan langsung (Kepala Kantor/Kepala Unit/Kepala Divisi).
+                Setelah anda melakukan self-assessment, atasan  langsung (Kepala Kantor/Kepala Unit/Kepala Divisi) akan mereview/ menilai / memverifikasi nilai Anda. Nilai final adalah rata-rata dari penilaian atasan (contoh: untuk level staff adalah penilaian / nilai rata-rata dari kepala unit dan kadiv)
               </li>
             </ol>
           </div>
