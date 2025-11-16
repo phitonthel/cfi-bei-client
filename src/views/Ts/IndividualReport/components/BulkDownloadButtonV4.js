@@ -748,6 +748,8 @@ export const SingleDownloadButton = ({ userId, userFullname, buttonText = 'Downl
         style={{
           opacity: isDownloading ? 0.7 : 1,
           cursor: isDownloading ? 'not-allowed' : 'pointer',
+          backgroundColor: isDownloading ? '#17a2b8' : '',
+          borderColor: isDownloading ? '#17a2b8' : '',
         }}
       >
         <FontAwesomeIcon

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { fireSwalError } from 'apis/fireSwal';
 import { useSelector } from 'react-redux';
@@ -7,13 +7,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Graph from '../IndividualReport/components/Graph';
 import { fetchTsIndividualReport } from '../../../apis/report/fetchTsIndividualReport';
-import { DownloadPdfButton } from '../../../components/Buttons/DownloadButtons';
+import { TeamReportPdfButton, BulkTeamReportDownloadButton } from './components/TeamReportPdfButton';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import Profile from '../../../components/Reports/UserProfile';
 import { fetchTsTeamReport } from 'apis/report/fetchTsTeamReport';
 
 function TeamReport() {
-  const reportRef = useRef(null);
   const authUser = useSelector(state => state.auth.user);
   const appReports = useSelector(state => state.app.reports);
 
@@ -51,7 +50,7 @@ function TeamReport() {
 
   return (
     <>
-      <div className="container mt-4" ref={reportRef}>
+      <div className="container mt-4">
         <div className="container mt-4">
           <div className="text-center mb-4">
             <h1>360 Degree Team Report</h1>
@@ -77,10 +76,12 @@ function TeamReport() {
           <Graph reports={reports} />
         </div>
       </div>
-      <DownloadPdfButton
-        reportRef={reportRef}
-        filename={`360_team_report_${reviewee.fullname.toLowerCase().replace(' ', '_')}`}
+      <TeamReportPdfButton
+        reviewee={reviewee}
+        reports={reports}
+        buttonText="Download PDF"
       />
+      <BulkTeamReportDownloadButton />
     </>
   );
 }
