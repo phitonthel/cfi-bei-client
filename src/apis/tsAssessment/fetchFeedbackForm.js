@@ -9,7 +9,7 @@ export const fetchFeedbackForm = async ({
 }) => {
   const query = `?reviewerId=${reviewerId}&revieweeId=${revieweeId}`
 
-  const { data } = await axios.get(`${config.baseUrl}/ts-assessment/feedback-form${query}`, {
+  const { data } = await axios.get(`${config.baseUrl}/ts-assessment/feedback-form-v2${query}`, {
     headers: {
       access_token: localStorage.getItem('access_token')
     }

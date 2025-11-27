@@ -52,7 +52,7 @@ const IndividualReports = () => {
     },
     {
       name: <h4>Actions</h4>,
-      cell: (row) => <Actions user={row} link={row.link} />,
+      cell: (row) => <Actions user={row} links={row.links} />,
     },
   ];
 

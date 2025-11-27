@@ -1,6 +1,7 @@
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { approveNomination } from '../../../apis/tsAssessment/approveNomination';
 import { unapproveNomination } from '../../../apis/tsAssessment/unapproveNomination';
+import { setAutoNomination } from '../../../apis/tsAssessment/setAutoNomination';
 
 export const handleApprovalUser = async ({
   reviewer,
@@ -31,6 +32,27 @@ export const handleUnapprovalUser = async ({
       reviewerId: reviewer.id,
     })
     fireSwalSuccess({ text: 'User unapproved successfully!' });
+  } catch (error) {
+    fireSwalError(error);
+  } finally {
+    await initNominations()
+  }
+}
+
+export const handleSetAutoNomination = async ({
+  reviewer,
+  reviewee,
+  isAutoNominated,
+  initNominations,
+}) => {
+  try {
+    await setAutoNomination({
+      revieweeId: reviewee.id,
+      reviewerId: reviewer.id,
+      isAutoNominated,
+    })
+    const action = isAutoNominated ? 'enabled' : 'disabled';
+    fireSwalSuccess({ text: `Auto nomination ${action} successfully!` });
   } catch (error) {
     fireSwalError(error);
   } finally {

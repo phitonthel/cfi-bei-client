@@ -629,7 +629,7 @@ const ReportDocument = ({ reportData, authUser }) => (
               {report.justificationTypes && report.justificationTypes.length > 0 ? (
                 <View style={styles.table}>
                   {/* Table Header */}
-                  <View style={[styles.tableRow, { backgroundColor: '#0066CC' }]}>
+                  <View style={[styles.tableRow, { backgroundColor: '#0066CC' }]} wrap={false}>
                     <Text style={[styles.tableCell, { color: 'white', fontWeight: 'bold', width: '20%' }]}>Type</Text>
                     <Text style={[styles.tableCell, { color: 'white', fontWeight: 'bold', width: '20%' }]}>Avg. Score</Text>
                     <Text style={[styles.tableCell, { color: 'white', fontWeight: 'bold', width: '60%' }]}>Justifications</Text>
@@ -637,10 +637,14 @@ const ReportDocument = ({ reportData, authUser }) => (
 
                   {/* Table Rows */}
                   {report.justificationTypes.map((justificationType, index) => (
-                    <View key={index} style={[styles.tableRow, {
-                      backgroundColor: index % 2 === 0 ? '#F8F9FA' : 'white',
-                      minHeight: 30
-                    }]}>
+                    <View
+                      key={index}
+                      style={[styles.tableRow, {
+                        backgroundColor: index % 2 === 0 ? '#F8F9FA' : 'white',
+                        minHeight: 30
+                      }]}
+                      wrap={false}
+                    >
                       <Text style={[styles.tableCell, { width: '20%', fontSize: 9 }]}>
                         {justificationType.type}
                       </Text>

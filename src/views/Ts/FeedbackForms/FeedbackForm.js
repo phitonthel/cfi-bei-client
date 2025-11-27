@@ -13,7 +13,7 @@ import { submitTsScore, submitTsEssay } from '../../../apis/assessment/submitSco
 import { fireSwalSuccess, fireSwalError } from '../../../apis/fireSwal';
 import { fetchFeedbackForm } from '../../../apis/tsAssessment/fetchFeedbackForm';
 import { FloatingMessage } from '../../../components/FloatingMessage';
-import QuestionForm from '../../../components/QuestionForm/QuestionForm';
+import QuestionFormV2 from '../../../components/QuestionForm/QuestionFormV2';
 import { SubmitButton } from '../../../components/SubmitButton';
 import { UserBanner } from 'views/Cfi/CfiAssessment/components/UserBanner';
 import { fetchCfiAssessments } from '../../../apis/assessment/fetchSelf';
@@ -328,9 +328,10 @@ const FeedbackForm = () => {
           }}
         />
 
-        <QuestionForm
+        <QuestionFormV2
           initialQuestions={tsAssessments}
           setTsAssessments={handleTsAssessmentChange}
+          setToLocalStorage={setToLocalStorage}
         />
 
         <OpenFeedbackForm

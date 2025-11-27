@@ -177,7 +177,7 @@ function Admin() {
   // Initialize auto-logout on tab close functionality
   React.useEffect(() => {
     // Only setup auto-logout if user is authenticated
-    if (userIsAuthenticated && authUser && authUser.access_token) {
+    if (process.env.NODE_ENV === 'production' && userIsAuthenticated && authUser && authUser.access_token) {
       // Option 1: Simple auto-logout on tab close
       // const cleanup = setupAutoLogoutOnTabClose();
 

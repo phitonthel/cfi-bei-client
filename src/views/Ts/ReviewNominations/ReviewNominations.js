@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 import ApproveAllNominationButton from './ApproveAllNominationButton';
-import { handleApprovalUser, handleUnapprovalUser } from './utils';
+import { handleApprovalUser, handleUnapprovalUser, handleSetAutoNomination } from './utils';
 import { columns } from './vars';
 import { fireSwalError, fireSwalSuccess } from '../../../apis/fireSwal';
 import { fetchAllUsers } from '../../../apis/user/fetchAllUsers';
@@ -77,6 +77,36 @@ function ReviewNomination() {
           }}
         >
           Approve
+        </span>
+        <span
+          className="badge badge-warning mx-1"
+          style={{ cursor: 'pointer ' }}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSetAutoNomination({
+              reviewer,
+              reviewee,
+              isAutoNominated: false,
+              initNominations,
+            });
+          }}
+        >
+          Disable Auto
+        </span>
+        <span
+          className="badge badge-success mx-1"
+          style={{ cursor: 'pointer ' }}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSetAutoNomination({
+              reviewer,
+              reviewee,
+              isAutoNominated: true,
+              initNominations,
+            });
+          }}
+        >
+          Enable Auto
         </span>
       </div>
     )

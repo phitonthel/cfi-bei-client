@@ -26,40 +26,12 @@ const OpenFeedbacks = ({
     <>
       <h2>Feedback Reflection</h2>
 
-      {authUser.level !== "SUPERADMIN" && (
-        <>
-          <OpenFeedback
-            essayReports={
-              shuffle([
-                ...supervisorFeedbacks,
-                ...peerFeedbacks,
-                ...selfFeedbacks,
-                ...subordinateFeedbacks,
-              ])
-            }
-            title={``}
-          />
-          <hr></hr>
-          <PageBreakPrint />
-        </>
-      )}
-
-      {authUser.level === "SUPERADMIN" && (
-        <>
-          <OpenFeedback essayReports={supervisorFeedbacks} title={`Feedback from Supervisor`} />
-          <hr></hr>
-          <PageBreakPrint />
-          <OpenFeedback essayReports={peerFeedbacks} title={`Feedback from Peers`} />
-          <hr></hr>
-          <PageBreakPrint />
-
-          <OpenFeedback essayReports={selfFeedbacks} title={`Feedback from Self`} />
-          <hr></hr>
-          <PageBreakPrint />
-
-          <OpenFeedback essayReports={subordinateFeedbacks} title={`Feedback from Subordinates`} />
-        </>
-      )}
+      <OpenFeedback
+        essayReports={shuffle(essayReports)}
+        title={``}
+      />
+      <hr></hr>
+      <PageBreakPrint />
     </>
   )
 }

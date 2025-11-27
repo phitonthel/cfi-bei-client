@@ -41,7 +41,7 @@ export const mergeCfiToTs = (fromCfiAssessments, toTsAssessments) => {
     if (matchingFromAssessment) {
       mergedResult.push({
         ...assessment,
-        score: matchingFromAssessment.reviewerAssessment.score + 1, // TS score is 1-5, CFI is 0-4
+        score: matchingFromAssessment.reviewerAssessment.score,
         justification: matchingFromAssessment.reviewerAssessment.justification ?? ""
       });
     } else {

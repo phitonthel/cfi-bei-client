@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { setAppReport } from '../../../../redux/appSlice';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-const Actions = ({ user, link }) => {
+const Actions = ({ user, links = [] }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -20,17 +20,18 @@ const Actions = ({ user, link }) => {
 
   const actionsConfig = [
     user.level !== "Direktur" && {
-      label: 'Report 2024',
+      label: 'Individual Report 2025',
       onClick: () => handleNavigation('/hr/ts/individual-report'),
     },
-    user.level !== "Direktur" && link && {
-      label: 'Report 2023',
-      onClick: () => window.open(link),
-    },
     ["Kepala Divisi", "Direktur"].includes(user.level) && {
-      label: 'Team Report 2024',
+      label: 'Team Report 2025',
       onClick: () => handleNavigation('/hr/ts/team-report'),
     },
+    // Add dynamic links from the links array
+    ...links.map(linkItem => ({
+      label: `${linkItem.type || 'Report'}`,
+      onClick: () => window.open(linkItem.link),
+    })),
   ].filter(Boolean);
 
   return (
