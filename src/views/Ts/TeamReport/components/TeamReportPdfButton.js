@@ -93,7 +93,7 @@ const BarChartPDF = ({ reports }) => {
   const plotWidth = chartWidth - marginLeft - marginRight;
   const plotHeight = chartHeight - marginTop - marginBottom;
 
-  // Set Y axis maximum to 5 (fixed scale)
+  // Set Y axis maximum to 4 (fixed scale)
   const yMax = 4;
   const yScale = plotHeight / yMax;
 
@@ -107,8 +107,8 @@ const BarChartPDF = ({ reports }) => {
       </Text>
       <Svg width={chartWidth} height={chartHeight}>
         {/* Grid lines */}
-        {[0, 1, 2, 3, 4, 5].map(i => {
-          const y = marginTop + plotHeight - (i * plotHeight / 5);
+        {[0, 1, 2, 3, 4].map(i => {
+          const y = marginTop + plotHeight - (i * plotHeight / 4);
           return (
             <React.Fragment key={i}>
               <Line x1={marginLeft} y1={y} x2={marginLeft + plotWidth} y2={y} stroke="#E0E0E0" strokeWidth={1} />
