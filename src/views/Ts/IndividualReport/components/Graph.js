@@ -11,7 +11,7 @@ const CustomAxisTick = (props) => {
   );
 };
 
-const yTicks = [0, 3, 5];
+const yTicks = [0, 2, 4];
 
 const Graph = ({ reports }) => {
   const formattedReports = reports.map(report => ({

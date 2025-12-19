@@ -94,7 +94,7 @@ const BarChartPDF = ({ reports }) => {
   const plotHeight = chartHeight - marginTop - marginBottom;
 
   // Set Y axis maximum to 5 (fixed scale)
-  const yMax = 5;
+  const yMax = 4;
   const yScale = plotHeight / yMax;
 
   const barWidth = plotWidth / chartData.length * 0.7;

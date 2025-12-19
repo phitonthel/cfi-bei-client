@@ -259,19 +259,30 @@ const CfiAssessment = (type) => {
   const init = async () => {
     try {
       setIsLoading(true)
-      let data = null
-      if (isLocalStorageAvailable()) {
-        data = getFromLocalStorage()
-      } else {
-        data = await fetchCfiAssessments({
-          type: type,
-          cfiTypeAssessmentId: cfiTypeAssessment.id,
-          revieweeId: cfiAssessment.revieweeId,
-          reviewerId: cfiAssessment.reviewerId
-        })
-      }
 
-      setAssessments(data)
+      // Always fetch fresh data from API
+      const fetchedData = await fetchCfiAssessments({
+        type: type,
+        cfiTypeAssessmentId: cfiTypeAssessment.id,
+        revieweeId: cfiAssessment.revieweeId,
+        reviewerId: cfiAssessment.reviewerId
+      })
+
+      // If local storage available, merge reviewer assessment from storage with fetched reviewee assessment
+      if (isLocalStorageAvailable()) {
+        const localData = getFromLocalStorage()
+        const mergedData = fetchedData.map(fetchedAssessment => {
+          const localAssessment = localData.find(item => item.id === fetchedAssessment.id)
+
+          return {
+            ...fetchedAssessment,
+            reviewerAssessment: localAssessment?.reviewerAssessment || fetchedAssessment.reviewerAssessment
+          }
+        })
+        setAssessments(mergedData)
+      } else {
+        setAssessments(fetchedData)
+      }
     } catch (error) {
       fireSwalError(error)
     } finally {

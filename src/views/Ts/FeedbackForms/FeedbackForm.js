@@ -190,7 +190,7 @@ const FeedbackForm = () => {
   }
 
   const localStorageKey = `ts-assessment:${authUser.id}:${appReports.feedbackFormUser.id}`
-  
+
   const setToLocalStorage = () => {
     const value = JSON.stringify({
       tsAssessments,
@@ -311,12 +311,13 @@ const FeedbackForm = () => {
           onImportSelected={handleImportFromPrevious}
         />
 
-        < ScoringLegend
+        {/* Disable temporary */}
+        {/* < ScoringLegend
           title={title}
           arrText={arrText}
           subArrText={subArrText}
           isReversed={true}
-        />
+        /> */}
 
         <FloatingMessage
           title={`Progress`}
