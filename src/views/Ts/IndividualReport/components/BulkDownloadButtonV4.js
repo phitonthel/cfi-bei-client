@@ -297,7 +297,7 @@ const BarChartPDF = ({ reports }) => {
                 y={y + 3}
                 style={{ fontSize: 8, textAnchor: 'end' }}
               >
-                {(i * yMax / 5).toFixed(1)}
+                {(i * yMax / 4).toFixed(1)}
               </Text>
             </React.Fragment>
           );
